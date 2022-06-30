@@ -32,3 +32,6 @@ If you want to contribute to this library, you're always welcome! See [Contribut
 
 ## Code of Conduct
 This [Code of Conduct](https://github.com/DrewStephensCoding/AFIExplorer/blob/master/CODE_OF_CONDUCT) outlines our expectations for participants within the Airmen Coders community, as well as steps to reporting unacceptable behavior. We are committed to providing a welcoming and inspiring community for all and expect our code of conduct to be honored.
+
+## Donation
+<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="drewcodesit" data-color="#FFDD00" data-emoji=""  data-font="Bree" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script>

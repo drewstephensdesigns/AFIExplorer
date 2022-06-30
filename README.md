@@ -5,7 +5,6 @@
 **AFI Explorer** an minimal Android application built to easily reference U.S Air Force and Space Force guidance and publications using Modern Android development tools.  *Made with love ❤️ by [DrewStephensCoding](https://github.com/DrewStephensCoding)*
 
 ## App Link
-## App Link
 ##### You can directly download the latest version of the app from the play store. 🎯
 <a href='https://play.google.com/store/apps/details?id=io.github.drewstephenscoding.afiexplorer'><img align='center' height='85' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'></a>
 

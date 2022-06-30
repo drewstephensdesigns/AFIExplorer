@@ -2,12 +2,34 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="info.androidhive.recyclerviewsearch.MainActivity">
+    tools:context=".main.MainActivity">
+    
     <item
         android:id="@+id/action_search"
-        android:icon="@drawable/ic_search_black_24dp"
+        android:icon="@drawable/ic_search"
         android:orderInCategory="100"
         android:title="@string/action_search"
-        app:actionViewClass="android.support.v7.widget.SearchView"
-        app:showAsAction="always" />
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always|collapseActionView" />
+
+    <item
+        android:id="@+id/action_bookmark"
+        android:icon="@drawable/ic_outline_bookmarks"
+        android:orderInCategory="101"
+        android:title="@string/action_bookmark"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_change_theme"
+        android:title="@string/change_theme"
+        android:orderInCategory="102"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_feedback"
+        android:icon="@drawable/ic_feedback"
+        android:orderInCategory="103"
+        android:title="@string/action_feedback"
+        app:showAsAction="never" />
+
 </menu>

@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AndroidSearchRecyclerview.iml" filepath="$PROJECT_DIR$/AndroidSearchRecyclerview.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/AFIExplorer.iml" filepath="$PROJECT_DIR$/.idea/modules/AFIExplorer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/AFIExplorer.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/AFIExplorer.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/AFIExplorer.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/AFIExplorer.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/AFIExplorer.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/AFIExplorer.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/AFIExplorer.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/AFIExplorer.app.unitTest.iml" />
     </modules>
   </component>
 </project>

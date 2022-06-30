@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#111</color>
-    <color name="colorPrimaryDark">#FFF</color>
-    <color name="colorAccent">#ea3732</color>
-    <color name="contact_name">#333333</color>
-    <color name="contact_number">#8c8c8c</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#005756</color>
+    <color name="black">#252521</color>
+    <color name="black_darker">#090908</color>
+    <color name="white">#EFEBEB</color>
+    <color name="pub_big_text">#191616</color>
+    <color name="pub_little_text">#BAB6B6</color>
 </resources>

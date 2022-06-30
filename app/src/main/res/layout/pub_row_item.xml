@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:paddingBottom="@dimen/row_padding"
+    android:paddingLeft="@dimen/activity_margin"
+    android:paddingRight="@dimen/activity_margin"
+    android:paddingTop="@dimen/row_padding"
+    android:focusable="true">
+
+    <ImageView
+        android:id="@+id/textViewOptions"
+        android:layout_width="@dimen/thumbnail"
+        android:layout_height="@dimen/thumbnail"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/row_padding"
+        android:src="@drawable/ic_menu_vert"
+        android:contentDescription="Vertical menu" />
+
+    <TextView
+        android:id="@+id/pubNumber"
+        android:layout_toEndOf="@id/textViewOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
+        android:textColor="?android:attr/colorControlNormal"
+        android:textSize="@dimen/pub_name" />
+
+    <TextView
+        android:id="@+id/pubTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pubNumber"
+        android:layout_toEndOf="@id/textViewOptions"
+        android:ellipsize="end"
+        android:fontFamily="@font/noto_sans"
+        android:maxLines="2"
+        android:textColor="?android:attr/colorControlNormal"
+        android:textSize="@dimen/pub_number" />
+
+    <TextView
+        android:id="@+id/pubLastAction"
+        android:layout_below="@id/pubTitle"
+        android:layout_toEndOf="@id/textViewOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/noto_sans"
+        android:textColor="?android:attr/colorControlNormal"
+        android:textSize="@dimen/pub_last_action" />
+
+    <TextView
+        android:id="@+id/pubCertDate"
+        android:layout_below="@id/pubLastAction"
+        android:layout_toEndOf="@id/textViewOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/noto_sans"
+        android:textColor="?android:attr/colorControlNormal"
+        android:textSize="@dimen/pub_last_action" />
+</RelativeLayout>

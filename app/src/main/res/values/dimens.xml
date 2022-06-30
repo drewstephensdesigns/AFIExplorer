@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="fab_margin">16dp</dimen>
     <dimen name="activity_margin">16dp</dimen>
-    <dimen name="thumbnail">40dp</dimen>
+    <dimen name="thumbnail">25dp</dimen>
     <dimen name="row_padding">10dp</dimen>
-    <dimen name="contact_name">15dp</dimen>
-    <dimen name="contact_number">12dp</dimen>
+    <dimen name="pub_name">15sp</dimen>
+    <dimen name="pub_number">12sp</dimen>
+    <dimen name="pub_last_action">9sp</dimen>
 </resources>

@@ -1,4 +1,6 @@
-## 📑 AFI-Explorer (Android) - 
+![](https://github.com/DrewStephensCoding/AFIExplorer/blob/master/screenshots/AFI%20Explorer.png)
+
+## 📑 AFI-Explorer (Android)
 ### Built by Airmen, for Airmen
 **AFI Explorer** an minimal Android application built to easily reference U.S Air Force and Space Force guidance and publications using Modern Android development tools.  *Made with love ❤️ by [DrewStephensCoding](https://github.com/DrewStephensCoding)*
 

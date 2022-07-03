@@ -1,0 +1,86 @@
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/help_header">
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="versionInfo"
+            app:title="@string/version_header"
+            app:summary="@string/versionName">
+        </Preference>
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="feedPref"
+            app:title="@string/feedback_header"
+            app:summary="@string/feedback_subheading">
+            <intent
+                android:action="android.intent.action.SENDTO"
+                android:data="mailto:drewstephensdesigns@gmail.com">
+                <extra android:name="android.intent.extra.SUBJECT"
+                    android:value="App Feedback"/>
+            </intent>
+        </Preference>
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="rating"
+            android:title="@string/rating_header"
+            android:summary="@string/rating_subheading">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://play.google.com/store/apps/details?id=io.github.drewstephenscoding.afiexplorer&amp;hl=en_US&amp;gl=US">
+            </intent>
+        </Preference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/social_header">
+        <Preference
+            app:title="@string/instagram"
+            app:summary="@string/instagram_id"
+            app:icon="@drawable/ic_camera">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="@string/developer_instagram_url" />
+        </Preference>
+
+        <Preference
+            app:title="@string/github"
+            app:summary="@string/github_id"
+            app:icon="@drawable/ic_github">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="@string/developer_github_url" />
+        </Preference>
+        <Preference
+            app:title="@string/linkedin"
+            app:summary="@string/linkedin_id"
+            app:icon="@drawable/ic_linkedin">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="@string/developer_linkedin_url" />
+        </Preference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:title="@string/legal_header">
+        <!-- Source Code Repo -->
+<!--        <Preference-->
+<!--            app:iconSpaceReserved="false"-->
+<!--            app:key="sourcePref"-->
+<!--            android:title="@string/source_code_header">-->
+<!--            <intent-->
+<!--                android:action="android.intent.action.VIEW"-->
+<!--                android:data="https://github.com/DrewStephensCoding/TickerIO/">-->
+<!--                <extra android:name="android.intent.extra.SUBJECT"-->
+<!--                    android:value="Developer Portfolio"/>-->
+<!--            </intent>-->
+<!--        </Preference>-->
+        <Preference app:key="licenses"
+            app:title="@string/licenses"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+</PreferenceScreen>

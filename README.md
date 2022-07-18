@@ -1,5 +1,4 @@
 ![](https://github.com/DrewStephensCoding/AFIExplorer/blob/master/screenshots/AFI%20Explorer.png)
-![](https://github.com/DrewStephensCoding/AFIExplorer/blob/master/screenshots/summary.png)
 
 ## 📑 AFI-Explorer (Android)
 ### Built by Airmen, for Airmen
@@ -17,6 +16,8 @@
   - [LiveData](https://developer.android.com/topic/libraries/architecture/livedata) - Data objects that notify views when the underlying database changes.
   - [Room](https://developer.android.com/topic/libraries/architecture/room) - SQLite object mapping library.
 - [Material Components for Android](https://github.com/material-components/material-components-android) - Modular and customizable Material Design UI components for Android.
+
+![](https://github.com/DrewStephensCoding/AFIExplorer/blob/master/screenshots/summary.png)
 
 ## Download
 - AFI Explorer is available for both iOS and Android.  Download the app at [AFI Explorer](https://afiexplorer.com/)

@@ -68,9 +68,9 @@
 -  UI Improvements
 -  Bug/Crash Fixes
 
-### Version 15 (1.2.9) Current Version // 06 JUL 2022
+### Version 15 (1.2.9)
 -  Hot fix for incorrect data source
 
-### Version 16 (1.3.0) *** Currently Awaiting Google Play approval ***
+### Version 16 (1.3.0) **CURRENT VERSION // 16 JUL 2022**
 -  Added The Brown Book (The Enlisted Force Structure)
 -  Added The Blue Book (A Profession of Arms: Our Core Values)

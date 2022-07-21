@@ -33,12 +33,8 @@ class MainAdapter(
     private val listener: PubsAdapterListener)
     : RecyclerView.Adapter<MainAdapter.MyViewHolder>(), Filterable {
 
-    private var pubsListFiltered: ArrayList<Pubs>
+    private var pubsListFiltered: ArrayList<Pubs> = pubsList // 18 JUL
     private lateinit var certDate:String
-
-    init {
-        pubsListFiltered = pubsList
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
        val view =
@@ -49,6 +45,7 @@ class MainAdapter(
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val publication = pubsListFiltered[position]
+
         val favoriteEntity = FavoriteEntity()
         val id = publication.getId()
         val number = publication.Number
@@ -178,8 +175,9 @@ class MainAdapter(
                     pubsList
                         .filter {
                             it.Title!!.lowercase(Locale.ROOT).contains(charString.lowercase(Locale.ROOT)) or
-                                    it.Number!!.lowercase(Locale.ROOT).contains(constraint!!) or
-                                    it.Number!!.contains(constraint) or it.Title!!.contains(charString)
+                            it.Number!!.lowercase(Locale.ROOT).contains(constraint!!) or
+                            it.Number!!.contains(constraint) or
+                            it.Title!!.contains(charString)
                         }
                         .forEach {
                             filteredList.add(it)

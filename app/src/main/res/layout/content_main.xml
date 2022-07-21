@@ -34,7 +34,6 @@
         android:textSize="18sp"
         android:visibility="gone" />
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:paddingTop="5dp"
@@ -47,5 +46,4 @@
         app:fastScrollHorizontalTrackDrawable="@drawable/line_drawable"
         app:fastScrollVerticalThumbDrawable="@drawable/thumb_drawable"
         app:fastScrollVerticalTrackDrawable="@drawable/line_drawable" />
-
 </RelativeLayout>

@@ -1,6 +1,9 @@
 package com.drewcodesit.afiexplorer.database
 
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.PrimaryKey
 
 //, indices = [Index(value = ["number", "title"], unique = true)]
 

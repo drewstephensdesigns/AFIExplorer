@@ -56,4 +56,26 @@
     <string name="developer_github_url" translatable="false">https://github.com/DrewStephensCoding</string>
     <string name="developer_linkedin_url" translatable="false">https://www.linkedin.com/in/drewstephens/</string>
 
+    <string name="change_log">Change Log</string>
+    <string name="change_log_url" translatable="false">https://github.com/DrewStephensCoding/AFIExplorer/blob/master/CHANGE_LOG</string>
+    
+    <string name="extra_features">Extra Features</string>
+
+    <!-- Hard Coded Pubs Seperate from api.afiexplorer.com -->
+    <string name="brown_book">The Brown Book</string>
+    <string name="brown_book_summary">The Enlisted Force Structure</string>
+    <string name="brown_book_url" translatable="false">https://www.doctrine.af.mil/Portals/61/documents/Airman_Development/BrownBook.pdf</string>
+
+    <string name="blue_book">The Blue Book</string>
+    <string name="blue_book_summary">A Profession of Arms: Our Core Values</string>
+    <string name="blue_book_url" translatable="false">https://www.doctrine.af.mil/Portals/61/documents/Airman_Development/BlueBook.pdf</string>
+
+    <string name="airman_blueprint">Blueprint - Enlisted Force Development</string>
+    <string name="airman_blueprint_summary">A Guide to Connect All Airmen to the Air Force</string>
+    <string name="blueprint_url" translatable="false">https://www.af.mil/Portals/1/documents/ul/EFD-The_Blueprint.pdf</string>
+
+    <string name="action_orders">CSAF Action Orders</string>
+    <string name="action_orders_summary">To Accelerate Change Across the Air Force</string>
+    <string name="action_orders_url">https://www.af.mil/Portals/1/documents/2022SAF/FINAL_Modified_Action_Orders.pdf</string>
+
 </resources>

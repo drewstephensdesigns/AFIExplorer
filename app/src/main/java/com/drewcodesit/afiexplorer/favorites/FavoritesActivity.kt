@@ -39,8 +39,8 @@ class FavoritesActivity : AppCompatActivity(),
 
     private lateinit var rv: RecyclerView
     private lateinit var favAdapter: FavoriteAdapter
-    private var favorites: MutableList<FavoriteEntity?> =
-        MainActivity.favoriteDatabase?.favoriteDAO()?.getFavoriteData()!!
+    private var favorites: MutableList<FavoriteEntity?>? = null
+       // MainActivity.favoriteDatabase?.favoriteDAO()?.getFavoriteData()!!
     private lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +52,8 @@ class FavoritesActivity : AppCompatActivity(),
             setDisplayShowHomeEnabled(true)
             title = resources.getString(R.string.app_faves)
         }
+
+        favorites = MainActivity.favoriteDatabase?.favoriteDAO()?.getFavoriteData()
 
         rv = findViewById<View?>(R.id.rv_favorites) as RecyclerView
         rv.setHasFixedSize(true)
@@ -69,7 +71,7 @@ class FavoritesActivity : AppCompatActivity(),
         rv.adapter = favAdapter
 
         // Show or Hide Empty State
-        if (favorites.isEmpty()){
+        if (favorites!!.isEmpty()){
             emptyInfoImg.visibility = View.VISIBLE
             emptyInfo.visibility = View.VISIBLE
             emptyInfo.text = getString(R.string.no_results_found_db)
@@ -162,16 +164,19 @@ class FavoritesActivity : AppCompatActivity(),
     // Click event for trashcan icon in
     // favorites_list_item to delete faved pubs
     override fun onItemClicked(favsListToDelete: FavoriteEntity, position:Int) {
-        MainActivity.favoriteDatabase!!.favoriteDAO()!!.delete(favsListToDelete)
-        info(applicationContext, "You deleted ${favsListToDelete.Number}! ", Toast.LENGTH_SHORT, true).show()
+        if(favorites != null && favorites!!.size > 0){
+            MainActivity.favoriteDatabase!!.favoriteDAO()!!.delete(favsListToDelete)
+            info(applicationContext, "You deleted ${favsListToDelete.Number}! ", Toast.LENGTH_SHORT, true).show()
 
-        // When deleting a faved pub, allows screen to
-        // refresh changes without being visible to user
-        finish()
-        overridePendingTransition( 0, 0)
-        startActivity(intent)
-        rv.recycledViewPool.clear()
-        favAdapter.notifyItemRemoved(position)
-        overridePendingTransition( 0, 0)
+            // When deleting a faved pub, allows screen to
+            // refresh changes without being visible to user
+            finish()
+            overridePendingTransition( 0, 0)
+            startActivity(intent)
+            rv.recycledViewPool.clear()
+            favorites!!.removeAt(position)
+            favAdapter.notifyItemRemoved(position)
+            overridePendingTransition( 0, 0)
+        }
     }
 }

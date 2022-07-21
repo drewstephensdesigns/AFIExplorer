@@ -37,6 +37,7 @@
         <entry key="app/src/main/res/layout/content_faves.xml" value="0.11" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.15052083333333333" />
         <entry key="app/src/main/res/layout/faves_activity.xml" value="0.12107396149949341" />
+        <entry key="app/src/main/res/layout/favorites_list_item.xml" value="0.11018518518518519" />
         <entry key="app/src/main/res/layout/main_activity.xml" value="0.15052083333333333" />
         <entry key="app/src/main/res/layout/pub_row_item.xml" value="0.12107396149949341" />
         <entry key="app/src/main/res/layout/settings_activity.xml" value="0.1" />

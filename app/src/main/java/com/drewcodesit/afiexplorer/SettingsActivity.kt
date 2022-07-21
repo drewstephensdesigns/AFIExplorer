@@ -1,5 +1,6 @@
 package com.drewcodesit.afiexplorer
 
+
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -8,7 +9,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity.setActivityTitle
-import kotlinx.android.synthetic.main.main_activity.*
+import kotlinx.android.synthetic.main.main_activity.toolbar
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -41,6 +42,8 @@ class SettingsActivity : AppCompatActivity() {
 
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
+
+            // Open Source Licenses
             findPreference<Preference>("licenses")?.setOnPreferenceClickListener {
                 context?.let {
                     Intent(it, OssLicensesMenuActivity::class.java).apply {

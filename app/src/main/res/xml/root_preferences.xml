@@ -82,5 +82,16 @@
         <Preference app:key="licenses"
             app:title="@string/licenses"
             app:iconSpaceReserved="false" />
+
+        <Preference
+            app:key="@string/change_log"
+            app:iconSpaceReserved="false"
+            app:title="@string/change_log">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/change_log_url">
+            </intent>
+        </Preference>
+
     </PreferenceCategory>
 </PreferenceScreen>

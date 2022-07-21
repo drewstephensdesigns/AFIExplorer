@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
 
         searchView?.apply {
             setSearchableInfo(searchManager.getSearchableInfo(componentName))
-            setIconifiedByDefault(false)
+            setIconifiedByDefault(true)
             maxWidth = Int.MAX_VALUE
 
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -119,7 +119,6 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    //adapter?.filter?.filter(newText!!)
                     adapter?.filter?.filter(newText!!.lowercase(Locale.getDefault())) {
                         when (adapter?.itemCount) {
                             0 -> {
@@ -135,6 +134,14 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
                     return false
                 }
             })
+
+            /*
+             * Hides other menu items when searchview is active
+             * Source: https://stackoverflow.com/questions/32840576/actionbar-hiding-all-menu-items-except-search-field
+             */
+            setOnQueryTextFocusChangeListener { _, _ ->
+                menu.findItem(R.id.action_bookmark).isVisible = !hasFocus()
+            }
         }
         return true
     }
@@ -268,6 +275,7 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
     //pubJSON is companion object below/web api for pubs
     private fun fetchPubs() {
         loading.visibility = View.VISIBLE
+
         request = JsonArrayRequest(pubJSON, { it ->
             val items: List<Pubs> =
                 Gson().fromJson(it.toString(), object : TypeToken<List<Pubs>>() {}.type)
@@ -276,6 +284,58 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
 
             pubsList?.clear()
             pubsList?.addAll(sortedItems)
+
+            /**
+             * Hardcoded pubs (seperate source from api.afiexplorer.com
+             * Current API Stops at 12 for the side loaded pub IDs
+             * 13 Blue Book | 14 Brown Book | 15 Airman Blueprint | 16 CSAF Action Orders
+             * Epoch time courtesy of https://www.epochconverter.com
+             **/
+
+            // Adds Blue Book
+            pubsList?.add(
+                Pubs(13,
+                getString(string.blue_book),
+                getString(string.blue_book_summary),
+                "NA",
+                "1652659402000",
+                getString(string.blue_book_url)
+                )
+            )
+
+            // Adds Brown Book
+            pubsList?.add(
+                Pubs(14,
+                getString(string.brown_book),
+                getString(string.brown_book_summary),
+                "NA",
+                "1652659402000",
+                getString(string.brown_book_url)
+                )
+            )
+
+            // Adds Airman Blueprint
+            pubsList?.add(
+                Pubs(15,
+                getString(string.airman_blueprint),
+                getString(string.airman_blueprint_summary),
+                "NA",
+                "1650614400000",
+                getString(string.blueprint_url)
+                )
+            )
+
+            // Adds CSAF Action Orders
+            pubsList?.add(
+                Pubs(16,
+                    getString(string.action_orders),
+                    getString(string.action_orders_summary),
+                    "NA",
+                    "1644220800000",
+                    getString(string.action_orders_url)
+                )
+            )
+
             recyclerView?.recycledViewPool?.clear()
             adapter?.notifyDataSetChanged()
             loading.visibility = View.GONE
@@ -296,7 +356,7 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
 
     companion object {
         // API currently used to display Departmental level AFIs/Pubs
-        private const val pubJSON = "https://api.afiexplorer.com/v2/"
+        private const val pubJSON = "https://api.afiexplorer.com/"
 
         // Database to save frequent pubs
         var favoriteDatabase: FavoriteDatabase? = null

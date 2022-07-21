@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName
 
 class Pubs(
     private val id: Int,
+
     @SerializedName("Number")
     var Number: String? = "",
 
@@ -22,6 +23,7 @@ class Pubs(
 
     @SerializedName("DocumentUrl")
     var DocumentUrl: String? = ""
+
 ) {
     fun getId(): Int{
         return id

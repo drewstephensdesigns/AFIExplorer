@@ -37,9 +37,7 @@
   - Fixed bug causing random crashing on Android 8 & 9 software versions
   
 ~~### Version 8 (1.2.2)~~
-~~- **Current Version**~~
   ~~- This release added a drag and drop feature, unfortunately, testing wasn't done before hand and the feature ended up not working correctly~~
-    ~~- Still in testing stage~~
     
 ### Version 9 (1.2.3)
 -  Updated launcher icon
@@ -66,6 +64,13 @@
     • Favorites screen now has search capabilities 
     • Added menu to Favorites screen to allow for copying publication number, publication URL, share publication, and delete publication from database
     
-### Version 14 (1.2.8) Current Version // 30 JUN 2022
+### Version 14 (1.2.8)
 -  UI Improvements
 -  Bug/Crash Fixes
+
+### Version 15 (1.2.9)
+-  Hot fix for incorrect data source
+
+### Version 16 (1.3.0) **CURRENT VERSION // 16 JUL 2022**
+-  Added The Brown Book (The Enlisted Force Structure)
+-  Added The Blue Book (A Profession of Arms: Our Core Values)

@@ -17,6 +17,21 @@
   - [Room](https://developer.android.com/topic/libraries/architecture/room) - SQLite object mapping library.
 - [Material Components for Android](https://github.com/material-components/material-components-android) - Modular and customizable Material Design UI components for Android.
 
+## Permissions 🔒
+The following permissions are utilized in the app, nothing more.
+```
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+```
+- android.permission.INTERNET is required for network operations 
+- android.permission.ACCESS_WIFI_STATE allows applications to access information about Wi-Fi networks
+- android.permission.READ_EXTERNAL_STORAGE allows an application to read from external storage.
+- android.permission.WRITE_EXTERNAL_STORAGE allows an application to write to external storage.
+
+Additional information for these permissions can be found at https://developer.android.com/reference/android/Manifest.permission
+
 ![](https://github.com/DrewStephensCoding/AFIExplorer/blob/master/screenshots/summary.png)
 
 ## Download

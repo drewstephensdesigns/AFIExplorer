@@ -17,6 +17,9 @@
   - [Room](https://developer.android.com/topic/libraries/architecture/room) - SQLite object mapping library.
 - [Material Components for Android](https://github.com/material-components/material-components-android) - Modular and customizable Material Design UI components for Android.
 
+## Change Log 
+To see the list of changes and updates to AFI Explorer, please see the [Change Log](https://github.com/DrewStephensCoding/AFIExplorer/blob/master/CHANGE_LOG.md).  This list will be kept up to date as the app grows.
+
 ## Permissions 🔒
 The following permissions are utilized in the app, nothing more.
 ```

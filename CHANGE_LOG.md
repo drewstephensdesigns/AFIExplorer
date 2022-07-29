@@ -75,8 +75,18 @@
 -  Added The Brown Book (The Enlisted Force Structure)
 -  Added The Blue Book (A Profession of Arms: Our Core Values)
 
-### Version 17 (1.3.1) ***Current Version as of 18 Jul***
+ ***Current Version as of 18 Jul***
+### Version 17 (1.3.1)
 -  Added Airman Blueprint
 -  Added CSAF Action Orders
 -  Bug fixes and improvements
+
+***Still in Production***
+Special thanks to the U.S Air Force LeMay Center for Doctrine Development and Education
+https://www.airuniversity.af.edu/LeMay/
+### Version 18 (1.3.2)
+-  Fixes auto rotate issue when user has auto rotate turned off
+-  Adds Air Force Doctrine Publication #1
+-  Adds ability to download files to an app-created folder
+-  Cleaned up code and removed unused resources
 

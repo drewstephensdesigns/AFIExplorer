@@ -35,6 +35,8 @@ The following permissions are utilized in the app, nothing more.
 
 Additional information for these permissions can be found at https://developer.android.com/reference/android/Manifest.permission
 
+## MAD Scorecard
+What is the MAD Scorecard? MAD scorecard uses Android Studio to tell you interesting things like how much size savings your app is seeing through the Android App Bundle. It spotlights each of the key MAD technologies, including specific Jetpack libraries and Kotlin features used in your app.  AFI Explorer's MAD Scorecard can be found below. More information on Modern Android Architecture (MAD) can be found at https://developer.android.com/modern-android-development/scorecard
 ![](https://github.com/DrewStephensCoding/AFIExplorer/blob/master/screenshots/summary.png)
 
 ## Download

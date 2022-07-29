@@ -90,7 +90,11 @@ class FavoriteAdapter(
     }
 
     override fun getItemCount(): Int {
-        return favePubsListFiltered!!.size
+        return if(favePubsListFiltered != null){
+            favePubsListFiltered!!.size
+        }else {
+            0
+        }
     }
 
     override fun getFilter(): Filter {

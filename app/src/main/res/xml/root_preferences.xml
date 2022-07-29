@@ -20,6 +20,8 @@
             <intent
                 android:action="android.intent.action.SENDTO"
                 android:data="mailto:drewstephensdesigns@gmail.com">
+
+                <!-- https://issuetracker.google.com/issues/37129926 -->
                 <extra android:name="android.intent.extra.SUBJECT"
                     android:value="App Feedback"/>
             </intent>
@@ -92,6 +94,5 @@
                 android:data="@string/change_log_url">
             </intent>
         </Preference>
-
     </PreferenceCategory>
 </PreferenceScreen>

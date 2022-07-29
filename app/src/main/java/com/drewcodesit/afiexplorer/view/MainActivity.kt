@@ -1,14 +1,16 @@
-package com.drewcodesit.afiexplorer.main
+package com.drewcodesit.afiexplorer.view
 
 import android.app.SearchManager
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -28,13 +30,12 @@ import androidx.room.Room
 import com.android.volley.toolbox.JsonArrayRequest
 import com.drewcodesit.afiexplorer.MyApplication
 import com.drewcodesit.afiexplorer.MyApplication.Companion.TAG
-import com.drewcodesit.afiexplorer.Pubs
+import com.drewcodesit.afiexplorer.model.Pubs
 import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.R.*
-import com.drewcodesit.afiexplorer.SettingsActivity
 import com.drewcodesit.afiexplorer.adapters.MainAdapter
 import com.drewcodesit.afiexplorer.database.FavoriteDatabase
-import com.drewcodesit.afiexplorer.favorites.FavoritesActivity
+import com.drewcodesit.afiexplorer.utils.Config
 import com.drewcodesit.afiexplorer.utils.MyDividerItemDecoration
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -91,9 +92,10 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
 
         favoriteDatabase = Room.databaseBuilder(
             applicationContext, FavoriteDatabase::class.java,
-            "myfavdb"
+            Config.DATABASE_NAME
         ).allowMainThreadQueries().build()
 
+        getOrientation()
         fetchPubs()
     }
 
@@ -271,12 +273,29 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
         }
     }
 
+    /**
+     * Bug Fix for Version 1.3.2 / Version Code 18
+     * Auto rotate issue even when turned off.
+     * https://www.reddit.com/user/goldfishfollies
+     */
+    private fun getOrientation(){
+        requestedOrientation =
+            if (Settings.System.getInt(contentResolver, Settings.System.ACCELEROMETER_ROTATION, 0) == 1){
+                //Auto Rotate is on, so don't lock
+                ActivityInfo.SCREEN_ORIENTATION_SENSOR
+            } else{
+                //Auto Rotate is off, so lock
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            }
+
+    }
+
     // Fetches JSON from API
     //pubJSON is companion object below/web api for pubs
     private fun fetchPubs() {
         loading.visibility = View.VISIBLE
 
-        request = JsonArrayRequest(pubJSON, { it ->
+        request = JsonArrayRequest(Config.BASE_URL, { it ->
             val items: List<Pubs> =
                 Gson().fromJson(it.toString(), object : TypeToken<List<Pubs>>() {}.type)
 
@@ -336,6 +355,21 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
                 )
             )
 
+            /**
+             * Update for Version 1.3.2 / Version Code 18
+             * Adds AF Doctrine Pub 1
+             * https://www.reddit.com/user/USAFDoctrine/
+             */
+            pubsList?.add(
+                Pubs(17,
+                getString(string.AFDP1),
+                getString(string.AFDP1_summary),
+                "NA",
+                "1615406400000",
+                getString(string.AFDP1_url)
+                )
+            )
+
             recyclerView?.recycledViewPool?.clear()
             adapter?.notifyDataSetChanged()
             loading.visibility = View.GONE
@@ -343,8 +377,7 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
 
         }) {
             println(it.printStackTrace())
-            Toasty.error(applicationContext, "Error: " + it.message, Toast.LENGTH_SHORT, true)
-                .show()
+            Toasty.error(applicationContext, getString(string.no_internet), Toast.LENGTH_SHORT, true).show()
         }
         MyApplication.instance.addToRequestQueue(request!!)
     }
@@ -355,8 +388,6 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
     }
 
     companion object {
-        // API currently used to display Departmental level AFIs/Pubs
-        private const val pubJSON = "https://api.afiexplorer.com/"
 
         // Database to save frequent pubs
         var favoriteDatabase: FavoriteDatabase? = null

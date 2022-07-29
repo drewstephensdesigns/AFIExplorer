@@ -54,5 +54,4 @@
         <item name="android:interpolator">@android:interpolator/accelerate_decelerate</item>
         <item name="android:visibility">gone</item>
     </style>
-
 </resources>

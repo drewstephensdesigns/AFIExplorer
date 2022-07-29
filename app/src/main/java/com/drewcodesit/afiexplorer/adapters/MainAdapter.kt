@@ -1,11 +1,14 @@
 package com.drewcodesit.afiexplorer.adapters
 
 
+import android.app.DownloadManager
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
@@ -14,10 +17,10 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.drewcodesit.afiexplorer.Pubs
+import com.drewcodesit.afiexplorer.model.Pubs
 import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.database.FavoriteEntity
-import com.drewcodesit.afiexplorer.main.MainActivity
+import com.drewcodesit.afiexplorer.view.MainActivity
 import es.dmoral.toasty.Toasty.info
 import es.dmoral.toasty.Toasty.success
 import java.text.SimpleDateFormat
@@ -103,6 +106,34 @@ class MainAdapter(
                         val shareIntent = Intent.createChooser(sendIntent, null)
                         shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(ct, shareIntent, null)
+                    }
+
+                    // Downloads file
+                    R.id.menu5 -> {
+
+                        /**
+                         ** fileDir: Standard directory in which to place documents that have been created by the user.
+                         ** subPath: Creates sub-folder that the app will download to
+                         ** request: parses url of the selected AFI/Publication
+                         */
+                        val manager = ct.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+
+                        val fileDir = Environment.DIRECTORY_DOCUMENTS
+                        val subPath = "/AFIExplorer// ${publication.Title}"
+                        val request = DownloadManager.Request(Uri.parse(publication.DocumentUrl))
+
+                        request.setTitle(publication.Number)
+                        request.setDescription(publication.Title)
+                        request.setDestinationInExternalPublicDir(
+                            fileDir,
+                            "$subPath.pdf"
+                        )
+                        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                        info(ct, publication.Number + " downloaded to: " + fileDir + "/AFIExplorer/", Toast.LENGTH_SHORT, true).show()
+
+                        // Deprecated
+                        //request.setVisibleInDownloadsUi(true)
+                        manager.enqueue(request)
                     }
                 }
                 false

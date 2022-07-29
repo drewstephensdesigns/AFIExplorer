@@ -1,4 +1,4 @@
-package com.drewcodesit.afiexplorer
+package com.drewcodesit.afiexplorer.model
 
 import com.google.gson.annotations.SerializedName
 

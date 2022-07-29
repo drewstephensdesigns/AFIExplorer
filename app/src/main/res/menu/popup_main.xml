@@ -21,4 +21,9 @@
         app:showAsAction="ifRoom"
         android:title="@string/action_share" />
 
+    <item
+        android:id="@+id/menu5"
+        app:showAsAction="ifRoom"
+        android:title="@string/action_download" />
+
 </menu>

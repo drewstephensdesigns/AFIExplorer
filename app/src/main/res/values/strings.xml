@@ -12,6 +12,8 @@
     <string name="no_results_found">No Results Found for %1$s</string>
     <string name="no_results_found_db">There\'s nothing here :(</string>
 
+    <string name="no_internet">Connection Error : Turn Off Airplane Mode or Use Wi-Fi to access Publications</string>
+
     <!-- Shared Preference Keys-->
     <string name="pref_key_mode_night">PREF_MODE_NIGHT</string>
 
@@ -20,7 +22,9 @@
     <string name="action_share">Share Publication</string>
     <string name="action_copy">Copy Publication Number</string>
     <string name="action_copy_url">Copy URL</string>
+    <string name="action_download">Download File</string>
 
+    <!-- Publication Actions for Clarity -->
     <string name="guidance_memorandum">Last Action: Guidance Memorandum</string>
     <string name="interim_change">Last Action: Interim Change</string>
     <string name="update_contact">Last Action: Update Contact</string>
@@ -43,7 +47,7 @@
     <string name="help_header">Help &amp; Feedback</string>
     <string name="social_header">Connect with Me</string>
     <string name="legal_header">Legal</string>
-    <string name="version_header">App Version</string>
+    <string name="version_header">App Info</string>
 
     <string name="instagram">Instagram</string>
     <string name="github">Github</string>
@@ -58,8 +62,6 @@
 
     <string name="change_log">Change Log</string>
     <string name="change_log_url" translatable="false">https://github.com/DrewStephensCoding/AFIExplorer/blob/master/CHANGE_LOG</string>
-    
-    <string name="extra_features">Extra Features</string>
 
     <!-- Hard Coded Pubs Seperate from api.afiexplorer.com -->
     <string name="brown_book">The Brown Book</string>
@@ -77,5 +79,9 @@
     <string name="action_orders">CSAF Action Orders</string>
     <string name="action_orders_summary">To Accelerate Change Across the Air Force</string>
     <string name="action_orders_url">https://www.af.mil/Portals/1/documents/2022SAF/FINAL_Modified_Action_Orders.pdf</string>
+
+    <string name="AFDP1">AFDP-1</string>
+    <string name="AFDP1_summary">The Air Force</string>
+    <string name="AFDP1_url">https://www.doctrine.af.mil/Portals/61/documents/AFDP_1/AFDP-1.pdfAir Fo</string>
 
 </resources>

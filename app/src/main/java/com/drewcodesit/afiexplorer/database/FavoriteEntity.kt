@@ -4,10 +4,11 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.drewcodesit.afiexplorer.utils.Config
 
 //, indices = [Index(value = ["number", "title"], unique = true)]
 
-@Entity(tableName = "favoritelist", indices = [Index(value = ["number", "title"], unique = true)])
+@Entity(tableName = Config.TABLE_NAME, indices = [Index(value = ["number", "title"], unique = true)])
 data class FavoriteEntity (
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name ="id") var id: Int = 0,
     @ColumnInfo(name = "number") var Number: String? = null,

@@ -1,6 +1,6 @@
 
 
-package com.drewcodesit.afiexplorer.favorites
+package com.drewcodesit.afiexplorer.view
 
 import android.app.SearchManager
 import android.content.ActivityNotFoundException
@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.adapters.FavoriteAdapter
 import com.drewcodesit.afiexplorer.database.FavoriteEntity
-import com.drewcodesit.afiexplorer.main.MainActivity
 import com.drewcodesit.afiexplorer.utils.MyDividerItemDecoration
 import com.rajat.pdfviewer.PdfViewerActivity
 import es.dmoral.toasty.Toasty.info

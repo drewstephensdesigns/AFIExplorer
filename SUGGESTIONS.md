@@ -14,4 +14,8 @@
 - Generic search vs actual search
 - Search function "next" feature
 - Keywords for searching AFIs
-- Option for alerts if publications are updated (Researching)
+- Option for alerts if publications are updated
+
+### Feedback by: [r/AirForce](https://www.reddit.com/r/AirForce?utm_medium=android_app&utm_source=share)
+- AFDP 1 https://www.doctrine.af.mil/Portals/61/documents/AFDP_1/AFDP-1.pdf
+- Auto rotate issue even when turned off.

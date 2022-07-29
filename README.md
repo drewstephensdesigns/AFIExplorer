@@ -1,4 +1,4 @@
-![](https://github.com/DrewStephensCoding/AFIExplorer/blob/master/screenshots/AFI%20Explorer.png)
+8![](https://github.com/DrewStephensCoding/AFIExplorer/blob/master/screenshots/AFI%20Explorer.png)
 
 ## 📑 AFI-Explorer (Android)
 ### Built by Airmen, for Airmen
@@ -17,6 +17,24 @@
   - [Room](https://developer.android.com/topic/libraries/architecture/room) - SQLite object mapping library.
 - [Material Components for Android](https://github.com/material-components/material-components-android) - Modular and customizable Material Design UI components for Android.
 
+## Change Log 
+To see the list of changes and updates to AFI Explorer, please see the [Change Log](https://github.com/DrewStephensCoding/AFIExplorer/blob/master/CHANGE_LOG.md).  This list will be kept up to date as the app grows.
+
+## Permissions 🔒
+The following permissions are utilized in the app, nothing more.
+```
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+```
+- android.permission.INTERNET is required for network operations 
+- android.permission.ACCESS_WIFI_STATE allows applications to access information about Wi-Fi networks
+- android.permission.READ_EXTERNAL_STORAGE allows an application to read from external storage.
+- android.permission.WRITE_EXTERNAL_STORAGE allows an application to write to external storage.
+
+Additional information for these permissions can be found at https://developer.android.com/reference/android/Manifest.permission
+
 ![](https://github.com/DrewStephensCoding/AFIExplorer/blob/master/screenshots/summary.png)
 
 ## Download
@@ -29,6 +47,9 @@ To run tests, run `gradlew test`
 
 To learn more about Android accessibility, visit the Android accessibility page. To learn more about developer facing aspects of Android accessibility, read the accessibility developer guide.
 
+## Suggestions
+We've been provided several great suggestions to improve the app.  While some are unfortunately not doable do to Android/Java architecture, we are researching the best approaches to continue development.  For the current list of suggestions, please see [App Suggestions](https://github.com/DrewStephensCoding/AFIExplorer/blob/master/SUGGESTIONS.md).  This list will be kept up to date.
+
 ## Issues
 We are continuously working to improve the app and add new features.  If you have suggestions for improvements or if you encounter a problem, please provide feedback to us via in-app feedback.  When creating an issue, try to include the following:
 -  The device manufacturer and model
@@ -36,10 +57,10 @@ We are continuously working to improve the app and add new features.  If you hav
 -  A description of the issue; include screenshots/screencaps if you think they'll help us understand the problem
 
 ## Contribute
-If you want to contribute to this library, you're always welcome! See [Contributing Guidelines](https://github.com/DrewStephensCoding/AFI-Explorer/blob/main/CONTRIBUTION.md)
+If you want to contribute to this library, you're always welcome! See [Contributing Guideline](https://github.com/DrewStephensCoding/AFIExplorer/blob/master/CONTRIBUTION.md)
 
 ## Code of Conduct
-This [Code of Conduct](https://github.com/DrewStephensCoding/AFIExplorer/blob/master/CODE_OF_CONDUCT) outlines our expectations for participants within the Airmen Coders community, as well as steps to reporting unacceptable behavior. We are committed to providing a welcoming and inspiring community for all and expect our code of conduct to be honored.
+This [Code of Conduct](https://github.com/DrewStephensCoding/AFIExplorer/blob/master/CODE_OF_CONDUCT.md) outlines our expectations for participants within the Airmen Coders community, as well as steps to reporting unacceptable behavior. We are committed to providing a welcoming and inspiring community for all and expect our code of conduct to be honored.
 
 ## Donation
 If AFI Explorer has helped make your daily life easier, please consider supporting future updates.

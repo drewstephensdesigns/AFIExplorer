@@ -71,6 +71,12 @@
 ### Version 15 (1.2.9)
 -  Hot fix for incorrect data source
 
-### Version 16 (1.3.0) **CURRENT VERSION // 16 JUL 2022**
+### Version 16 (1.3.0)
 -  Added The Brown Book (The Enlisted Force Structure)
 -  Added The Blue Book (A Profession of Arms: Our Core Values)
+
+### Version 17 (1.3.1) ***Current Version as of 18 Jul***
+-  Added Airman Blueprint
+-  Added CSAF Action Orders
+-  Bug fixes and improvements
+

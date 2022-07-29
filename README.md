@@ -1,4 +1,4 @@
-8![](https://github.com/DrewStephensCoding/AFIExplorer/blob/master/screenshots/AFI%20Explorer.png)
+![](https://github.com/DrewStephensCoding/AFIExplorer/blob/master/screenshots/AFI%20Explorer.png)
 
 ## 📑 AFI-Explorer (Android)
 ### Built by Airmen, for Airmen

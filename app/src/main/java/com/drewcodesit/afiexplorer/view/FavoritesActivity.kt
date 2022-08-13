@@ -55,7 +55,7 @@ class FavoritesActivity : AppCompatActivity(),
         favorites = MainActivity.favoriteDatabase?.favoriteDAO()?.getFavoriteData()
 
         rv = findViewById<View?>(R.id.rv_favorites) as RecyclerView
-        rv.setHasFixedSize(true)
+        //rv.setHasFixedSize(true)
         rv.layoutManager = LinearLayoutManager(this)
 
         rv.apply {

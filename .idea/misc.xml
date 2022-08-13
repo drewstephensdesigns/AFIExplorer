@@ -33,6 +33,7 @@
         <entry key="app/src/main/res/drawable/ic_outline_bookmarks.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_publications.xml" value="0.15" />
         <entry key="app/src/main/res/drawable/ic_search.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_search_empty.xml" value="0.126" />
         <entry key="app/src/main/res/drawable/line.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/progress_circle.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_about.xml" value="0.1" />

@@ -28,7 +28,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
 import com.android.volley.toolbox.JsonArrayRequest
 import com.drewcodesit.afiexplorer.MyApplication
 import com.drewcodesit.afiexplorer.MyApplication.Companion.TAG
@@ -75,7 +74,7 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
         }
 
         recyclerView = findViewById<View?>(id.recycler_view) as RecyclerView
-        recyclerView!!.setHasFixedSize(true)
+        //recyclerView!!.setHasFixedSize(true)
         recyclerView!!.layoutManager = LinearLayoutManager(
             this
         )
@@ -318,7 +317,8 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
                 getString(string.blue_book_summary),
                 "NA",
                 "1652659402000",
-                getString(string.blue_book_url)
+                getString(string.blue_book_url),
+                "AF/A1"
                 )
             )
 
@@ -329,7 +329,9 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
                 getString(string.brown_book_summary),
                 "NA",
                 "1652659402000",
-                getString(string.brown_book_url)
+                getString(string.brown_book_url),
+                "AF/A1"
+
                 )
             )
 
@@ -340,7 +342,9 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
                 getString(string.airman_blueprint_summary),
                 "NA",
                 "1650614400000",
-                getString(string.blueprint_url)
+                getString(string.blueprint_url),
+                "AF/A1"
+
                 )
             )
 
@@ -351,7 +355,8 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
                     getString(string.action_orders_summary),
                     "NA",
                     "1644220800000",
-                    getString(string.action_orders_url)
+                    getString(string.action_orders_url),
+                    "AF/CC"
                 )
             )
 
@@ -366,7 +371,8 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
                 getString(string.AFDP1_summary),
                 "NA",
                 "1615406400000",
-                getString(string.AFDP1_url)
+                getString(string.AFDP1_url),
+                "LeMay Center for Doctrine Development"
                 )
             )
 

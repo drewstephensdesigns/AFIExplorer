@@ -53,6 +53,7 @@ class MainAdapter(
         val number = publication.Number
         val title = publication.Title
         val url = publication.DocumentUrl
+        val rescindOrg = publication.RescindOrg
 
         favoriteEntity.id = id
         favoriteEntity.Number = number
@@ -167,6 +168,9 @@ class MainAdapter(
 
                 "Certified Current: $certDate".also { h.pubCertDate!!.text = it }
 
+                "Rescind Org: $rescindOrg".also { h.pubRescindOrg!!.text = it }
+
+
                 // Hard Coding E-Pubs Actions for Grammar
                 return when(LastAction){
                     "GM" -> h.pubLastAction!!.text = ct.getString(R.string.guidance_memorandum)
@@ -243,6 +247,7 @@ class MainAdapter(
         var pubTitle: TextView? = view.findViewById<View?>(R.id.pubTitle) as TextView
         var pubLastAction: TextView? = view.findViewById<View?>(R.id.pubLastAction) as TextView
         var pubCertDate: TextView? = view.findViewById<View?>(R.id.pubCertDate) as TextView
+        var pubRescindOrg: TextView? = view.findViewById<View?>(R.id.pubRescindOrg) as TextView
         var buttonViewOption: ImageView? = view.findViewById<View?>(R.id.textViewOptions) as ImageView
 
         // Clicking on any publication in the list allows user to open PDF

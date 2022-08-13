@@ -22,7 +22,10 @@ class Pubs(
     var CertDate: String,
 
     @SerializedName("DocumentUrl")
-    var DocumentUrl: String? = ""
+    var DocumentUrl: String? = "",
+
+    @SerializedName("RescindOrg")
+    var RescindOrg: String? = ""
 
 ) {
     fun getId(): Int{

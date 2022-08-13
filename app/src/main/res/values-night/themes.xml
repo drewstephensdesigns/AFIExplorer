@@ -18,8 +18,10 @@
         <item name="colorOnSecondary">#090908</item>
 
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/black_darker</item>
+        <item name="android:statusBarColor" >@color/black_darker</item>
         <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
         <item name="android:colorControlNormal">@color/pub_little_text</item>
     </style>
 

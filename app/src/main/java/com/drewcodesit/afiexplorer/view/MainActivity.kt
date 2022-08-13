@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -21,6 +22,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.res.ResourcesCompat
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -63,6 +65,8 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
         super.onCreate(savedInstanceState)
         setContentView(layout.main_activity)
 
+        toastyConfig()
+
         setSupportActionBar(toolbar)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(false)
@@ -89,13 +93,8 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
 
         pubsList = ArrayList()
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        favoriteDatabase = FavoriteDatabase.getDatabase(applicationContext)
 
-        favoriteDatabase = Room.databaseBuilder(
-            applicationContext, FavoriteDatabase::class.java,
-            Config.DATABASE_NAME
-        ).allowMainThreadQueries().build()
-
-        getOrientation()
         fetchPubs()
     }
 
@@ -160,6 +159,7 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
             * Social Media Links (Github, Instagram, LinkedIn)
             * Developer Email
              */
+
             id.action_feedback -> {
                 startActivity(
                     Intent(
@@ -169,7 +169,6 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
                 )
                 true
             }
-
             // Change App Theme (Light, Dark, System Follow)
             id.action_change_theme -> {
                 val themeSelections = getThemeSelections()
@@ -208,6 +207,7 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
                     .show()
                 true
             }
+
 
             // View Saved Publications
             id.action_bookmark -> {
@@ -248,6 +248,7 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         (application as MyApplication).applyTheme()
+        getOrientation()
         recreate()
     }
 
@@ -287,7 +288,6 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
                 //Auto Rotate is off, so lock
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             }
-
     }
 
     // Fetches JSON from API
@@ -385,6 +385,17 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
     private fun setupData(pubsList: ArrayList<Pubs>) {
         adapter = MainAdapter(applicationContext, pubsList, this)
         recyclerView?.adapter = adapter
+    }
+
+    // Configures Toasty Library
+    private fun toastyConfig(){
+        val typeface: Typeface? = ResourcesCompat.getFont(applicationContext, font.ibm_plex_sans)
+
+        Toasty.Config.getInstance()
+            .setTextSize(15)
+            .setToastTypeface(typeface!!)
+            .supportDarkTheme(true)
+            .apply()
     }
 
     companion object {

@@ -20,9 +20,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.drewcodesit.afiexplorer.model.Pubs
 import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.database.FavoriteEntity
-import com.drewcodesit.afiexplorer.view.MainActivity
-import es.dmoral.toasty.Toasty.info
-import es.dmoral.toasty.Toasty.success
+import com.drewcodesit.afiexplorer.view.MainActivity.Companion.favoriteDatabase
+import es.dmoral.toasty.Toasty.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -77,8 +76,12 @@ class MainAdapter(
                 when (item.itemId) {
                     // Bookmark
                     R.id.menu1 -> {
-                        MainActivity.favoriteDatabase!!.favoriteDAO()!!.addData(favoriteEntity)
-                        success(ct, "$number: added to favorites!", Toast.LENGTH_SHORT, true).show()
+                        if (favoriteDatabase!!.favoriteDAO()!!.titleExists(publication.Number!!) != 0){
+                            warning(ct, "$number already exists in database", Toast.LENGTH_SHORT, false).show()
+                        } else {
+                            favoriteDatabase!!.favoriteDAO()!!.addData(favoriteEntity)
+                            success(ct, "$number: added to favorites!", Toast.LENGTH_SHORT, true).show()
+                        }
                     }
 
                     // Copy Pub Number

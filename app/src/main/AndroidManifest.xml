@@ -60,6 +60,13 @@
                 android:value=".view.MainActivity" />
         </activity>
 
+        <activity
+            android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
+            android:theme="@style/AppTheme" />
+
         <service android:name="com.downloadservice.filedownloadservice.service.DownloadService"/>
 
     </application>

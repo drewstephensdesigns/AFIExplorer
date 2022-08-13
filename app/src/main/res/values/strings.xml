@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">AFI Explorer</string>
+    <string name="app_home">Publications</string>
+
     <string name="app_faves">Favorites</string>
     <string name="action_support">Support</string>
     <string name="action_feedback">App Info</string>
@@ -61,7 +63,7 @@
     <string name="developer_linkedin_url" translatable="false">https://www.linkedin.com/in/drewstephens/</string>
 
     <string name="change_log">Change Log</string>
-    <string name="change_log_url" translatable="false">https://github.com/DrewStephensCoding/AFIExplorer/blob/master/CHANGE_LOG</string>
+    <string name="change_log_url" translatable="false">https://github.com/DrewStephensCoding/AFIExplorer/blob/master/CHANGE_LOG.md</string>
 
     <!-- Hard Coded Pubs Seperate from api.afiexplorer.com -->
     <string name="brown_book">The Brown Book</string>

@@ -10,15 +10,14 @@
         android:orderInCategory="100"
         android:title="@string/action_search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="ifRoom|collapseActionView" />
+        app:showAsAction="always|collapseActionView" />
 
     <item
         android:id="@+id/action_bookmark"
         android:icon="@drawable/ic_outline_bookmarks"
         android:orderInCategory="101"
         android:title="@string/action_bookmark"
-        app:showAsAction="ifRoom"/>
-
+        app:showAsAction="always"/>
     <item
         android:id="@+id/action_change_theme"
         android:title="@string/change_theme"

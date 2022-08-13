@@ -72,14 +72,16 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics:18.2.12'
     implementation 'com.google.firebase:firebase-analytics:21.1.0'
     implementation 'androidx.preference:preference-ktx:1.2.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.1'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.1'
     kapt "androidx.room:room-compiler:2.4.3"
     androidTestImplementation "androidx.room:room-testing:2.4.3"
 
     // Toasty - Usual Toast, but with Steroids
-    implementation 'com.github.GrenderG:Toasty:1.5.0'
+    implementation 'com.github.GrenderG:Toasty:1.5.2'
 
     // PDF Viewer - If user doesn't have pdf capable app installed
-    implementation 'com.github.afreakyelf:Pdf-Viewer:v1.0.7'
+    implementation 'com.github.afreakyelf:Pdf-Viewer:v1.0.8'
 
     // Licenses
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'

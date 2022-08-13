@@ -22,6 +22,8 @@
         <entry key="..\:/AndroidStudioProjects/Projects_Inwork/AFIExplorer/app/src/main/res/layout/pub_row_item.xml" value="0.1" />
         <entry key="..\:/AndroidStudioProjects/Projects_Inwork/AFIExplorer/app/src/main/res/menu/menu_faves.xml" value="0.1" />
         <entry key="..\:/AndroidStudioProjects/Projects_Inwork/AFIExplorer/app/src/main/res/menu/popup_faves.xml" value="0.11510416666666666" />
+        <entry key="app/src/main/res/drawable/bottom_nav_color.xml" value="0.1245" />
+        <entry key="app/src/main/res/drawable/bottom_nav_selector.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_camera.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_feedback.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_free_icon_1.xml" value="0.1" />
@@ -29,19 +31,25 @@
         <entry key="app/src/main/res/drawable/ic_linkedin.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_menu_vert.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_outline_bookmarks.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_publications.xml" value="0.15" />
         <entry key="app/src/main/res/drawable/ic_search.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/line.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/progress_circle.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_about.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_faves.xml" value="0.12107396149949341" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.15052083333333333" />
+        <entry key="app/src/main/res/layout/bottom_nav_main_activity.xml" value="0.1" />
         <entry key="app/src/main/res/layout/content_faves.xml" value="0.11" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.15052083333333333" />
         <entry key="app/src/main/res/layout/faves_activity.xml" value="0.12107396149949341" />
         <entry key="app/src/main/res/layout/favorites_list_item.xml" value="0.11018518518518519" />
+        <entry key="app/src/main/res/layout/fragment_faves.xml" value="0.24139492753623187" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.1" />
         <entry key="app/src/main/res/layout/main_activity.xml" value="0.15052083333333333" />
         <entry key="app/src/main/res/layout/pub_row_item.xml" value="0.12107396149949341" />
         <entry key="app/src/main/res/layout/settings_activity.xml" value="0.1" />
-        <entry key="app/src/main/res/menu/menu_faves.xml" value="0.14166666666666666" />
+        <entry key="app/src/main/res/menu/bottom_menu.xml" value="0.24791666666666667" />
+        <entry key="app/src/main/res/menu/menu_faves.xml" value="0.1" />
         <entry key="app/src/main/res/menu/menu_main.xml" value="0.14629629629629629" />
         <entry key="app/src/main/res/menu/popup_faves.xml" value="0.15052083333333333" />
         <entry key="app/src/main/res/menu/popup_main.xml" value="0.15052083333333333" />

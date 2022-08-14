@@ -56,4 +56,12 @@
         <item name="android:interpolator">@android:interpolator/accelerate_decelerate</item>
         <item name="android:visibility">gone</item>
     </style>
+
+    <style name="ossTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/black_darker</item>
+        <item name="colorPrimaryDark">@color/black_darker</item>
+        <item name="android:windowBackground">#171719</item>
+        <item name="android:textColor">#B5AFAF</item>
+    </style>
+
 </resources>

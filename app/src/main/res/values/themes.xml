@@ -49,4 +49,10 @@
         <item name="android:visibility">gone</item>
     </style>
 
+    <style name="ossTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:textColor">@color/black_darker</item>
+    </style>
+
+
 </resources>

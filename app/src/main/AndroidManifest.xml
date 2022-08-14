@@ -63,13 +63,9 @@
 
         <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/ossTheme" />
         <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
-            android:theme="@style/AppTheme" />
-
-        <service
-            android:name="com.downloadservice.filedownloadservice.service.DownloadService" />
-
+            android:theme="@style/ossTheme" />
     </application>
 </manifest>

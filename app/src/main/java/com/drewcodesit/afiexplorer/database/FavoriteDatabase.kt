@@ -1,12 +1,19 @@
 package com.drewcodesit.afiexplorer.database
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.drewcodesit.afiexplorer.utils.Config
 
-@Database(entities = [FavoriteEntity::class], version = 1, exportSchema = false)
+@Database
+    (entities = [FavoriteEntity::class],
+    version = 2,
+    autoMigrations = [
+        AutoMigration (from = 1, to = 2)
+    ],
+    exportSchema = true)
 abstract class FavoriteDatabase : RoomDatabase() {
 
     companion object {
@@ -18,7 +25,9 @@ abstract class FavoriteDatabase : RoomDatabase() {
                     context.applicationContext,
                     FavoriteDatabase::class.java,
                     Config.DATABASE_NAME)
-                    .allowMainThreadQueries().build()
+                    .allowMainThreadQueries()
+                    //.fallbackToDestructiveMigration()
+                    .build()
             }
             return INSTANCE as FavoriteDatabase
         }

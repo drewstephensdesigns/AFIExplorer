@@ -97,4 +97,8 @@
     <string name="AFDP1_summary">The Air Force</string>
     <string name="AFDP1_url">https://www.doctrine.af.mil/Portals/61/documents/AFDP_1/AFDP-1.pdf</string>
 
+    <string name="DODI_4515.13">DODI4515.13</string>
+    <string name="DODI4515.13_summary">Air Transportation Eligibility</string>
+    <string name="DODI4515.13_url">https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/451513p.pdf</string>
+
 </resources>

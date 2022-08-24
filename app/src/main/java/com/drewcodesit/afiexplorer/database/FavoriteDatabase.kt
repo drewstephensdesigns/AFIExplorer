@@ -1,6 +1,7 @@
 package com.drewcodesit.afiexplorer.database
 
 import android.content.Context
+import android.util.Log
 import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
@@ -26,8 +27,9 @@ abstract class FavoriteDatabase : RoomDatabase() {
                     FavoriteDatabase::class.java,
                     Config.DATABASE_NAME)
                     .allowMainThreadQueries()
-                    //.fallbackToDestructiveMigration()
+                    .fallbackToDestructiveMigration()
                     .build()
+                Log.i("Database", "Database created")
             }
             return INSTANCE as FavoriteDatabase
         }

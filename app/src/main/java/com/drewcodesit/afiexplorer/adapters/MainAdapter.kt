@@ -77,11 +77,11 @@ class MainAdapter(
                 when (item.itemId) {
                     // Bookmark
                     R.id.menu1 -> {
-                        if (favoriteDatabase!!.favoriteDAO()!!.titleExists(publication.Number!!) != 0){
-                            warning(ct, "$number already exists in database", Toast.LENGTH_SHORT, false).show()
-                        } else {
+                        if (!favoriteDatabase!!.favoriteDAO()!!.titleExists(publication.Number!!)){
                             favoriteDatabase!!.favoriteDAO()!!.addData(favoriteEntity)
                             success(ct, "$number: added to favorites!", Toast.LENGTH_SHORT, true).show()
+                        } else {
+                            warning(ct, "$number already exists in database", Toast.LENGTH_SHORT, false).show()
                         }
                     }
 

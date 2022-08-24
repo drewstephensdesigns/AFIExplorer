@@ -376,6 +376,19 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
                 )
             )
 
+            // Added 21 Aug 22
+            // DODI 4515.13 AIR TRANSPORTATION ELIGIBILITY
+            pubsList?.add(
+                Pubs(18,
+                    getString(string.DODI_4515_13),
+                    getString(string.DODI4515_13_summary),
+                    "Rewrite",
+                    "1646226000000",
+                    getString(string.DODI4515_13_url),
+                    "OUSD(A&S)"
+                )
+            )
+
             recyclerView?.recycledViewPool?.clear()
             adapter?.notifyDataSetChanged()
             loading.visibility = View.GONE

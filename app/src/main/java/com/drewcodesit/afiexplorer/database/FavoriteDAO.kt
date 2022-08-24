@@ -26,5 +26,5 @@ interface FavoriteDAO {
     fun isFavorite(id: Int): Int
 
     @Query("SELECT EXISTS (SELECT * FROM ${Config.TABLE_NAME} WHERE number=:number)")
-    fun titleExists(number: String): Int
+    fun titleExists(number: String): Boolean
 }

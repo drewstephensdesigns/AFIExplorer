@@ -17,9 +17,9 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.drewcodesit.afiexplorer.model.Pubs
 import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.database.FavoriteEntity
+import com.drewcodesit.afiexplorer.model.Pubs
 import com.drewcodesit.afiexplorer.view.MainActivity.Companion.favoriteDatabase
 import es.dmoral.toasty.Toasty.*
 import java.text.SimpleDateFormat

@@ -1,20 +1,16 @@
 package com.drewcodesit.afiexplorer.view
 
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.drewcodesit.afiexplorer.R
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity.setActivityTitle
-import es.dmoral.toasty.Toasty
-import kotlinx.android.synthetic.main.main_activity.toolbar
+import kotlinx.android.synthetic.main.main_activity.*
 
 class SettingsActivity : AppCompatActivity() {
 

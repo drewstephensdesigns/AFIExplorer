@@ -16,12 +16,12 @@ android {
         applicationId "io.github.drewstephenscoding.afiexplorer"
         minSdkVersion 21
         targetSdkVersion 32
-        // version code changed to 18
-        // 17 AUG
-        versionCode 19
-        // version name changed to 1.3.3
-        // 17 AUG
-        versionName "1.3.3"
+        // version code changed to 20
+        // 26 AUG
+        versionCode 21
+        // version name changed to 1.3.5
+        // 26 AUG
+        versionName "1.3.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         kapt {

@@ -28,7 +28,6 @@ import es.dmoral.toasty.Toasty.info
 import kotlinx.android.synthetic.main.content_faves.*
 import kotlinx.android.synthetic.main.faves_activity.*
 
-
 // FavAdapterListener opens saved publications
 // ItemListener deletes saved publications
 class FavoritesActivity : AppCompatActivity(),
@@ -38,6 +37,8 @@ class FavoritesActivity : AppCompatActivity(),
     private lateinit var rv: RecyclerView
     private lateinit var favAdapter: FavoriteAdapter
     private lateinit var searchView: SearchView
+
+    private val TAG = "FavoritesActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,15 +68,15 @@ class FavoritesActivity : AppCompatActivity(),
     }
 
     private fun getFaves() {
+        //Log.i(TAG, "getFaves()........")
 
-        val favorites: MutableList<FavoriteEntity?>? =
-            FavoriteDatabase
-                .getDatabase(applicationContext)
-                .favoriteDAO()
-                ?.getFavoriteData()
+        val favorites =
+            FavoriteDatabase.getDatabase(applicationContext).favoriteDAO()!!.getFavoriteData()
 
         favAdapter = FavoriteAdapter(this, favorites, this, this)
         rv.adapter = favAdapter
+
+        //Log.i("FAVORITES ACTIVITY", "Items in Database: ${favorites?.size}")
 
         // Show or Hide Empty State
         if (favorites!!.isEmpty()) {
@@ -129,11 +130,7 @@ class FavoritesActivity : AppCompatActivity(),
                     setTitle("Delete Favorites")
                     setMessage("This will clear the database, are you sure you want to continue?")
                     setPositiveButton("DELETE") { _, _ ->
-                        FavoriteDatabase
-                            .getDatabase(applicationContext)
-                            .favoriteDAO()
-                            ?.deleteAll()
-                        //MainActivity.favoriteDatabase!!.favoriteDAO()!!.deleteAll()
+                        FavoriteDatabase.getDatabase(applicationContext).favoriteDAO()!!.deleteAll()
                         favAdapter.notifyDataSetChanged()
                         info(
                             applicationContext,
@@ -180,10 +177,8 @@ class FavoritesActivity : AppCompatActivity(),
     // Click event for trashcan icon in
     // favorites_list_item to delete faved pubs
     override fun onItemClicked(favsListToDelete: FavoriteEntity, position: Int) {
-        FavoriteDatabase.getDatabase(applicationContext)
-            .favoriteDAO()
-            ?.delete(favsListToDelete)
-        favAdapter.notifyDataSetChanged()
+        FavoriteDatabase.getDatabase(applicationContext).favoriteDAO()!!.delete(favsListToDelete)
+        //favAdapter.notifyDataSetChanged()
         info(
             applicationContext,
             "You deleted ${favsListToDelete.Number}! ",

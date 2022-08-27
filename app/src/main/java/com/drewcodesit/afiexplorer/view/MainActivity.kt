@@ -31,11 +31,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.toolbox.JsonArrayRequest
 import com.drewcodesit.afiexplorer.MyApplication
 import com.drewcodesit.afiexplorer.MyApplication.Companion.TAG
-import com.drewcodesit.afiexplorer.model.Pubs
 import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.R.*
 import com.drewcodesit.afiexplorer.adapters.MainAdapter
 import com.drewcodesit.afiexplorer.database.FavoriteDatabase
+import com.drewcodesit.afiexplorer.model.Pubs
 import com.drewcodesit.afiexplorer.utils.Config
 import com.drewcodesit.afiexplorer.utils.MyDividerItemDecoration
 import com.google.gson.Gson

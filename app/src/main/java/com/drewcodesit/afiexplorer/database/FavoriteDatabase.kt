@@ -18,10 +18,11 @@ import com.drewcodesit.afiexplorer.utils.Config
 abstract class FavoriteDatabase : RoomDatabase() {
 
     companion object {
-        private var INSTANCE: FavoriteDatabase? = null
+        @Volatile
+        var INSTANCE: FavoriteDatabase? = null
 
         fun getDatabase(context: Context): FavoriteDatabase {
-            if (INSTANCE == null) {
+            if (INSTANCE == null) synchronized(FavoriteDatabase::class.java){
                 INSTANCE = Room.databaseBuilder(
                     context.applicationContext,
                     FavoriteDatabase::class.java,

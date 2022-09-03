@@ -38,8 +38,6 @@ class FavoritesActivity : AppCompatActivity(),
     private lateinit var favAdapter: FavoriteAdapter
     private lateinit var searchView: SearchView
 
-    private val TAG = "FavoritesActivity"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.faves_activity)
@@ -73,6 +71,8 @@ class FavoritesActivity : AppCompatActivity(),
         val favorites =
             FavoriteDatabase.getDatabase(applicationContext).favoriteDAO()!!.getFavoriteData()
 
+        Log.e("FAVORITES", "$favorites")
+
         favAdapter = FavoriteAdapter(this, favorites, this, this)
         rv.adapter = favAdapter
 
@@ -80,11 +80,13 @@ class FavoritesActivity : AppCompatActivity(),
 
         // Show or Hide Empty State
         if (favorites!!.isEmpty()) {
+            Log.i("FAVORITES", "Empty, Current Size: ${favorites.size}")
             emptyInfoImg.visibility = View.VISIBLE
             emptyInfo.visibility = View.VISIBLE
             emptyInfo.text = getString(R.string.no_results_found_db)
 
         } else {
+            Log.i("FAVORITES", "Current Size: ${favorites.size}")
             emptyInfoImg.visibility = View.GONE
             emptyInfo.visibility = View.GONE
 

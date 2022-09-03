@@ -16,12 +16,12 @@ android {
         applicationId "io.github.drewstephenscoding.afiexplorer"
         minSdkVersion 21
         targetSdkVersion 32
-        // version code changed to 20
-        // 26 AUG
-        versionCode 21
-        // version name changed to 1.3.5
-        // 26 AUG
-        versionName "1.3.5"
+        // version code changed to 22
+        // 3 Sep
+        versionCode 22
+        // version name changed to 1.3.6
+        // 3 Sep
+        versionName "1.3.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         kapt {
@@ -70,17 +70,14 @@ dependencies {
     // Preferences
     implementation 'androidx.preference:preference-ktx:1.2.0'
 
-    // Splash Screen - Android 12
-    implementation 'androidx.core:core-splashscreen:1.0.0'
-
     // volley http library
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'com.google.code.gson:gson:2.9.0'
 
     // Room components
     implementation "androidx.room:room-ktx:2.4.3"
-    implementation 'com.google.firebase:firebase-crashlytics:18.2.12'
-    implementation 'com.google.firebase:firebase-analytics:21.1.0'
+    implementation 'com.google.firebase:firebase-crashlytics:18.2.13'
+    implementation 'com.google.firebase:firebase-analytics:21.1.1'
     implementation 'androidx.preference:preference-ktx:1.2.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.1'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.1'

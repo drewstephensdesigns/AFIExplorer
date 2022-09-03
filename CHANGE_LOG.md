@@ -1,12 +1,11 @@
 ## Change Log
 Here you can find all the changes, improvements and bugs that have been added to AFI Explorer since the beginning.  The most current version will always be shown at the top for visibility.
 
-***Current as of 13 AUG 22***
-### Version 18 (1.3.2)
--  Fixes auto rotate issue when user has auto rotate turned off
--  Adds Air Force Doctrine Publication #1
--  Adds ability to download files to an app-created folder
--  Cleaned up code and removed unused resources
+***Submitted to Google Play 3 SEP 22***
+#### Version 22 (1.3.6)
+- Routine improvements and bug fixes
+- Fixed issues causing crashes due to database migration
+- Removed hardcoded publications due to multi-platform repo standup
 
 #### Previous Versions
 
@@ -89,3 +88,19 @@ Here you can find all the changes, improvements and bugs that have been added to
 -  Added Airman Blueprint
 -  Added CSAF Action Orders
 -  Bug fixes and improvements
+
+### Version 18 (1.3.2)
+-  Fixes auto rotate issue when user has auto rotate turned off
+-  Adds Air Force Doctrine Publication #1
+-  Adds ability to download files to an app-created folder
+-  Cleaned up code and removed unused resources
+
+### Version 19 (1.3.3)
+-  Routine improvements and bug fixes
+
+### Version 20 (1.3.4)
+-  Routine improvements and bug fixes
+
+### Version 20 (1.3.5)
+-  Attempt to fix crashes on certain devices due to database migration
+

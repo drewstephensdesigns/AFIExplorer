@@ -1,7 +1,7 @@
 ## Change Log
 Here you can find all the changes, improvements and bugs that have been added to AFI Explorer since the beginning.  The most current version will always be shown at the top for visibility.
 
-***Submitted to Google Play 3 SEP 22***
+***Current As Of 3 SEP 22***
 #### Version 22 (1.3.6)
 - Routine improvements and bug fixes
 - Fixed issues causing crashes due to database migration

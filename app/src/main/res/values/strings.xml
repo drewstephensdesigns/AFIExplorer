@@ -1,7 +1,6 @@
 <resources>
     <!-- App Screen Titles -->
     <string name="app_name">AFI Explorer</string>
-    <string name="app_home">Publications</string>
     <string name="app_faves">Favorites</string>
 
     <!-- Menu/Toolbar Titles -->
@@ -18,6 +17,8 @@
     <string name="no_results_found">No Results Found for %1$s</string>
     <string name="no_results_found_db">There\'s nothing here…</string>
     <string name="no_internet">Connection Error : Turn Off Airplane Mode or Use Wi-Fi to access Publications</string>
+    <string name="pub_restricted">This publication is restricted, see E-Pubs for official source</string>
+
 
     <!-- Shared Preference Keys-->
     <string name="pref_key_mode_night">PREF_MODE_NIGHT</string>
@@ -30,7 +31,6 @@
     <string name="action_download">Download File</string>
 
     <!-- Publication Actions for Clarity -->
-    <string name="rescindOrg">Rescind Org</string>
 
     <string name="guidance_memorandum">Last Action: Guidance Memorandum</string>
     <string name="interim_change">Last Action: Interim Change</string>
@@ -69,36 +69,19 @@
     <string name="change_log">Change Log</string>
     <string name="change_log_url" translatable="false">https://github.com/DrewStephensCoding/AFIExplorer/blob/master/CHANGE_LOG.md</string>
 
-    <!-- Hard Coded Pubs Seperate from api.afiexplorer.com -->
-    <!--
-        // Brown Book
-        // Blue Book
-        // Airman Blueprint
-        // CSAF Action Orders
-        // Air Force Doctrine Publication 1 - The Air Force
-    -->
-    <string name="brown_book">The Brown Book</string>
-    <string name="brown_book_summary">The Enlisted Force Structure</string>
-    <string name="brown_book_url" translatable="false">https://www.doctrine.af.mil/Portals/61/documents/Airman_Development/BrownBook.pdf</string>
+    <!-- MAJCOM Strings -->
+    <string name="sort_header">Sort &amp; Filter by MAJCOM</string>
+    <string name="show_all">Show All Pubs</string>
+    <string name="lemay_center">LeMay Center for Doctrine Development</string>
+    <string name="acc">Air Combat Command</string>
+    <string name="amc">Air Mobility Command</string>
+    <string name="aetc">Air Education and Training Command</string>
+    <string name="afmc">Air Force Material Command</string>
+    <string name="afsoc">Air Force Special Operations Command</string>
+    <string name="pacaf">Pacific Air Forces</string>
+    <string name="afgsc">Air Force Global Strike Command</string>
+    <string name="afrc">Air Force Reserve Command</string>
+    <string name="usafe">United States Air Forces in Europe - AF Africa</string>
 
-    <string name="blue_book">The Blue Book</string>
-    <string name="blue_book_summary">A Profession of Arms: Our Core Values</string>
-    <string name="blue_book_url" translatable="false">https://www.doctrine.af.mil/Portals/61/documents/Airman_Development/BlueBook.pdf</string>
-
-    <string name="airman_blueprint">Blueprint - Enlisted Force Development</string>
-    <string name="airman_blueprint_summary">A Guide to Connect All Airmen to the Air Force</string>
-    <string name="blueprint_url" translatable="false">https://www.af.mil/Portals/1/documents/ul/EFD-The_Blueprint.pdf</string>
-
-    <string name="action_orders">CSAF Action Orders</string>
-    <string name="action_orders_summary">To Accelerate Change Across the Air Force</string>
-    <string name="action_orders_url">https://www.af.mil/Portals/1/documents/2022SAF/FINAL_Modified_Action_Orders.pdf</string>
-
-    <string name="AFDP1">AFDP-1</string>
-    <string name="AFDP1_summary">The Air Force</string>
-    <string name="AFDP1_url">https://www.doctrine.af.mil/Portals/61/documents/AFDP_1/AFDP-1.pdf</string>
-
-    <string name="DODI_4515.13">DODI4515.13</string>
-    <string name="DODI4515.13_summary">Air Transportation Eligibility</string>
-    <string name="DODI4515.13_url">https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/451513p.pdf</string>
 
 </resources>

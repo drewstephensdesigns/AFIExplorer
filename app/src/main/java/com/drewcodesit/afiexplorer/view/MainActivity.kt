@@ -1,5 +1,6 @@
 package com.drewcodesit.afiexplorer.view
 
+import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -16,6 +17,8 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.CompoundButton
+import android.widget.RadioButton
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -38,10 +41,12 @@ import com.drewcodesit.afiexplorer.database.FavoriteDatabase
 import com.drewcodesit.afiexplorer.model.Pubs
 import com.drewcodesit.afiexplorer.utils.Config
 import com.drewcodesit.afiexplorer.utils.MyDividerItemDecoration
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.rajat.pdfviewer.PdfViewerActivity
 import es.dmoral.toasty.Toasty
+import kotlinx.android.synthetic.main.bottom_sheet_filter.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.main_activity.*
 import java.util.*
@@ -56,7 +61,25 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
     private var searchView: SearchView? = null
     private var request: JsonArrayRequest? = null
 
+    // Shared Prefs
     private lateinit var sharedPreferences: SharedPreferences
+
+    // BottomSheet for Filtering
+    private lateinit var bottomSheetDialog: BottomSheetDialog
+
+    // Radio Buttons for Filtering
+    private lateinit var cbALL: RadioButton
+    private lateinit var cbHAF: RadioButton
+    private lateinit var cbLeMayCenter: RadioButton
+    private lateinit var cbACC: RadioButton
+    private lateinit var cbAMC: RadioButton
+    private lateinit var cbPACAF: RadioButton
+    private lateinit var cbAFMC: RadioButton
+    private lateinit var cbAFSOC: RadioButton
+    private lateinit var cbUSAFE: RadioButton
+    private lateinit var cbAFRC: RadioButton
+    private lateinit var cbAFGSC: RadioButton
+    private lateinit var cbAETC: RadioButton
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,6 +118,7 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
         favoriteDatabase = FavoriteDatabase.getDatabase(applicationContext)
 
         fetchPubs()
+        setUpBottomSheet()
     }
 
     override fun onDestroy() {
@@ -146,20 +170,17 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
         return true
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
 
            // Search function for looking up publications
-           id.action_search -> {true}
+           id.action_search -> {
+               true
+           }
 
-            /*
-            * Open Source Licenses
-            * App Store Listing for Rating
-            * Social Media Links (Github, Instagram, LinkedIn)
-            * Developer Email
-             */
-
-            id.action_feedback -> {
+           // App Feedback Links
+           id.action_feedback -> {
                 startActivity(
                     Intent(
                         this@MainActivity,
@@ -168,8 +189,9 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
                 )
                 true
             }
-            // Change App Theme (Light, Dark, System Follow)
-            id.action_change_theme -> {
+
+           // Change App Theme (Light, Dark, System Follow)
+           id.action_change_theme -> {
                 val themeSelections = getThemeSelections()
                 AlertDialog.Builder(this)
                     .setTitle("Change Theme")
@@ -255,9 +277,13 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
     // in installed PDF viewer or defaults to PDF-Viewer (bitmap converter so lower quality)
     override fun onPubsSelected(pubs: Pubs) {
         try{
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.setDataAndType(Uri.parse(pubs.DocumentUrl), "application/pdf")
-            startActivity(intent)
+            if (pubs.DocumentUrl?.contains("generic_restricted.pdf") == true || (pubs.DocumentUrl?.contains("for_official_use_only.pdf")) == true ) {
+                Toasty.error(applicationContext, getString(string.pub_restricted), Toast.LENGTH_SHORT, false).show()
+            } else{
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.setDataAndType(Uri.parse(pubs.DocumentUrl), "application/pdf")
+                startActivity(intent)
+            }
 
         } catch (e:ActivityNotFoundException){
             startActivity(
@@ -265,9 +291,9 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
                 PdfViewerActivity.launchPdfFromUrl(     //PdfViewerActivity.Companion.launchPdfFromUrl(..   :: incase of JAVA
                     applicationContext,
                     "${pubs.DocumentUrl}",     // PDF URL in String format
-                    "${pubs.Title}",        // PDF Name/Title in String format
-                    "",                 // If nothing specific, Put "" it will save to Downloads
-                    enableDownload = true              // This param is true by default.
+                    "${pubs.Title}",          // PDF Name/Title in String format
+                    "",                  // If nothing specific, Put "" it will save to Downloads
+                    enableDownload = true             // This param is true by default.
                 )
             )
         }
@@ -291,6 +317,8 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
 
     // Fetches JSON from API
     //pubJSON is companion object below/web api for pubs
+    @SuppressLint("NotifyDataSetChanged")
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun fetchPubs() {
         loading.visibility = View.VISIBLE
 
@@ -321,6 +349,174 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
     private fun setupData(pubsList: ArrayList<Pubs>) {
         adapter = MainAdapter(applicationContext, pubsList, this)
         recyclerView?.adapter = adapter
+    }
+
+    // Bottom Sheet Dialog for Filtering
+    @RequiresApi(Build.VERSION_CODES.N)
+    @SuppressLint("InflateParams", "NotifyDataSetChanged")
+    private fun setUpBottomSheet(){
+        fabFilter.setOnClickListener{
+            val dialogView = layoutInflater.inflate(layout.bottom_sheet_filter, null)
+
+            // radio buttons in bottom_sheet_filter.xml
+            cbALL = dialogView.findViewById(id.cbALL)
+            cbHAF = dialogView.findViewById(id.cbHAF)
+            cbLeMayCenter = dialogView.findViewById(id.cbLeMayCenter)
+            cbACC = dialogView.findViewById(id.cbACC)
+            cbAMC = dialogView.findViewById(id.cbAMC)
+            cbAETC = dialogView.findViewById(id.cbAETC)
+            cbAFMC = dialogView.findViewById(id.cbAFMC)
+            cbAFSOC = dialogView.findViewById(id.cbAFSOC)
+            cbAFGSC = dialogView.findViewById(id.cbAFGSC)
+            cbUSAFE = dialogView.findViewById(id.cbUSAFE)
+            cbPACAF = dialogView.findViewById(id.cbPACAF)
+            cbAFRC= dialogView.findViewById(id.cbAFRC)
+
+            bottomSheetDialog = BottomSheetDialog(this@MainActivity)
+            bottomSheetDialog.setContentView(dialogView)
+            bottomSheetDialog.show()
+
+            // All Pubs (Reset)
+            cbALL.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
+                if(isChecked) {
+                    fetchPubs()
+                    bottomSheetDialog.dismiss()
+                    adapter?.notifyDataSetChanged()
+                }
+            }
+
+            // HAF Level Pubs (AF/ HAF/ SAF/)
+            cbHAF.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
+                if(isChecked) {
+                    adapter?.filter?.filter(showListByOrg("AF/"))
+                    bottomSheetDialog.dismiss()
+                    adapter?.notifyDataSetChanged()
+                }
+            }
+
+            // LeMay Center
+            cbLeMayCenter.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
+                if (isChecked) {
+                    adapter?.filter?.filter(showListByOrg("LeMay Center"))
+                    bottomSheetDialog.dismiss()
+                    adapter?.notifyDataSetChanged()
+                }
+            }
+
+            // ACC
+            cbACC.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+                if (isChecked) {
+                    adapter?.filter?.filter(showListByOrg("ACC"))
+                    bottomSheetDialog.dismiss()
+                    adapter?.notifyDataSetChanged()
+                }
+            }
+
+            // AMC
+            cbAMC.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
+                if (isChecked) {
+                    adapter?.filter?.filter(showListByOrg("AMC"))
+                    bottomSheetDialog.dismiss()
+                    adapter?.notifyDataSetChanged()
+                }
+            }
+
+            // AETC
+            cbAETC.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
+                if (isChecked) {
+                    adapter?.filter?.filter(showListByOrg("AETC"))
+                    bottomSheetDialog.dismiss()
+                    adapter?.notifyDataSetChanged()
+                }
+            }
+
+            // AFMC
+            cbAFMC.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
+                if (isChecked) {
+                    adapter?.filter?.filter(showListByOrg("AFMC"))
+                    bottomSheetDialog.dismiss()
+                    adapter?.notifyDataSetChanged()
+                }
+            }
+
+            // AFSOC
+            cbAFSOC.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
+                if (isChecked) {
+                    adapter?.filter?.filter(showListByOrg("AFSOC"))
+                    bottomSheetDialog.dismiss()
+                    adapter?.notifyDataSetChanged()
+                }
+            }
+
+            // AFGSC
+            cbAFGSC.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
+                if (isChecked) {
+                    adapter?.filter?.filter(showListByOrg("AFGSC"))
+                    bottomSheetDialog.dismiss()
+                    adapter?.notifyDataSetChanged()
+                }
+            }
+
+            // USAFE
+            cbUSAFE.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
+                if (isChecked) {
+                    adapter?.filter?.filter(showListByOrg("USAFE-AFAFRICA"))
+                    bottomSheetDialog.dismiss()
+                    adapter?.notifyDataSetChanged()
+                }
+            }
+
+            // PACAF
+            cbPACAF.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
+                if (isChecked) {
+                    adapter?.filter?.filter(showListByOrg("PACAF"))
+                    bottomSheetDialog.dismiss()
+                    adapter?.notifyDataSetChanged()
+                }
+            }
+
+            // AFRC
+            cbAFRC.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
+                if (isChecked) {
+                    adapter?.filter?.filter(showListByOrg("AFRC"))
+                    bottomSheetDialog.dismiss()
+                    adapter?.notifyDataSetChanged()
+                }
+            }
+        }
+    }
+
+    /**
+     * @param rescindOrg String
+     * @return CharSequence
+     */
+    private fun showListByOrg(rescindOrg: String): CharSequence {
+        when(rescindOrg){
+            "AF/" ->{
+                pubsList?.filter {
+                    it.RescindOrg == "AF/" ||
+                    it.RescindOrg == "SAF/" ||
+                    it.RescindOrg == "AF/A" ||
+                    it.RescindOrg == "HAF/"
+                }
+            }
+
+            "ACC" ->{ pubsList?.filter { it.RescindOrg == "ACC" } }
+            "AMC" ->{ pubsList?.filter { it.RescindOrg == "AMC" } }
+            "AFGSC" ->{ pubsList?.filter { it.RescindOrg == "AFGSC" } }
+            "AFRC" ->{ pubsList?.filter { it.RescindOrg == "AFRC" } }
+            "USAFE-AFAFRICA" ->{ pubsList?.filter { it.RescindOrg == "USAFE-AFAFRICA" } }
+            "PACAF" ->{ pubsList?.filter { it.RescindOrg == "PACAF" } }
+            "AETC" ->{ pubsList?.filter { it.RescindOrg == "AETC" } }
+            "AFMC" ->{ pubsList?.filter { it.RescindOrg == "AFMC" } }
+            "AFSOC" ->{ pubsList?.filter { it.RescindOrg == "AFSOC" } }
+
+            "LeMay Center || LeMay Center for Doctrine Development" -> { pubsList?.filter {
+                it.RescindOrg == "LeMay Center" ||
+                it.RescindOrg == "LeMay Center for Doctrine Development"}
+            }
+        }
+        return rescindOrg
     }
 
     // Configures Toasty Library

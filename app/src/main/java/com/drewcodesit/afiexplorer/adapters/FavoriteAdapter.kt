@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.database.FavoriteEntity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import es.dmoral.toasty.Toasty
 import java.util.*
 
@@ -130,6 +131,7 @@ class FavoriteAdapter(
         var pubNumber: TextView = view.findViewById(R.id.pubNumber)
         var pubTitle: TextView = view.findViewById(R.id.pubTitle)
         var buttonViewOption: ImageView? = view.findViewById<View?>(R.id.textViewOptions) as ImageView
+       // var buttonUpdateData: FloatingActionButton = view.findViewById<View?>(R.id.fab) as FloatingActionButton
 
         // Normal click to open publication instance from
         // Epubs site -> Matches Links from MainActivity
@@ -142,7 +144,6 @@ class FavoriteAdapter(
         }
     }
 
-    //
     interface FavAdapterListener {
         fun onFavsSelected(fav: FavoriteEntity)
     }

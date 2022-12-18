@@ -16,12 +16,12 @@ android {
         applicationId "io.github.drewstephenscoding.afiexplorer"
         minSdkVersion 21
         targetSdkVersion 32
-        // version code changed to 22
-        // 3 Sep
-        versionCode 22
-        // version name changed to 1.3.6
-        // 3 Sep
-        versionName "1.3.6"
+        // version code changed to 23
+        // 3 DEC
+        versionCode 23
+        // version name changed to 1.3.7
+        // 3 DEC
+        versionName "1.3.7"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         kapt {
@@ -55,13 +55,14 @@ android {
             assets.srcDirs(files(projectDir, "schemas"))
         }
     }
+    namespace 'com.drewcodesit.afiexplorer'
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.5.0'
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     // recycler view
@@ -76,11 +77,11 @@ dependencies {
 
     // Room components
     implementation "androidx.room:room-ktx:2.4.3"
-    implementation 'com.google.firebase:firebase-crashlytics:18.2.13'
-    implementation 'com.google.firebase:firebase-analytics:21.1.1'
+    implementation 'com.google.firebase:firebase-crashlytics:18.3.2'
+    implementation 'com.google.firebase:firebase-analytics:21.2.0'
     implementation 'androidx.preference:preference-ktx:1.2.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.1'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.5.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
     kapt "androidx.room:room-compiler:2.4.3"
     androidTestImplementation "androidx.room:room-testing:2.4.3"
 

@@ -36,8 +36,8 @@ class MyApplication : Application() {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
 
         val modeNight = sharedPreferences.getInt(
-                getString(R.string.pref_key_mode_night),
-                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            getString(R.string.pref_key_mode_night),
+            AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
         )
 
         AppCompatDelegate.setDefaultNightMode(modeNight)

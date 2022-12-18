@@ -6,4 +6,5 @@
     <dimen name="pub_name">15sp</dimen>
     <dimen name="pub_number">12sp</dimen>
     <dimen name="pub_last_action">9sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

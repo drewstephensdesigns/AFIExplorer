@@ -37,6 +37,8 @@ class MainAdapter(
     : RecyclerView.Adapter<MainAdapter.MyViewHolder>(), Filterable {
 
     private var pubsListFiltered: ArrayList<Pubs> = pubsList // 18 JUL
+
+
     private lateinit var certDate:String
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -161,6 +163,7 @@ class MainAdapter(
                 val calendar = Calendar.getInstance()
                 val dateReplace = rawdate.replace("/Date(", "").replace(")/", "")
                 val timeInMillis = java.lang.Long.valueOf(dateReplace)
+
                 calendar.timeInMillis = timeInMillis
 
                 // Converts Calendar Instance from Long to Simple
@@ -173,7 +176,6 @@ class MainAdapter(
                 "Certified Current: $certDate".also { h.pubCertDate!!.text = it }
 
                 "Rescind Org: $rescindOrg".also { h.pubRescindOrg!!.text = it }
-
 
                 // Hard Coding E-Pubs Actions for Grammar
                 return when(LastAction){
@@ -217,9 +219,14 @@ class MainAdapter(
                     pubsList
                         .filter {
                             it.Title!!.lowercase(Locale.ROOT).contains(charString.lowercase(Locale.ROOT)) or
-                            it.Number!!.lowercase(Locale.ROOT).contains(constraint!!) or
-                            it.Number!!.contains(constraint) or
-                            it.Title!!.contains(charString)
+                            it.Title!!.contains(charString) or
+
+                            it.Number!!.lowercase(Locale.ROOT).contains(charString.lowercase(Locale.ROOT)) or
+                            it.Number!!.contains(charString) or
+
+                            it.RescindOrg!!.lowercase(Locale.ROOT).contains(charString.lowercase(Locale.ROOT)) or
+                            it.RescindOrg!!.contains(charString)
+
                         }
                         .forEach {
                             filteredList.add(it)

@@ -13,7 +13,7 @@ interface FavoriteDAO {
     fun getFavoriteData(): MutableList<FavoriteEntity?>?
 
     // Added 19 Mar 2022 @ 10:12 PM...
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     fun update(favoriteEntity: FavoriteEntity?)
 
     @Delete

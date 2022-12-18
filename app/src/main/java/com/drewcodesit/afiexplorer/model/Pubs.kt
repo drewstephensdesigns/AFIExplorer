@@ -25,7 +25,7 @@ class Pubs(
     var DocumentUrl: String? = "",
 
     @SerializedName("RescindOrg")
-    var RescindOrg: String? = ""
+    var RescindOrg: String? = "",
 
 ) {
     fun getId(): Int{

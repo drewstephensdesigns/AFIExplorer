@@ -32,7 +32,7 @@ import kotlinx.android.synthetic.main.faves_activity.*
 // ItemListener deletes saved publications
 class FavoritesActivity : AppCompatActivity(),
     FavoriteAdapter.FavAdapterListener,
-    FavoriteAdapter.ItemListener {
+    FavoriteAdapter.ItemListener{
 
     private lateinit var rv: RecyclerView
     private lateinit var favAdapter: FavoriteAdapter
@@ -76,8 +76,6 @@ class FavoritesActivity : AppCompatActivity(),
         favAdapter = FavoriteAdapter(this, favorites, this, this)
         rv.adapter = favAdapter
 
-        //Log.i("FAVORITES ACTIVITY", "Items in Database: ${favorites?.size}")
-
         // Show or Hide Empty State
         if (favorites!!.isEmpty()) {
             Log.i("FAVORITES", "Empty, Current Size: ${favorites.size}")
@@ -89,7 +87,6 @@ class FavoritesActivity : AppCompatActivity(),
             Log.i("FAVORITES", "Current Size: ${favorites.size}")
             emptyInfoImg.visibility = View.GONE
             emptyInfo.visibility = View.GONE
-
         }
     }
 
@@ -116,7 +113,6 @@ class FavoritesActivity : AppCompatActivity(),
             })
         }
         return true
-
     }
 
     // Returns to Main Activity
@@ -150,6 +146,7 @@ class FavoritesActivity : AppCompatActivity(),
                 }.create().show()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }

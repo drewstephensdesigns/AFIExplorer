@@ -1,16 +1,21 @@
 package com.drewcodesit.afiexplorer.view
 
+import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.CompoundButton
+import android.widget.RadioButton
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -23,8 +28,10 @@ import com.drewcodesit.afiexplorer.adapters.FavoriteAdapter
 import com.drewcodesit.afiexplorer.database.FavoriteDatabase
 import com.drewcodesit.afiexplorer.database.FavoriteEntity
 import com.drewcodesit.afiexplorer.utils.MyDividerItemDecoration
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.rajat.pdfviewer.PdfViewerActivity
 import es.dmoral.toasty.Toasty.info
+import kotlinx.android.synthetic.main.bottom_sheet_filter_faves.*
 import kotlinx.android.synthetic.main.content_faves.*
 import kotlinx.android.synthetic.main.faves_activity.*
 
@@ -38,6 +45,14 @@ class FavoritesActivity : AppCompatActivity(),
     private lateinit var favAdapter: FavoriteAdapter
     private lateinit var searchView: SearchView
 
+    // BottomSheet for Filtering
+    private lateinit var bottomSheetDialog: BottomSheetDialog
+
+    // Radio Buttons for Filtering
+    private lateinit var cbSortByTitle: RadioButton
+    private lateinit var cbSortByNumber: RadioButton
+
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.faves_activity)
@@ -49,7 +64,6 @@ class FavoritesActivity : AppCompatActivity(),
         }
 
         rv = findViewById<View?>(R.id.rv_favorites) as RecyclerView
-        //rv.setHasFixedSize(true)
         rv.layoutManager = LinearLayoutManager(this)
 
         rv.apply {
@@ -63,13 +77,13 @@ class FavoritesActivity : AppCompatActivity(),
             )
         }
         getFaves()
+        setUpBottomSheet()
     }
 
     private fun getFaves() {
-        //Log.i(TAG, "getFaves()........")
-
         val favorites =
             FavoriteDatabase.getDatabase(applicationContext).favoriteDAO()!!.getFavoriteData()
+            //FavoriteDatabase.getDatabase(applicationContext).favoriteDAO()!!.getAllSortedByName()
 
         Log.e("FAVORITES", "$favorites")
 
@@ -78,15 +92,15 @@ class FavoritesActivity : AppCompatActivity(),
 
         // Show or Hide Empty State
         if (favorites!!.isEmpty()) {
-            Log.i("FAVORITES", "Empty, Current Size: ${favorites.size}")
             emptyInfoImg.visibility = View.VISIBLE
             emptyInfo.visibility = View.VISIBLE
             emptyInfo.text = getString(R.string.no_results_found_db)
-
+            fabFilterFaves.hide()
         } else {
             Log.i("FAVORITES", "Current Size: ${favorites.size}")
             emptyInfoImg.visibility = View.GONE
             emptyInfo.visibility = View.GONE
+            fabFilterFaves.show()
         }
     }
 
@@ -146,7 +160,6 @@ class FavoritesActivity : AppCompatActivity(),
                 }.create().show()
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -164,32 +177,64 @@ class FavoritesActivity : AppCompatActivity(),
                 // Use 'launchPdfFromPath' if you want to use assets file (enable "fromAssets" flag) / internal directory
                 PdfViewerActivity.launchPdfFromUrl(     //PdfViewerActivity.Companion.launchPdfFromUrl(..   :: incase of JAVA
                     applicationContext,
-                    "${fav.DocumentUrl}",   // PDF URL in String format
-                    "${fav.Number}",       // PDF Name/Title in String format
-                    "",               // If nothing specific, Put "" it will save to Downloads
-                    enableDownload = true          // This param is true by default.
+                    "${fav.DocumentUrl}",        // PDF URL in String format
+                    "${fav.Number}",            // PDF Name/Title in String format
+                    "",                    // If nothing specific, Put "" it will save to Downloads
+                    enableDownload = true               // This param is true by default.
                 )
             )
         }
     }
 
-    // Click event for trashcan icon in
-    // favorites_list_item to delete faved pubs
+
+    @SuppressLint("InflateParams", "NotifyDataSetChanged")
+    private fun setUpBottomSheet(){
+        fabFilterFaves.setOnClickListener {
+            val dialogView = layoutInflater.inflate(R.layout.bottom_sheet_filter_faves, null)
+
+            // radio buttons in bottom_sheet_filter.xml
+            cbSortByTitle = dialogView.findViewById(R.id.cbSortByTitle)
+            cbSortByNumber = dialogView.findViewById(R.id.cbSortByNumber)
+
+            bottomSheetDialog = BottomSheetDialog(this@FavoritesActivity)
+            bottomSheetDialog.setContentView(dialogView)
+            bottomSheetDialog.show()
+
+            cbSortByTitle.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean->
+                if(isChecked){
+                    favAdapter.filterByTitle()
+                    cbSortByTitle.isChecked = true
+                    cbSortByNumber.isChecked = false
+                    favAdapter.notifyDataSetChanged()
+                }
+            }
+
+            cbSortByNumber.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean->
+                if(isChecked){
+                    favAdapter.filterByNumber()
+                    cbSortByNumber.isChecked = true
+                    cbSortByTitle.isChecked = false
+                    favAdapter.notifyDataSetChanged()
+                }
+            }
+        }
+    }
+
+    // Deletes Single Items from Database
     override fun onItemClicked(favsListToDelete: FavoriteEntity, position: Int) {
         FavoriteDatabase.getDatabase(applicationContext).favoriteDAO()!!.delete(favsListToDelete)
-        //favAdapter.notifyDataSetChanged()
         info(
             applicationContext,
             "You deleted ${favsListToDelete.Number}! ",
             Toast.LENGTH_SHORT,
             true
         ).show()
-
-        finish()
         overridePendingTransition(0, 0)
         startActivity(intent)
         rv.recycledViewPool.clear()
         favAdapter.notifyItemRemoved(position)
+        favAdapter.filterByNumber()
         overridePendingTransition(0, 0)
+        finish()
     }
 }

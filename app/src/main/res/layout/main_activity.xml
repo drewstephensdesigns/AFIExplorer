@@ -28,13 +28,13 @@
         android:id="@+id/fabFilter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right|bottom"
+        android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
         android:textColor="?android:colorControlNormal"
         android:textSize="14sp"
         android:textStyle="bold"
         android:theme="@style/FabExtendedMaterialTheme"
-        app:iconTint="?android:colorControlNormal"
+        app:iconTint="@color/black_darker"
         app:icon="@drawable/ic_filter_list" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

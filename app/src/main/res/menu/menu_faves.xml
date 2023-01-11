@@ -10,11 +10,12 @@
         android:orderInCategory="100"
         android:title="@string/action_search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="always|collapseActionView" />
+        app:showAsAction="ifRoom|collapseActionView" />
 
     <item
         android:id="@+id/action_clear_database"
         android:orderInCategory="101"
         android:title="@string/action_clear_database"
         app:showAsAction="collapseActionView"/>
+
 </menu>

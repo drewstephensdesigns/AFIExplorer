@@ -1,6 +1,9 @@
 package com.drewcodesit.afiexplorer.view
 
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -52,6 +55,16 @@ class SettingsActivity : AppCompatActivity() {
                         startActivity(this)
                     }
                 }
+                true
+            }
+
+            // Copies version code
+            findPreference<Preference>("versionInfo")?.setOnPreferenceClickListener {
+                val clipboard: ClipboardManager =
+                    context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+
+                val clip = ClipData.newPlainText("Copied Version!", getString(R.string.versionName))
+                clipboard.setPrimaryClip(clip)
                 true
             }
         }

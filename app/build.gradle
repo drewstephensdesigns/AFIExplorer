@@ -73,17 +73,20 @@ dependencies {
 
     // volley http library
     implementation 'com.android.volley:volley:1.2.1'
-    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'com.google.code.gson:gson:2.10'
 
     // Room components
+    implementation 'androidx.room:room-runtime:2.4.3'
     implementation "androidx.room:room-ktx:2.4.3"
+    kapt "androidx.room:room-compiler:2.4.3"
+
+    // Firebase
     implementation 'com.google.firebase:firebase-crashlytics:18.3.2'
     implementation 'com.google.firebase:firebase-analytics:21.2.0'
-    implementation 'androidx.preference:preference-ktx:1.2.0'
+
+    // Navigation
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
-    kapt "androidx.room:room-compiler:2.4.3"
-    androidTestImplementation "androidx.room:room-testing:2.4.3"
 
     // Toasty - Usual Toast, but with Steroids
     implementation 'com.github.GrenderG:Toasty:1.5.2'
@@ -98,4 +101,6 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation "androidx.room:room-testing:2.4.3"
+
 }

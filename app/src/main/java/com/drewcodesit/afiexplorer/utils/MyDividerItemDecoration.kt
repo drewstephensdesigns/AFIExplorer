@@ -10,10 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlin.math.roundToLong
 
-
-/**
- * Created by danielnimafa on 16/03/18.
- */
 class MyDividerItemDecoration(private val context: Context, orientation: Int, private val margin: Int) : RecyclerView.ItemDecoration() {
     private val attrs = intArrayOf(android.R.attr.listDivider)
 
@@ -77,7 +73,7 @@ class MyDividerItemDecoration(private val context: Context, orientation: Int, pr
     }
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-        if (mOrientation == Companion.VERTICAL_LIST) {
+        if (mOrientation == VERTICAL_LIST) {
             outRect.set(0, 0, 0, mDivider!!.intrinsicHeight)
         } else {
             outRect.set(0, 0, mDivider!!.intrinsicWidth, 0)

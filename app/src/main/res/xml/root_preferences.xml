@@ -69,18 +69,6 @@
     <PreferenceCategory
         app:iconSpaceReserved="false"
         android:title="@string/legal_header">
-        <!-- Source Code Repo -->
-<!--        <Preference-->
-<!--            app:iconSpaceReserved="false"-->
-<!--            app:key="sourcePref"-->
-<!--            android:title="@string/source_code_header">-->
-<!--            <intent-->
-<!--                android:action="android.intent.action.VIEW"-->
-<!--                android:data="https://github.com/DrewStephensCoding/TickerIO/">-->
-<!--                <extra android:name="android.intent.extra.SUBJECT"-->
-<!--                    android:value="Developer Portfolio"/>-->
-<!--            </intent>-->
-<!--        </Preference>-->
         <Preference app:key="licenses"
             app:title="@string/licenses"
             app:iconSpaceReserved="false" />
@@ -94,5 +82,17 @@
                 android:data="@string/change_log_url">
             </intent>
         </Preference>
+
+        <Preference
+            app:key="@string/epubs_notice"
+            app:iconSpaceReserved="false"
+            android:title="@string/epubs_notice">
+                <intent
+                    android:action="android.intent.action.VIEW"
+                    android:data="@string/epubs_notice_url">
+                </intent>
+        </Preference>
+
+
     </PreferenceCategory>
 </PreferenceScreen>

@@ -11,7 +11,7 @@
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/white</item>
+        <item name="android:statusBarColor" >@color/white</item>
         <!-- Customize your theme here. -->
         <item name="android:colorControlNormal">@color/pub_big_text</item>
         <item name="android:windowBackground">@color/white</item>
@@ -57,6 +57,8 @@
 
     <style name="FabExtendedMaterialTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:backgroundTint">@color/teal_700</item>
+        <item name="iconTint">@color/pub_little_text</item>
+
         <item name="textAppearanceButton">@style/AppTextAppearance.Button</item>
     </style>
 

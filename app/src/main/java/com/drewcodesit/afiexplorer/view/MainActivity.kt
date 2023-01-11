@@ -12,6 +12,8 @@ import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.view.Menu
@@ -60,6 +62,7 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
     private var adapter: MainAdapter? = null
     private var searchView: SearchView? = null
     private var request: JsonArrayRequest? = null
+    private var exit: Boolean = false
 
     // Shared Prefs
     private lateinit var sharedPreferences: SharedPreferences
@@ -277,7 +280,15 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
     // in installed PDF viewer or defaults to PDF-Viewer (bitmap converter so lower quality)
     override fun onPubsSelected(pubs: Pubs) {
         try{
-            if (pubs.DocumentUrl?.contains("generic_restricted.pdf") == true || (pubs.DocumentUrl?.contains("for_official_use_only.pdf")) == true ) {
+            // Checks if Document URL from E-Pubs is restricted and shows Toast Message indicating
+            // Official Source Doc can be found through E-Pubs Website
+            if (pubs.DocumentUrl?.contains("generic_restricted.pdf") == true
+                || (pubs.DocumentUrl?.contains("restricted_access.pdf")) == true
+                || (pubs.DocumentUrl?.contains("for_official_use_only.pdf")) == true
+                || (pubs.DocumentUrl?.contains("generic_fouo.pdf")) == true
+                || (pubs.DocumentUrl?.contains("stocked_and_issued")) == true
+                || (pubs.DocumentUrl?.contains("generic_opr1.pdf")) == true
+                || (pubs.DocumentUrl?.contains("generic_opr.pdf")) == true) {
                 Toasty.error(applicationContext, getString(string.pub_restricted), Toast.LENGTH_SHORT, false).show()
             } else{
                 val intent = Intent(Intent.ACTION_VIEW)
@@ -346,6 +357,10 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
         MyApplication.instance.addToRequestQueue(request!!)
     }
 
+    /**
+     *
+     * @param pubsList ArrayList<Pubs>
+     */
     private fun setupData(pubsList: ArrayList<Pubs>) {
         adapter = MainAdapter(applicationContext, pubsList, this)
         recyclerView?.adapter = adapter
@@ -380,6 +395,7 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
             cbALL.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
                 if(isChecked) {
                     fetchPubs()
+                    supportActionBar?.title = resources.getString(string.app_name)
                     bottomSheetDialog.dismiss()
                     adapter?.notifyDataSetChanged()
                 }
@@ -389,6 +405,7 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
             cbHAF.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
                 if(isChecked) {
                     adapter?.filter?.filter(showListByOrg("AF/"))
+                    supportActionBar?.title = "HAF Pubs"
                     bottomSheetDialog.dismiss()
                     adapter?.notifyDataSetChanged()
                 }
@@ -398,6 +415,7 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
             cbLeMayCenter.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
                 if (isChecked) {
                     adapter?.filter?.filter(showListByOrg("LeMay Center"))
+                    supportActionBar?.title = "LeMay Center"
                     bottomSheetDialog.dismiss()
                     adapter?.notifyDataSetChanged()
                 }
@@ -407,6 +425,7 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
             cbACC.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
                 if (isChecked) {
                     adapter?.filter?.filter(showListByOrg("ACC"))
+                    supportActionBar?.title = "ACC Pubs"
                     bottomSheetDialog.dismiss()
                     adapter?.notifyDataSetChanged()
                 }
@@ -416,6 +435,7 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
             cbAMC.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
                 if (isChecked) {
                     adapter?.filter?.filter(showListByOrg("AMC"))
+                    supportActionBar?.title = "AMC Pubs"
                     bottomSheetDialog.dismiss()
                     adapter?.notifyDataSetChanged()
                 }
@@ -425,6 +445,7 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
             cbAETC.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
                 if (isChecked) {
                     adapter?.filter?.filter(showListByOrg("AETC"))
+                    supportActionBar?.title = "AETC Pubs"
                     bottomSheetDialog.dismiss()
                     adapter?.notifyDataSetChanged()
                 }
@@ -434,6 +455,7 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
             cbAFMC.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
                 if (isChecked) {
                     adapter?.filter?.filter(showListByOrg("AFMC"))
+                    supportActionBar?.title = "AFMC Pubs"
                     bottomSheetDialog.dismiss()
                     adapter?.notifyDataSetChanged()
                 }
@@ -443,6 +465,7 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
             cbAFSOC.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
                 if (isChecked) {
                     adapter?.filter?.filter(showListByOrg("AFSOC"))
+                    supportActionBar?.title = "AFSOC Pubs"
                     bottomSheetDialog.dismiss()
                     adapter?.notifyDataSetChanged()
                 }
@@ -452,6 +475,7 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
             cbAFGSC.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
                 if (isChecked) {
                     adapter?.filter?.filter(showListByOrg("AFGSC"))
+                    supportActionBar?.title = "AFGSC Pubs"
                     bottomSheetDialog.dismiss()
                     adapter?.notifyDataSetChanged()
                 }
@@ -461,6 +485,7 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
             cbUSAFE.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
                 if (isChecked) {
                     adapter?.filter?.filter(showListByOrg("USAFE-AFAFRICA"))
+                    supportActionBar?.title = "USAFE Pubs"
                     bottomSheetDialog.dismiss()
                     adapter?.notifyDataSetChanged()
                 }
@@ -470,6 +495,7 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
             cbPACAF.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
                 if (isChecked) {
                     adapter?.filter?.filter(showListByOrg("PACAF"))
+                    supportActionBar?.title = "PACAF Pubs"
                     bottomSheetDialog.dismiss()
                     adapter?.notifyDataSetChanged()
                 }
@@ -479,6 +505,7 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
             cbAFRC.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
                 if (isChecked) {
                     adapter?.filter?.filter(showListByOrg("AFRC"))
+                    supportActionBar?.title = "AFRC Pubs"
                     bottomSheetDialog.dismiss()
                     adapter?.notifyDataSetChanged()
                 }
@@ -497,7 +524,9 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
                     it.RescindOrg == "AF/" ||
                     it.RescindOrg == "SAF/" ||
                     it.RescindOrg == "AF/A" ||
-                    it.RescindOrg == "HAF/"
+                    it.RescindOrg == "HAF/" ||
+                    it.RescindOrg == "HQ/" ||
+                    it.RescindOrg == "DOD/"
                 }
             }
 
@@ -528,6 +557,21 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
             .setToastTypeface(typeface!!)
             .supportDarkTheme(true)
             .apply()
+    }
+
+    // Refreshes filtered feed on back press
+    // Exits app if back-pressed x2
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onBackPressed() {
+        supportActionBar?.title = getString(string.app_name)
+        fetchPubs()
+        if (exit){
+            finish() // finish activity
+        }else{
+            Toasty.normal(this, getString(string.action_exit_app)).show()
+            exit = true
+            Handler(Looper.getMainLooper()).postDelayed({ exit = false }, 3 * 1000)
+        }
     }
 
     companion object {

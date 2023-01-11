@@ -13,7 +13,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.database.FavoriteEntity
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import es.dmoral.toasty.Toasty
 import java.util.*
 
@@ -24,17 +23,25 @@ class FavoriteAdapter(
     private var listener: ItemListener)
     : RecyclerView.Adapter<FavoriteAdapter.ViewHolder>(), Filterable {
 
-    //ListAdapter<Pubs, FavoriteAdapter.ViewHolder>(DiffCallback), Filterable {
-
     private var favePubsListFiltered: MutableList<FavoriteEntity?>? = favoriteListEntities
 
+    /**
+     *
+     * @param parent ViewGroup
+     * @param viewType Int
+     * @return ViewHolder
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.favorites_list_item, parent, false)
         return ViewHolder(view)
     }
 
+    /**
+     *
+     * @param holder ViewHolder
+     * @param position Int
+     */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
         val fl = favePubsListFiltered?.get(position)//favoriteListEntities?.get(position)
         holder.pubNumber.text = fl!!.Number
         holder.pubTitle.text = fl.Title
@@ -108,8 +115,10 @@ class FavoriteAdapter(
                     favoriteListEntities
                         ?.filter {
                             it?.Title!!.lowercase(Locale.ROOT).contains(charString.lowercase(Locale.ROOT)) or
-                                    it.Number!!.lowercase(Locale.ROOT).contains(constraint!!) or
-                                    it.Number!!.contains(constraint) or it.Title!!.contains(charString)
+                            it.Title!!.contains(charString) or
+
+                            it.Number!!.lowercase(Locale.ROOT).contains(constraint!!) or
+                            it.Number!!.contains(constraint)
                         }
                         ?.forEach {
                             filteredList.add(it)
@@ -127,11 +136,31 @@ class FavoriteAdapter(
         }
     }
 
+    // Filter Favorites By Title
+    fun filterByTitle(){
+        favoriteListEntities?.sortWith { pubTitle1, pubTitle2 ->
+            pubTitle1?.Title!!.compareTo(pubTitle2?.Title!!)
+        }
+    }
+
+    // Filter Favorites by Number
+    fun filterByNumber(){
+        favoriteListEntities?.sortWith {pubNumber1, pubNumber2 ->
+            pubNumber1?.Number!!.compareTo(pubNumber2?.Number!!)
+        }
+    }
+
+    /**
+     *
+     * @property pubNumber TextView
+     * @property pubTitle TextView
+     * @property buttonViewOption ImageView?
+     * @constructor
+     */
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var pubNumber: TextView = view.findViewById(R.id.pubNumber)
         var pubTitle: TextView = view.findViewById(R.id.pubTitle)
         var buttonViewOption: ImageView? = view.findViewById<View?>(R.id.textViewOptions) as ImageView
-       // var buttonUpdateData: FloatingActionButton = view.findViewById<View?>(R.id.fab) as FloatingActionButton
 
         // Normal click to open publication instance from
         // Epubs site -> Matches Links from MainActivity

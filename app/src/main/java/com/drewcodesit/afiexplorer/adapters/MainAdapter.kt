@@ -81,12 +81,13 @@ class MainAdapter(
                     // Bookmark
                     R.id.menu1 -> {
                         if (FavoriteDatabase.getDatabase(ct).favoriteDAO()?.titleExists(number.toString()) == 0){
-                            // not exists
+                            // Does not exist, adds to database
                             favoriteDatabase?.favoriteDAO()?.addData(favoriteEntity)
                             success(ct, "$number: added to favorites!", Toast.LENGTH_SHORT, true).show()
                         } else {
-                            // does exists
-                            warning(ct, "$number already exists in database", Toast.LENGTH_SHORT, false).show()
+                            // Does exists, updates the database
+                            favoriteDatabase?.favoriteDAO()?.updateFaves(favoriteEntity)
+                            info(ct, "$number has been updated", Toast.LENGTH_SHORT, false).show()
                             //Log.i("MAIN_ADAPTER", "${FavoriteDatabase.getDatabase(ct).favoriteDAO()?.titleExists(number.toString())}")
                         }
                     }

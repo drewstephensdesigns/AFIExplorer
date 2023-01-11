@@ -3,7 +3,6 @@ package com.drewcodesit.afiexplorer.database
 import androidx.room.*
 import com.drewcodesit.afiexplorer.utils.Config
 
-
 @Dao
 interface FavoriteDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -12,9 +11,8 @@ interface FavoriteDAO {
     @Query("SELECT * FROM ${Config.TABLE_NAME}")
     fun getFavoriteData(): MutableList<FavoriteEntity?>?
 
-    // Added 19 Mar 2022 @ 10:12 PM...
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun update(favoriteEntity: FavoriteEntity?)
+    fun updateFaves(favoriteEntity: FavoriteEntity?)
 
     @Delete
     fun delete(favoriteEntity: FavoriteEntity?)
@@ -22,9 +20,12 @@ interface FavoriteDAO {
     @Query("DELETE FROM ${Config.TABLE_NAME}")
     fun deleteAll()
 
-    @Query("SELECT EXISTS (SELECT * FROM ${Config.TABLE_NAME} WHERE id=:id)")
-    fun isFavorite(id: Int): Int
+    @Query("SELECT * FROM ${Config.TABLE_NAME} WHERE id LIKE :id")
+    fun getPubs(id: Int): FavoriteEntity
 
     @Query("SELECT EXISTS (SELECT * FROM ${Config.TABLE_NAME} WHERE number=:number)")
     fun titleExists(number: String?): Int?
+
+    @Query("SELECT * FROM ${Config.TABLE_NAME} ORDER BY number ASC")
+    fun getAllSortedByName(): MutableList<FavoriteEntity?>?
 }

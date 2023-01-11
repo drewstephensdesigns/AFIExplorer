@@ -19,7 +19,6 @@
     <string name="no_internet">Connection Error : Turn Off Airplane Mode or Use Wi-Fi to access Publications</string>
     <string name="pub_restricted">This publication is restricted, see E-Pubs for official source</string>
 
-
     <!-- Shared Preference Keys-->
     <string name="pref_key_mode_night">PREF_MODE_NIGHT</string>
 
@@ -29,9 +28,10 @@
     <string name="action_copy">Copy Publication Number</string>
     <string name="action_copy_url">Copy URL</string>
     <string name="action_download">Download File</string>
+    <string name="action_update">Check for Updates</string>
+    <string name="action_exit_app">Press Back again to exit</string>
 
     <!-- Publication Actions for Clarity -->
-
     <string name="guidance_memorandum">Last Action: Guidance Memorandum</string>
     <string name="interim_change">Last Action: Interim Change</string>
     <string name="update_contact">Last Action: Update Contact</string>
@@ -59,6 +59,7 @@
     <string name="instagram_id">\@drewstephensdesigns</string>
     <string name="github_id">\@DrewStephensCoding</string>
     <string name="linkedin_id">\@DrewStephens</string>
+    <string name="epubs_notice">E-Pubs Product Announcements</string>
 
     <!-- Social Media URLs -->
     <string name="developer_instagram_url" translatable="false">https://www.instagram.com/drewstephensdesigns/</string>
@@ -68,9 +69,11 @@
     <!-- Github Change Log -->
     <string name="change_log">Change Log</string>
     <string name="change_log_url" translatable="false">https://github.com/DrewStephensCoding/AFIExplorer/blob/master/CHANGE_LOG.md</string>
-
+    <string name="epubs_notice_url" translatable="false">https://www.e-publishing.af.mil/Tools/Product-Announcements/</string>
+    
     <!-- MAJCOM Strings -->
-    <string name="sort_header">Sort &amp; Filter by MAJCOM</string>
+    <string name="sort_header">Sort &amp; filter by</string>
+    <string name="sort_header_faves">Sort by</string>
     <string name="show_all">Show All Pubs</string>
     <string name="lemay_center">LeMay Center for Doctrine Development</string>
     <string name="acc">Air Combat Command</string>
@@ -82,6 +85,5 @@
     <string name="afgsc">Air Force Global Strike Command</string>
     <string name="afrc">Air Force Reserve Command</string>
     <string name="usafe">United States Air Forces in Europe - AF Africa</string>
-
 
 </resources>

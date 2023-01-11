@@ -16,11 +16,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:text="@string/sort_header"
             android:textColor="?attr/colorControlNormal"
             android:fontFamily="@font/ibm_plex_sans"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:textStyle="bold" />
 
     </RelativeLayout>

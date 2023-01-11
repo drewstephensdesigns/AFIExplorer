@@ -1,6 +1,12 @@
 ## Change Log
 Here you can find all the changes, improvements and bugs that have been added to AFI Explorer since the beginning.  The most current version will always be shown at the top for visibility.
 
+***Not Yet Released***
+#### Version 23 (1.3.7)
+- Added Dialog for Filtering by MAJCOM
+- Added Warning Toast when accessing restricted access publications instead of opening blank document
+- Added flag to manifest file allowing keeping of data when uninstalling application
+
 ***Current As Of 3 SEP 22***
 #### Version 22 (1.3.6)
 - Routine improvements and bug fixes

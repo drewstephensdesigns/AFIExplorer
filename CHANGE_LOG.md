@@ -90,22 +90,22 @@ Here you can find all the changes, improvements and bugs that have been added to
 -  Added CSAF Action Orders
 -  Bug fixes and improvements
 
-### Version 18 (1.3.2)
+#### Version 18 (1.3.2)
 -  Fixes auto rotate issue when user has auto rotate turned off
 -  Adds Air Force Doctrine Publication #1
 -  Adds ability to download files to an app-created folder
 -  Cleaned up code and removed unused resources
 
-### Version 19 (1.3.3)
+#### Version 19 (1.3.3)
 -  Routine improvements and bug fixes
 
-### Version 20 (1.3.4)
+#### Version 20 (1.3.4)
 -  Routine improvements and bug fixes
 
-### Version 21 (1.3.5)
+#### Version 21 (1.3.5)
 -  Attempt to fix crashes on certain devices due to database migration
 
-### Version 22 (1.3.6)
+#### Version 22 (1.3.6)
 - Routine improvements and bug fixes
 - Fixed issues causing crashes due to database migration
 - Removed hardcoded publications due to multi-platform repo standup

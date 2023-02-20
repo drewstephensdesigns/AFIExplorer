@@ -8,7 +8,7 @@
 - Better navigation/searching through MAJCOM publications
 - Organize favorite publications (Researching feasibility)
 ~~App themes (Kept current layout of Light, Dark, System Follow)~~
-- Add push notifications for publication updates (Researching feaibility)
+- Add push notifications for publication updates (Researching feasibility)
 ~~Change naming conventions~~
 - Search progress indicator
 - Generic search vs actual search

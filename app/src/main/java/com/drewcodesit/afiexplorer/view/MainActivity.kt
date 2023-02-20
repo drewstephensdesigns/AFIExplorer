@@ -19,9 +19,9 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.CompoundButton
 import android.widget.RadioButton
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -32,7 +32,7 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.android.volley.Request
 import com.android.volley.toolbox.JsonArrayRequest
 import com.drewcodesit.afiexplorer.MyApplication
 import com.drewcodesit.afiexplorer.MyApplication.Companion.TAG
@@ -40,6 +40,7 @@ import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.R.*
 import com.drewcodesit.afiexplorer.adapters.MainAdapter
 import com.drewcodesit.afiexplorer.database.FavoriteDatabase
+import com.drewcodesit.afiexplorer.databinding.MainActivityBinding
 import com.drewcodesit.afiexplorer.model.Pubs
 import com.drewcodesit.afiexplorer.utils.Config
 import com.drewcodesit.afiexplorer.utils.MyDividerItemDecoration
@@ -48,17 +49,17 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.rajat.pdfviewer.PdfViewerActivity
 import es.dmoral.toasty.Toasty
-import kotlinx.android.synthetic.main.bottom_sheet_filter.*
-import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.main_activity.*
 import java.util.*
 
 
 // PubsAdapterListener opens publications
 class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
 
+    // Migration to View Binding from Kotlin Synthetics
+    // Source: https://medium.com/codex/android-viewbinding-migration-16070e24b752
+    private lateinit var _binding: MainActivityBinding
+
     private var pubsList: ArrayList<Pubs>? = null
-    private var recyclerView: RecyclerView? = null
     private var adapter: MainAdapter? = null
     private var searchView: SearchView? = null
     private var request: JsonArrayRequest? = null
@@ -83,29 +84,38 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
     private lateinit var cbAFRC: RadioButton
     private lateinit var cbAFGSC: RadioButton
     private lateinit var cbAETC: RadioButton
+    private lateinit var cbTravel: RadioButton
+
+    //The OnBackPressedDispatcher is a class that allows you
+    // to register a OnBackPressedCallback to a LifecycleOwner
+    private val onBackPressedCallback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+        @RequiresApi(Build.VERSION_CODES.N)
+        override fun handleOnBackPressed() {
+            closeOrRefreshApp()
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
-        setContentView(layout.main_activity)
+
+        // View Binding
+        _binding = MainActivityBinding.inflate(layoutInflater)
+        setContentView(_binding.root)
 
         toastyConfig()
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(_binding.toolbar)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(false)
             setDisplayShowHomeEnabled(true)
             title = resources.getString(string.app_name)
         }
 
-        recyclerView = findViewById<View?>(id.recycler_view) as RecyclerView
-        //recyclerView!!.setHasFixedSize(true)
-        recyclerView!!.layoutManager = LinearLayoutManager(
-            this
-        )
-        recyclerView?.apply {
-
+        // View Binding
+        //recyclerView = _binding.contentMain.recyclerView
+       _binding.contentMain.recyclerView.layoutManager = LinearLayoutManager(this)
+        _binding.contentMain.recyclerView.apply {
             itemAnimator = DefaultItemAnimator()
             addItemDecoration(
                 MyDividerItemDecoration(
@@ -122,11 +132,8 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
 
         fetchPubs()
         setUpBottomSheet()
-    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(TAG, "onDestroy: --------")
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
     // SearchView
@@ -134,7 +141,6 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
         menuInflater.inflate(R.menu.menu_main, menu)
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         searchView = menu.findItem(id.action_search)?.actionView as SearchView
-
         searchView?.apply {
             setSearchableInfo(searchManager.getSearchableInfo(componentName))
             setIconifiedByDefault(true)
@@ -146,14 +152,15 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    adapter?.filter?.filter(newText!!.lowercase(Locale.getDefault())) {
+                    adapter?.filter?.filter(newText!!) {
                         when (adapter?.itemCount) {
                             0 -> {
-                                no_results_found.visibility = View.VISIBLE
-                                no_results_found.text = getString(string.no_results_found, newText)
+                                // Kotlin View Binding
+                                _binding.contentMain.noResultsFound.visibility = View.VISIBLE
+                                _binding.contentMain.noResultsFound.text = getString(string.no_results_found, newText)
                             }
                             else -> {
-                                no_results_found.visibility = View.GONE
+                                _binding.contentMain.noResultsFound.visibility = View.GONE
                             }
                         }
                     }
@@ -231,7 +238,6 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
                     .show()
                 true
             }
-
 
             // View Saved Publications
             id.action_bookmark -> {
@@ -328,49 +334,52 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
 
     // Fetches JSON from API
     //pubJSON is companion object below/web api for pubs
+    @RequiresApi(Build.VERSION_CODES.M)
     @SuppressLint("NotifyDataSetChanged")
-    @RequiresApi(Build.VERSION_CODES.N)
     private fun fetchPubs() {
-        loading.visibility = View.VISIBLE
+        _binding.contentMain.loading.visibility = View.VISIBLE
 
-        request = JsonArrayRequest(Config.BASE_URL, { it ->
-            val items: List<Pubs> =
-                Gson().fromJson(it.toString(), object : TypeToken<List<Pubs>>() {}.type)
+        request = JsonArrayRequest(
+            Request.Method.GET,
+            Config.BASE_URL,
+            null,{ response ->
+                val items: List<Pubs> =
+                    Gson().fromJson(response.toString(), object : TypeToken<List<Pubs>>() {}.type)
 
-            val sortedItems = items.sortedWith(compareBy { it.Number })
+                //val sortedItems = items.sortedWith(compareBy { it.Number })
+                val sortedItems = items.sortedByDescending {
+                    it.getCertDate()
+                }
 
-            pubsList?.clear()
-            pubsList?.addAll(sortedItems)
+                pubsList?.clear()
+                pubsList?.addAll(sortedItems)
 
-           // Hardcoded pubs moved to Publications Gitlab Repo
-           // https://gitlab.com/afi-explorer/pubs
+                // Hardcoded pubs moved to Publications Gitlab Repo
+                // https://gitlab.com/afi-explorer/pubs
 
-            recyclerView?.recycledViewPool?.clear()
-            adapter?.notifyDataSetChanged()
-            loading.visibility = View.GONE
-            setupData(pubsList!!)
-
-        }) {
-            println(it.printStackTrace())
-            Toasty.error(applicationContext, getString(string.no_internet), Toast.LENGTH_SHORT, true).show()
-        }
+                _binding.contentMain.recyclerView.recycledViewPool.clear()
+                adapter?.notifyDataSetChanged()
+                _binding.contentMain.loading.visibility = View.GONE
+                setupData()
+            },
+            {error ->
+                println(error.printStackTrace())
+                Toasty.error(applicationContext, getString(string.no_internet), Toast.LENGTH_SHORT, true).show()
+            }
+        )
         MyApplication.instance.addToRequestQueue(request!!)
     }
 
-    /**
-     *
-     * @param pubsList ArrayList<Pubs>
-     */
-    private fun setupData(pubsList: ArrayList<Pubs>) {
-        adapter = MainAdapter(applicationContext, pubsList, this)
-        recyclerView?.adapter = adapter
+    private fun setupData(){
+        adapter = MainAdapter(applicationContext, pubsList!!, this)
+        _binding.contentMain.recyclerView.adapter = adapter
     }
 
     // Bottom Sheet Dialog for Filtering
     @RequiresApi(Build.VERSION_CODES.N)
-    @SuppressLint("InflateParams", "NotifyDataSetChanged")
+    @SuppressLint("InflateParams")
     private fun setUpBottomSheet(){
-        fabFilter.setOnClickListener{
+        _binding.fabFilter.setOnClickListener{
             val dialogView = layoutInflater.inflate(layout.bottom_sheet_filter, null)
 
             // radio buttons in bottom_sheet_filter.xml
@@ -386,169 +395,45 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
             cbUSAFE = dialogView.findViewById(id.cbUSAFE)
             cbPACAF = dialogView.findViewById(id.cbPACAF)
             cbAFRC= dialogView.findViewById(id.cbAFRC)
+            cbTravel = dialogView.findViewById(id.cbTravel)
 
             bottomSheetDialog = BottomSheetDialog(this@MainActivity)
             bottomSheetDialog.setContentView(dialogView)
             bottomSheetDialog.show()
 
-            // All Pubs (Reset)
-            cbALL.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
-                if(isChecked) {
-                    fetchPubs()
-                    supportActionBar?.title = resources.getString(string.app_name)
-                    bottomSheetDialog.dismiss()
-                    adapter?.notifyDataSetChanged()
-                }
-            }
+            val filterMap = mapOf(
+                cbALL to Pair("", resources.getString(string.app_name)),
+                cbHAF to Pair("AF/", "HAF"),
+                cbLeMayCenter to Pair("LeMay Center", "Doctrine"),
+                cbACC to Pair("ACC", "ACC"),
+                cbAMC to Pair("AMC", "AMC"),
+                cbAETC to Pair("AETC", "AETC"),
+                cbAFMC to Pair("AFMC", "AFMC"),
+                cbAFSOC to Pair("AFSOC", "AFSOC"),
+                cbAFGSC to Pair("AFGSC", "AFGSC"),
+                cbUSAFE to Pair("USAFE-AFAFRICA", "USAFE-AFAFRICA"),
+                cbPACAF to Pair("PACAF", "PACAF"),
+                cbAFRC to Pair("AFRC", "AFRC"),
+                cbTravel to Pair("DoD", "DoD")
+            )
 
-            // HAF Level Pubs (AF/ HAF/ SAF/)
-            cbHAF.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
-                if(isChecked) {
-                    adapter?.filter?.filter(showListByOrg("AF/"))
-                    supportActionBar?.title = "HAF Pubs"
-                    bottomSheetDialog.dismiss()
-                    adapter?.notifyDataSetChanged()
-                }
-            }
-
-            // LeMay Center
-            cbLeMayCenter.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
-                if (isChecked) {
-                    adapter?.filter?.filter(showListByOrg("LeMay Center"))
-                    supportActionBar?.title = "LeMay Center"
-                    bottomSheetDialog.dismiss()
-                    adapter?.notifyDataSetChanged()
-                }
-            }
-
-            // ACC
-            cbACC.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-                if (isChecked) {
-                    adapter?.filter?.filter(showListByOrg("ACC"))
-                    supportActionBar?.title = "ACC Pubs"
-                    bottomSheetDialog.dismiss()
-                    adapter?.notifyDataSetChanged()
-                }
-            }
-
-            // AMC
-            cbAMC.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
-                if (isChecked) {
-                    adapter?.filter?.filter(showListByOrg("AMC"))
-                    supportActionBar?.title = "AMC Pubs"
-                    bottomSheetDialog.dismiss()
-                    adapter?.notifyDataSetChanged()
-                }
-            }
-
-            // AETC
-            cbAETC.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
-                if (isChecked) {
-                    adapter?.filter?.filter(showListByOrg("AETC"))
-                    supportActionBar?.title = "AETC Pubs"
-                    bottomSheetDialog.dismiss()
-                    adapter?.notifyDataSetChanged()
-                }
-            }
-
-            // AFMC
-            cbAFMC.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
-                if (isChecked) {
-                    adapter?.filter?.filter(showListByOrg("AFMC"))
-                    supportActionBar?.title = "AFMC Pubs"
-                    bottomSheetDialog.dismiss()
-                    adapter?.notifyDataSetChanged()
-                }
-            }
-
-            // AFSOC
-            cbAFSOC.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
-                if (isChecked) {
-                    adapter?.filter?.filter(showListByOrg("AFSOC"))
-                    supportActionBar?.title = "AFSOC Pubs"
-                    bottomSheetDialog.dismiss()
-                    adapter?.notifyDataSetChanged()
-                }
-            }
-
-            // AFGSC
-            cbAFGSC.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
-                if (isChecked) {
-                    adapter?.filter?.filter(showListByOrg("AFGSC"))
-                    supportActionBar?.title = "AFGSC Pubs"
-                    bottomSheetDialog.dismiss()
-                    adapter?.notifyDataSetChanged()
-                }
-            }
-
-            // USAFE
-            cbUSAFE.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
-                if (isChecked) {
-                    adapter?.filter?.filter(showListByOrg("USAFE-AFAFRICA"))
-                    supportActionBar?.title = "USAFE Pubs"
-                    bottomSheetDialog.dismiss()
-                    adapter?.notifyDataSetChanged()
-                }
-            }
-
-            // PACAF
-            cbPACAF.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
-                if (isChecked) {
-                    adapter?.filter?.filter(showListByOrg("PACAF"))
-                    supportActionBar?.title = "PACAF Pubs"
-                    bottomSheetDialog.dismiss()
-                    adapter?.notifyDataSetChanged()
-                }
-            }
-
-            // AFRC
-            cbAFRC.setOnCheckedChangeListener{_: CompoundButton?, isChecked: Boolean ->
-                if (isChecked) {
-                    adapter?.filter?.filter(showListByOrg("AFRC"))
-                    supportActionBar?.title = "AFRC Pubs"
-                    bottomSheetDialog.dismiss()
-                    adapter?.notifyDataSetChanged()
+            for ((checkbox, filter) in filterMap) {
+                checkbox.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        updateFilter(filter.first, filter.second)
+                        bottomSheetDialog.dismiss()
+                    }
                 }
             }
         }
     }
 
-    /**
-     * @param rescindOrg String
-     * @return CharSequence
-     */
-    private fun showListByOrg(rescindOrg: String): CharSequence {
-        when(rescindOrg){
-            "AF/" ->{
-                pubsList?.filter {
-                    it.RescindOrg == "AF/" ||
-                    it.RescindOrg == "SAF/" ||
-                    it.RescindOrg == "AF/A" ||
-                    it.RescindOrg == "HAF/" ||
-                    it.RescindOrg == "HQ/" ||
-                    it.RescindOrg == "DOD/"
-                }
-            }
-
-            "ACC" ->{ pubsList?.filter { it.RescindOrg == "ACC" } }
-            "AMC" ->{ pubsList?.filter { it.RescindOrg == "AMC" } }
-            "AFGSC" ->{ pubsList?.filter { it.RescindOrg == "AFGSC" } }
-            "AFRC" ->{ pubsList?.filter { it.RescindOrg == "AFRC" } }
-            "USAFE-AFAFRICA" ->{ pubsList?.filter { it.RescindOrg == "USAFE-AFAFRICA" } }
-            "PACAF" ->{ pubsList?.filter { it.RescindOrg == "PACAF" } }
-            "AETC" ->{ pubsList?.filter { it.RescindOrg == "AETC" } }
-            "AFMC" ->{ pubsList?.filter { it.RescindOrg == "AFMC" } }
-            "AFSOC" ->{ pubsList?.filter { it.RescindOrg == "AFSOC" } }
-
-            "LeMay Center || LeMay Center for Doctrine Development" -> { pubsList?.filter {
-                it.RescindOrg == "LeMay Center" ||
-                it.RescindOrg == "LeMay Center for Doctrine Development"}
-            }
-        }
-        return rescindOrg
+    private fun updateFilter(org: String, title: String) {
+        adapter?.filterByRescindOrg()?.filter(org)
+        supportActionBar?.title = title
+        bottomSheetDialog.dismiss()
     }
 
-    // Configures Toasty Library
     private fun toastyConfig(){
         val typeface: Typeface? = ResourcesCompat.getFont(applicationContext, font.ibm_plex_sans)
 
@@ -559,10 +444,8 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
             .apply()
     }
 
-    // Refreshes filtered feed on back press
-    // Exits app if back-pressed x2
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun onBackPressed() {
+    private fun closeOrRefreshApp(){
         supportActionBar?.title = getString(string.app_name)
         fetchPubs()
         if (exit){
@@ -572,6 +455,11 @@ class MainActivity : AppCompatActivity(), MainAdapter.PubsAdapterListener {
             exit = true
             Handler(Looper.getMainLooper()).postDelayed({ exit = false }, 3 * 1000)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "onDestroy: --------")
     }
 
     companion object {

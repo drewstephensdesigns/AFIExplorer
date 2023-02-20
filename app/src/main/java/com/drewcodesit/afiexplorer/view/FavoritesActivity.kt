@@ -27,13 +27,11 @@ import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.adapters.FavoriteAdapter
 import com.drewcodesit.afiexplorer.database.FavoriteDatabase
 import com.drewcodesit.afiexplorer.database.FavoriteEntity
+import com.drewcodesit.afiexplorer.databinding.FavesActivityBinding
 import com.drewcodesit.afiexplorer.utils.MyDividerItemDecoration
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.rajat.pdfviewer.PdfViewerActivity
 import es.dmoral.toasty.Toasty.info
-import kotlinx.android.synthetic.main.bottom_sheet_filter_faves.*
-import kotlinx.android.synthetic.main.content_faves.*
-import kotlinx.android.synthetic.main.faves_activity.*
 
 // FavAdapterListener opens saved publications
 // ItemListener deletes saved publications
@@ -51,21 +49,24 @@ class FavoritesActivity : AppCompatActivity(),
     // Radio Buttons for Filtering
     private lateinit var cbSortByTitle: RadioButton
     private lateinit var cbSortByNumber: RadioButton
+    private lateinit var _binding: FavesActivityBinding
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.faves_activity)
-        setSupportActionBar(toolbar2)
+        _binding = FavesActivityBinding.inflate(layoutInflater)
+
+        setContentView(_binding.root)
+
+        setSupportActionBar(_binding.toolbar2)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
             title = resources.getString(R.string.app_faves)
         }
 
-        rv = findViewById<View?>(R.id.rv_favorites) as RecyclerView
+        rv = _binding.contentFaves.rvFavorites
         rv.layoutManager = LinearLayoutManager(this)
-
         rv.apply {
             itemAnimator = DefaultItemAnimator()
             addItemDecoration(
@@ -83,7 +84,6 @@ class FavoritesActivity : AppCompatActivity(),
     private fun getFaves() {
         val favorites =
             FavoriteDatabase.getDatabase(applicationContext).favoriteDAO()!!.getFavoriteData()
-            //FavoriteDatabase.getDatabase(applicationContext).favoriteDAO()!!.getAllSortedByName()
 
         Log.e("FAVORITES", "$favorites")
 
@@ -92,15 +92,20 @@ class FavoritesActivity : AppCompatActivity(),
 
         // Show or Hide Empty State
         if (favorites!!.isEmpty()) {
-            emptyInfoImg.visibility = View.VISIBLE
-            emptyInfo.visibility = View.VISIBLE
-            emptyInfo.text = getString(R.string.no_results_found_db)
-            fabFilterFaves.hide()
+            // Kotlin View Binding
+            _binding.contentFaves.emptyInfoImg.visibility = View.VISIBLE
+            _binding.contentFaves.emptyInfo.visibility = View.VISIBLE
+            _binding.contentFaves.emptyInfo.text = getString(R.string.no_results_found_db)
+
+            _binding.fabFilterFaves.hide()
         } else {
             Log.i("FAVORITES", "Current Size: ${favorites.size}")
-            emptyInfoImg.visibility = View.GONE
-            emptyInfo.visibility = View.GONE
-            fabFilterFaves.show()
+            // Kotlin View Binding
+            _binding.contentFaves.emptyInfoImg.visibility = View.GONE
+            _binding.contentFaves.emptyInfo.visibility = View.GONE
+            _binding.fabFilterFaves.show()
+
+            favAdapter.filterByTitle()
         }
     }
 
@@ -133,7 +138,7 @@ class FavoritesActivity : AppCompatActivity(),
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                onBackPressed()
+                onBackPressedDispatcher.onBackPressed()
                 true
             }
 
@@ -186,10 +191,9 @@ class FavoritesActivity : AppCompatActivity(),
         }
     }
 
-
     @SuppressLint("InflateParams", "NotifyDataSetChanged")
     private fun setUpBottomSheet(){
-        fabFilterFaves.setOnClickListener {
+        _binding.fabFilterFaves.setOnClickListener {
             val dialogView = layoutInflater.inflate(R.layout.bottom_sheet_filter_faves, null)
 
             // radio buttons in bottom_sheet_filter.xml
@@ -221,6 +225,7 @@ class FavoritesActivity : AppCompatActivity(),
     }
 
     // Deletes Single Items from Database
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onItemClicked(favsListToDelete: FavoriteEntity, position: Int) {
         FavoriteDatabase.getDatabase(applicationContext).favoriteDAO()!!.delete(favsListToDelete)
         info(

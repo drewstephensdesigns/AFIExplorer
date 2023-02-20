@@ -4,15 +4,17 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.database.FavoriteEntity
+import com.drewcodesit.afiexplorer.databinding.FavoritesListItemBinding
 import es.dmoral.toasty.Toasty
 import java.util.*
 
@@ -32,8 +34,8 @@ class FavoriteAdapter(
      * @return ViewHolder
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.favorites_list_item, parent, false)
-        return ViewHolder(view)
+        val binding = FavoritesListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     /**
@@ -41,8 +43,9 @@ class FavoriteAdapter(
      * @param holder ViewHolder
      * @param position Int
      */
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val fl = favePubsListFiltered?.get(position)//favoriteListEntities?.get(position)
+        val fl = favePubsListFiltered?.get(position)
         holder.pubNumber.text = fl!!.Number
         holder.pubTitle.text = fl.Title
 
@@ -50,7 +53,7 @@ class FavoriteAdapter(
         val clipboard: ClipboardManager =
             ct.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
-        holder.buttonViewOption?.setOnClickListener {
+        holder.buttonViewOption.setOnClickListener {
             // Setting Theme to Popup Menu
             // Creating a Popup Menu
             val wrapper: Context = ContextThemeWrapper(ct, R.style.AppTheme)
@@ -108,34 +111,22 @@ class FavoriteAdapter(
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
+                val searchTerm = constraint?.toString() ?: ""
+                favePubsListFiltered = (favoriteListEntities?.filter {
+                    it?.Title?.contains(searchTerm, ignoreCase = true) == true ||
+                            it?.Number?.contains(searchTerm, ignoreCase = true) == true
+                } ?: emptyList()) as MutableList<FavoriteEntity?>?
 
-                val charString = constraint?.toString() ?: ""
-                favePubsListFiltered = if (charString.isEmpty()) favoriteListEntities else {
-                    val filteredList = ArrayList<FavoriteEntity?>()
-                    favoriteListEntities
-                        ?.filter {
-                            it?.Title!!.lowercase(Locale.ROOT).contains(charString.lowercase(Locale.ROOT)) or
-                            it.Title!!.contains(charString) or
-
-                            it.Number!!.lowercase(Locale.ROOT).contains(constraint!!) or
-                            it.Number!!.contains(constraint)
-                        }
-                        ?.forEach {
-                            filteredList.add(it)
-                        }
-                    filteredList
-                }
                 return FilterResults().apply { values = favePubsListFiltered }
             }
 
             @Suppress("UNCHECKED_CAST")
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                favePubsListFiltered = results?.values as ArrayList<FavoriteEntity?>
+                favePubsListFiltered = results?.values as MutableList<FavoriteEntity?>
                 notifyDataSetChanged()
             }
         }
     }
-
     // Filter Favorites By Title
     fun filterByTitle(){
         favoriteListEntities?.sortWith { pubTitle1, pubTitle2 ->
@@ -155,17 +146,16 @@ class FavoriteAdapter(
      * @property pubNumber TextView
      * @property pubTitle TextView
      * @property buttonViewOption ImageView?
-     * @constructor
      */
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var pubNumber: TextView = view.findViewById(R.id.pubNumber)
-        var pubTitle: TextView = view.findViewById(R.id.pubTitle)
-        var buttonViewOption: ImageView? = view.findViewById<View?>(R.id.textViewOptions) as ImageView
+    inner class ViewHolder(view: FavoritesListItemBinding) : RecyclerView.ViewHolder(view.root) {
+        var pubNumber: TextView = view.pubNumber
+        var pubTitle: TextView = view.pubTitle
+        var buttonViewOption: ImageView = view.textViewOptions
 
         // Normal click to open publication instance from
         // Epubs site -> Matches Links from MainActivity
         init {
-            view.setOnClickListener{
+            view.root.setOnClickListener{
                 favoriteListEntities?.get(bindingAdapterPosition)?.let { it1 ->
                     favListener.onFavsSelected(it1)
                 }
@@ -178,5 +168,6 @@ class FavoriteAdapter(
     }
     interface ItemListener {
         fun onItemClicked(favsListToDelete: FavoriteEntity, position: Int)
+
     }
 }

@@ -1,7 +1,6 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
@@ -9,21 +8,21 @@ apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
     buildToolsVersion "30.0.3"
 
     defaultConfig {
+        multiDexEnabled true
         applicationId "io.github.drewstephenscoding.afiexplorer"
         minSdkVersion 21
-        targetSdkVersion 32
-        // version code changed to 23
-        // 3 DEC
-        versionCode 23
-        // version name changed to 1.3.7
-        // 3 DEC
-        versionName "1.3.7"
+        targetSdkVersion 33
+        // version code changed to 24
+        // 14 JAN 23
+        versionCode 24
+        // version name changed to 1.3.8
+        // 14 JAN 23
+        versionName "1.3.8"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         kapt {
             arguments {
                 arg("room.schemaLocation", "$projectDir/schemas")
@@ -31,13 +30,14 @@ android {
         }
     }
     applicationVariants.all { variant ->
-        variant.resValue "string", "versionName", "Version " + variant.versionName
+        variant.resValue "string", "versionName", variant.versionName
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            multiDexEnabled true
         }
     }
     compileOptions {
@@ -61,8 +61,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     // recycler view
@@ -73,15 +73,15 @@ dependencies {
 
     // volley http library
     implementation 'com.android.volley:volley:1.2.1'
-    implementation 'com.google.code.gson:gson:2.10'
+    implementation 'com.google.code.gson:gson:2.10.1'
 
     // Room components
-    implementation 'androidx.room:room-runtime:2.4.3'
-    implementation "androidx.room:room-ktx:2.4.3"
-    kapt "androidx.room:room-compiler:2.4.3"
+    implementation 'androidx.room:room-runtime:2.5.0'
+    implementation "androidx.room:room-ktx:2.5.0"
+    kapt "androidx.room:room-compiler:2.5.0"
 
     // Firebase
-    implementation 'com.google.firebase:firebase-crashlytics:18.3.2'
+    implementation 'com.google.firebase:firebase-crashlytics:18.3.3'
     implementation 'com.google.firebase:firebase-analytics:21.2.0'
 
     // Navigation
@@ -96,11 +96,4 @@ dependencies {
 
     // Licenses
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
-
-    // Tests
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    androidTestImplementation "androidx.room:room-testing:2.4.3"
-
 }

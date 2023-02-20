@@ -1,4 +1,10 @@
 <resources>
+    <!-- Stack Overflow Resources-->
+    <!-- //=========================================================================================
+        - Linebreaks (\n) only work if you put your string resource value in quotes like this:
+        - https://stackoverflow.com/questions/5382490/how-to-add-a-line-break-in-an-android-textview
+         ===================================================================================== //-->
+
     <!-- App Screen Titles -->
     <string name="app_name">AFI Explorer</string>
     <string name="app_faves">Favorites</string>
@@ -11,18 +17,6 @@
     <string name="action_search">Search</string>
     <string name="action_delete">Delete From Favorites</string>
     <string name="action_clear_database">Delete All Favorites</string>
-
-    <!-- Hints/Notices -->
-    <string name="search_hint">Search pubs…</string>
-    <string name="no_results_found">No Results Found for %1$s</string>
-    <string name="no_results_found_db">There\'s nothing here…</string>
-    <string name="no_internet">Connection Error : Turn Off Airplane Mode or Use Wi-Fi to access Publications</string>
-    <string name="pub_restricted">This publication is restricted, see E-Pubs for official source</string>
-
-    <!-- Shared Preference Keys-->
-    <string name="pref_key_mode_night">PREF_MODE_NIGHT</string>
-
-    <!-- Popup Menu -->
     <string name="action_save">Save Publication</string>
     <string name="action_share">Share Publication</string>
     <string name="action_copy">Copy Publication Number</string>
@@ -31,26 +25,39 @@
     <string name="action_update">Check for Updates</string>
     <string name="action_exit_app">Press Back again to exit</string>
 
+    <!-- Hints/Notices -->
+    <string name="search_hint">Search pubs…</string>
+    <string name="no_results_found">No Results Found for %1$s</string>
+    <string name="no_results_found_db">"No saved items \n Add publications from the \n home screen to view later."</string>
+    <string name="no_internet">Connection Error : Turn Off Airplane Mode or Use Wi-Fi to access Publications</string>
+    <string name="pub_restricted">This publication is restricted, see E-Pubs for official source</string>
+
+    <!-- Shared Preference Keys-->
+    <string name="pref_key_mode_night">PREF_MODE_NIGHT</string>
+
     <!-- Publication Actions for Clarity -->
+    <string name="ac">Last Action: AC</string>
     <string name="guidance_memorandum">Last Action: Guidance Memorandum</string>
     <string name="interim_change">Last Action: Interim Change</string>
     <string name="update_contact">Last Action: Update Contact</string>
     <string name="rewrite">Last Action: Rewrite</string>
     <string name="transfer">Last Action: Transfer</string>
     <string name="correction">Last Action: Correction</string>
-    <string name="unknown_action">Last Action: Unknown</string>
+    <string name="certified_current">Last Action: Certified Current</string>
+    <string name="unknown_action">Last Action: </string>
 
     <!-- Settings/App Info Screen -->
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="feedback_header">Send Feedback</string>
-    <string name="feedback_subheading">Report technical issues or suggest new features!</string>
+    <string name="feedback_subheading">Let us know how we can improve</string>
     <string name="rating_header">Rate App</string>
-    <string name="rating_subheading">If AFI Explorer has helped your everyday life, please consider rating us on the Play Store</string>
+    <string name="rating_subheading">Please consider rating us on the Play Store</string>
     <string name="licenses">Open Source Licenses</string>
+    <string name="licenses_summary">Libraries we use</string>
     <string name="help_header">Help &amp; Feedback</string>
     <string name="social_header">Connect with Me</string>
     <string name="legal_header">Legal</string>
-    <string name="version_header">App Info</string>
+    <string name="version_header">Build Version</string>
 
     <!-- Social Media Links -->
     <string name="instagram">Instagram</string>
@@ -68,14 +75,21 @@
 
     <!-- Github Change Log -->
     <string name="change_log">Change Log</string>
+    <string name="change_summary">Changes and improvements</string>
     <string name="change_log_url" translatable="false">https://github.com/DrewStephensCoding/AFIExplorer/blob/master/CHANGE_LOG.md</string>
     <string name="epubs_notice_url" translatable="false">https://www.e-publishing.af.mil/Tools/Product-Announcements/</string>
-    
+
+    <!-- Privacy Policy-->
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="privacy_summary">How AFI Explorer collects information</string>
+    <string name="privacy_url" translatable="false">https://afiexplorer.com/privacypolicy/</string>
+
     <!-- MAJCOM Strings -->
     <string name="sort_header">Sort &amp; filter by</string>
     <string name="sort_header_faves">Sort by</string>
     <string name="show_all">Show All Pubs</string>
     <string name="lemay_center">LeMay Center for Doctrine Development</string>
+    <string name="haf">HAF Publications</string>
     <string name="acc">Air Combat Command</string>
     <string name="amc">Air Mobility Command</string>
     <string name="aetc">Air Education and Training Command</string>
@@ -85,5 +99,8 @@
     <string name="afgsc">Air Force Global Strike Command</string>
     <string name="afrc">Air Force Reserve Command</string>
     <string name="usafe">United States Air Forces in Europe - AF Africa</string>
+    <string name="travel">DoD Travel Regulations</string>
+    <string name="cd_vertical_menu">Vertical menu</string>
+    <string name="cd_favorites">favorites</string>
 
 </resources>

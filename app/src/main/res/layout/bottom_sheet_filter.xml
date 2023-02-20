@@ -16,9 +16,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/ibm_plex_sans"
             android:text="@string/sort_header"
             android:textColor="?attr/colorControlNormal"
-            android:fontFamily="@font/ibm_plex_sans"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -51,11 +51,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:text="@string/show_all"
                 android:fontFamily="@font/noto_sans"
+                android:text="@string/show_all"
                 android:textColor="?android:attr/colorControlNormal"
                 android:textSize="14sp" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -74,13 +73,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:text="HAF Publications"
                 android:fontFamily="@font/noto_sans"
+                android:text="@string/haf"
                 android:textColor="?android:attr/colorControlNormal"
                 android:textSize="14sp" />
-
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -98,8 +95,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:text="@string/lemay_center"
                 android:fontFamily="@font/noto_sans"
+                android:text="@string/lemay_center"
                 android:textColor="?android:attr/colorControlNormal"
                 android:textSize="14sp" />
 
@@ -121,8 +118,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:text="@string/acc"
                 android:fontFamily="@font/noto_sans"
+                android:text="@string/acc"
                 android:textColor="?android:attr/colorControlNormal"
                 android:textSize="14sp" />
 
@@ -144,8 +141,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:text="@string/amc"
                 android:fontFamily="@font/noto_sans"
+                android:text="@string/amc"
                 android:textColor="?android:attr/colorControlNormal"
                 android:textSize="14sp" />
 
@@ -191,8 +188,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:text="@string/afmc"
                 android:fontFamily="@font/noto_sans"
+                android:text="@string/afmc"
                 android:textColor="?android:attr/colorControlNormal"
                 android:textSize="14sp" />
 
@@ -312,6 +309,30 @@
                 android:textSize="14sp" />
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/cbTravel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?android:attr/colorControlNormal"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/noto_sans"
+                android:text="@string/travel"
+                android:textColor="?android:attr/colorControlNormal"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
 
     </LinearLayout>
 

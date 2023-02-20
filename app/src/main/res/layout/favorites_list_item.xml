@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?attr/selectableItemBackground"
     android:clickable="true"
     android:paddingBottom="@dimen/row_padding"
@@ -18,7 +17,7 @@
         android:layout_centerVertical="true"
         android:layout_marginEnd="@dimen/row_padding"
         android:src="@drawable/ic_menu_vert"
-        android:contentDescription="Vertical menu" />
+        android:contentDescription="@string/cd_vertical_menu" />
 
     <TextView
         android:id="@+id/pubNumber"

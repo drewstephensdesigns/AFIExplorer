@@ -1,20 +1,15 @@
 ## Change Log
 Here you can find all the changes, improvements and bugs that have been added to AFI Explorer since the beginning.  The most current version will always be shown at the top for visibility.
 
-***Not Yet Released***
-#### Version 23 (1.3.7)
+#### Current: Version 23 (1.3.7)
+- Added filtering by Title/Number on Favorites
+- Increased search to show Rescind Org
+  - Example: /A4 will pull all regs with A4 (Logistics, Engineering and Force Protection) as a Rescind Organization
 - Added Dialog for Filtering by MAJCOM
 - Added Warning Toast when accessing restricted access publications instead of opening blank document
 - Added flag to manifest file allowing keeping of data when uninstalling application
 
-***Current As Of 3 SEP 22***
-#### Version 22 (1.3.6)
-- Routine improvements and bug fixes
-- Fixed issues causing crashes due to database migration
-- Removed hardcoded publications due to multi-platform repo standup
-
-#### Previous Versions
-
+## Previous Versions
 #### Version 1 (1.0)
 - Initial release of AFI Explorer for Android
   - Minor bugs were identified
@@ -95,18 +90,22 @@ Here you can find all the changes, improvements and bugs that have been added to
 -  Added CSAF Action Orders
 -  Bug fixes and improvements
 
-### Version 18 (1.3.2)
+#### Version 18 (1.3.2)
 -  Fixes auto rotate issue when user has auto rotate turned off
 -  Adds Air Force Doctrine Publication #1
 -  Adds ability to download files to an app-created folder
 -  Cleaned up code and removed unused resources
 
-### Version 19 (1.3.3)
+#### Version 19 (1.3.3)
 -  Routine improvements and bug fixes
 
-### Version 20 (1.3.4)
+#### Version 20 (1.3.4)
 -  Routine improvements and bug fixes
 
-### Version 20 (1.3.5)
+#### Version 21 (1.3.5)
 -  Attempt to fix crashes on certain devices due to database migration
 
+#### Version 22 (1.3.6)
+- Routine improvements and bug fixes
+- Fixed issues causing crashes due to database migration
+- Removed hardcoded publications due to multi-platform repo standup

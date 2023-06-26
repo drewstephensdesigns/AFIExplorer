@@ -1,13 +1,18 @@
 ## Change Log
 Here you can find all the changes, improvements and bugs that have been added to AFI Explorer since the beginning.  The most current version will always be shown at the top for visibility.
 
-#### Current: Version 23 (1.3.7)
-- Added filtering by Title/Number on Favorites
-- Increased search to show Rescind Org
-  - Example: /A4 will pull all regs with A4 (Logistics, Engineering and Force Protection) as a Rescind Organization
-- Added Dialog for Filtering by MAJCOM
-- Added Warning Toast when accessing restricted access publications instead of opening blank document
-- Added flag to manifest file allowing keeping of data when uninstalling application
+### Pending Review: Version 25 (2.0.0_Beta1)
+- Complete rewrite of the app
+  - Integration of bottom navigation
+  - Improved filtering of publications
+- Performance improvements
+- UI improvements/fixes
+- Saved publications now automatically updated when a change to the reg is made (Example: Title, URL, or Number changes)
+
+### Current: Version 24 (1.3.8)
+- Publications are now sorted by date with most recent updated at the top
+- Fixed bug preventing search filter from filtering Rescind Org correctly
+- UI and performance improvements
 
 ## Previous Versions
 #### Version 1 (1.0)
@@ -109,3 +114,11 @@ Here you can find all the changes, improvements and bugs that have been added to
 - Routine improvements and bug fixes
 - Fixed issues causing crashes due to database migration
 - Removed hardcoded publications due to multi-platform repo standup
+
+- #### Version 23 (1.3.7)
+- Added filtering by Title/Number on Favorites
+- Increased search to show Rescind Org
+  - Example: /A4 will pull all regs with A4 (Logistics, Engineering and Force Protection) as a Rescind Organization
+- Added Dialog for Filtering by MAJCOM
+- Added Warning Toast when accessing restricted access publications instead of opening blank document
+- Added flag to manifest file allowing keeping of data when uninstalling application

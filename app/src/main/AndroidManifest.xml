@@ -5,10 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
 
     <application
         android:enableOnBackInvokedCallback="true"
@@ -28,8 +24,7 @@
             android:name=".view.MainActivity"
             android:configChanges="uiMode|orientation"
             android:exported="true"
-            android:launchMode="singleTop"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.SEARCH" />
@@ -41,19 +36,6 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity> <!-- Favorites -->
-        <activity
-            android:name=".view.FavoritesActivity"
-            android:exported="false"
-            android:label="@string/app_faves" >
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable"
-                android:value=".main.MainActivity" />
-        </activity> <!-- Settings -->
         <activity
             android:name=".view.SettingsActivity"
             android:exported="false"

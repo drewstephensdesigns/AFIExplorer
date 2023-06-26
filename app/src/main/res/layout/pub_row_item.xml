@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/pubRowItems"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground"
     android:paddingBottom="@dimen/row_padding"
-    android:paddingLeft="@dimen/activity_margin"
-    android:paddingRight="@dimen/activity_margin"
+    android:paddingLeft="14dp"
+    android:paddingRight="14dp"
     android:paddingTop="@dimen/row_padding"
     android:focusable="true">
 
@@ -37,7 +37,7 @@
         android:layout_toEndOf="@id/textViewOptions"
         android:ellipsize="end"
         android:fontFamily="@font/noto_sans"
-        android:maxLines="2"
+        android:maxLines="3"
         android:textColor="?android:attr/colorControlNormal"
         android:textSize="@dimen/pub_number" />
 

@@ -3,21 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".view.MainActivity">
-    
-    <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_search"
-        android:orderInCategory="100"
-        android:title="@string/action_search"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="always|collapseActionView" />
 
-    <item
-        android:id="@+id/action_bookmark"
-        android:icon="@drawable/ic_outline_bookmarks"
-        android:orderInCategory="101"
-        android:title="@string/action_bookmark"
-        app:showAsAction="always"/>
     <item
         android:id="@+id/action_change_theme"
         android:title="@string/change_theme"
@@ -30,4 +16,5 @@
         android:orderInCategory="103"
         android:title="@string/action_feedback"
         app:showAsAction="never" />
+
 </menu>

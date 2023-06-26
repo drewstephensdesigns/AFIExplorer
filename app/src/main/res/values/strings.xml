@@ -7,30 +7,28 @@
 
     <!-- App Screen Titles -->
     <string name="app_name">AFI Explorer</string>
+    <string name="app_home">Publications</string>
     <string name="app_faves">Favorites</string>
 
     <!-- Menu/Toolbar Titles -->
     <string name="action_support">Support</string>
     <string name="change_theme">Change Theme</string>
     <string name="action_feedback">App Info</string>
-    <string name="action_bookmark">Bookmark</string>
     <string name="action_search">Search</string>
     <string name="action_delete">Delete From Favorites</string>
     <string name="action_clear_database">Delete All Favorites</string>
     <string name="action_save">Save Publication</string>
     <string name="action_share">Share Publication</string>
-    <string name="action_copy">Copy Publication Number</string>
     <string name="action_copy_url">Copy URL</string>
     <string name="action_download">Download File</string>
-    <string name="action_update">Check for Updates</string>
     <string name="action_exit_app">Press Back again to exit</string>
 
     <!-- Hints/Notices -->
     <string name="search_hint">Search pubs…</string>
     <string name="no_results_found">No Results Found for %1$s</string>
     <string name="no_results_found_db">"No saved items \n Add publications from the \n home screen to view later."</string>
-    <string name="no_internet">Connection Error : Turn Off Airplane Mode or Use Wi-Fi to access Publications</string>
-    <string name="pub_restricted">This publication is restricted, see E-Pubs for official source</string>
+    <string name="no_internet">Connection Error</string>
+    <string name="pub_restricted">Restricted, see E-Pubs for official source</string>
 
     <!-- Shared Preference Keys-->
     <string name="pref_key_mode_night">PREF_MODE_NIGHT</string>
@@ -85,22 +83,9 @@
     <string name="privacy_url" translatable="false">https://afiexplorer.com/privacypolicy/</string>
 
     <!-- MAJCOM Strings -->
-    <string name="sort_header">Sort &amp; filter by</string>
-    <string name="sort_header_faves">Sort by</string>
-    <string name="show_all">Show All Pubs</string>
-    <string name="lemay_center">LeMay Center for Doctrine Development</string>
-    <string name="haf">HAF Publications</string>
-    <string name="acc">Air Combat Command</string>
-    <string name="amc">Air Mobility Command</string>
-    <string name="aetc">Air Education and Training Command</string>
-    <string name="afmc">Air Force Material Command</string>
-    <string name="afsoc">Air Force Special Operations Command</string>
-    <string name="pacaf">Pacific Air Forces</string>
-    <string name="afgsc">Air Force Global Strike Command</string>
-    <string name="afrc">Air Force Reserve Command</string>
-    <string name="usafe">United States Air Forces in Europe - AF Africa</string>
-    <string name="travel">DoD Travel Regulations</string>
     <string name="cd_vertical_menu">Vertical menu</string>
     <string name="cd_favorites">favorites</string>
+    <string name="cd_filter_main">Filter for main publications</string>
+    <string name="cd_image">image</string>
 
 </resources>

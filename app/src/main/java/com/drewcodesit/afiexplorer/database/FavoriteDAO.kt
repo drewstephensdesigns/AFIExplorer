@@ -9,10 +9,10 @@ interface FavoriteDAO {
     fun addData(favoriteEntity: FavoriteEntity?)
 
     @Query("SELECT * FROM ${Config.TABLE_NAME}")
-    fun getFavoriteData(): MutableList<FavoriteEntity?>?
+    fun getFavoriteData(): MutableList<FavoriteEntity>
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun updateFaves(favoriteEntity: FavoriteEntity?)
+    fun update(favoriteEntity: FavoriteEntity)
 
     @Delete
     fun delete(favoriteEntity: FavoriteEntity?)

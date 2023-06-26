@@ -9,22 +9,17 @@
         android:title="@string/action_update"/>
 -->
     <item
-        android:id="@+id/menu1"
-        app:showAsAction="ifRoom"
-        android:title="@string/action_copy" />
-
-    <item
-        android:id="@+id/menu2"
+        android:id="@+id/menuActionCopy"
         app:showAsAction="ifRoom"
         android:title="@string/action_copy_url" />
 
     <item
-        android:id="@+id/menu3"
+        android:id="@+id/menuActionShare"
         app:showAsAction="ifRoom"
         android:title="@string/action_share" />
 
     <item
-        android:id="@+id/menu4"
+        android:id="@+id/menuActionDelete"
         android:title="@string/action_delete"
         app:showAsAction="ifRoom"/>
 

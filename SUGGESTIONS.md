@@ -3,7 +3,7 @@
 
 ### Feedback by: AF Quarantine University Facebook Page
 - Tongue and Quill Word Templates
-- Keep top navigation (Done)
+~~Keep top navigation (Done)~~
 - Adding Defense Health Publications (Researching feasibility)
 - Better navigation/searching through MAJCOM publications
 - Organize favorite publications (Researching feasibility)

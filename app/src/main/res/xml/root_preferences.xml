@@ -21,9 +21,9 @@
                 android:action="android.intent.action.SENDTO"
                 android:data="mailto:drewstephensdesigns@gmail.com">
 
-                <!-- https://issuetracker.google.com/issues/37129926 -->
+                <!-- https://issuetracker.google.com/issues/37129926
                 <extra android:name="android.intent.extra.SUBJECT"
-                    android:value="App Feedback"/>
+                    android:value="App Feedback"/>-->
             </intent>
         </Preference>
 
@@ -64,6 +64,13 @@
             <intent android:action="android.intent.action.VIEW"
                 android:data="@string/developer_linkedin_url" />
         </Preference>
+
+        <Preference
+            app:key="acknowledge"
+            app:title="@string/title_acknowledgement"
+            app:icon="@drawable/ic_thumbs_up">
+        </Preference>
+
     </PreferenceCategory>
 
     <PreferenceCategory

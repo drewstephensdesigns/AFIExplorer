@@ -28,11 +28,12 @@ import com.drewcodesit.afiexplorer.database.FavoriteEntity
 import com.drewcodesit.afiexplorer.databinding.FragmentFavesBinding
 import com.drewcodesit.afiexplorer.utils.MyDividerItemDecoration
 import com.maxkeppeler.sheets.core.ButtonStyle
-import com.maxkeppeler.sheets.core.IconButton
 import com.maxkeppeler.sheets.core.SheetStyle
 import com.maxkeppeler.sheets.info.InfoSheet
 import com.maxkeppeler.sheets.input.InputSheet
 import com.maxkeppeler.sheets.input.type.InputRadioButtons
+import com.maxkeppeler.sheets.lottie.LottieAnimation
+import com.maxkeppeler.sheets.lottie.withCoverLottieAnimation
 import com.rajat.pdfviewer.PdfViewerActivity
 import es.dmoral.toasty.Toasty
 
@@ -168,13 +169,18 @@ class FavoriteFragment : Fragment(),
     private fun nukeDatabase(){
         InfoSheet().show(requireContext()){
             style(SheetStyle.DIALOG)
-            withIconButton(IconButton( R.drawable.ic_error)){}
-            title("Delete Favorites?")
-            content("This will clear the database, are you sure you want to continue?")
+           // withIconButton(IconButton( R.drawable.ic_error)){}
+            title("Delete Database?")
+            content(R.string.action_nuke_database)
+            withCoverLottieAnimation(LottieAnimation {
+                setupAnimation {
+                    setAnimation(R.raw.caution_anim)
+                }
+            })
             onNegative(
-                "Not yet",
+                "Not Yet",
             ) { /* Set listener when negative button is clicked. */ }
-            onPositive("Yes") {
+            onPositive("Ok") {
                 FavoriteDatabase.getDatabase(requireContext()).favoriteDAO()?.deleteAll()
                 fetchFaves()
                 showDeleteToast("Database cleared!")

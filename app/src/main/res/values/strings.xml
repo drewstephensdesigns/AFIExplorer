@@ -22,8 +22,10 @@
     <string name="action_copy_url">Copy URL</string>
     <string name="action_download">Download File</string>
     <string name="action_exit_app">Press Back again to exit</string>
+    <string name="action_nuke_database">This action will delete the entire database…</string>
 
     <!-- Hints/Notices -->
+    <string name="intent_title">Select PDF Reader…</string>
     <string name="search_hint">Search pubs…</string>
     <string name="no_results_found">No Results Found for %1$s</string>
     <string name="no_results_found_db">"No saved items \n Add publications from the \n home screen to view later."</string>
@@ -45,6 +47,7 @@
     <string name="unknown_action">Last Action: </string>
 
     <!-- Settings/App Info Screen -->
+    <string name="title_acknowledgement">Acknowledgement</string>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="feedback_header">Send Feedback</string>
     <string name="feedback_subheading">Let us know how we can improve</string>
@@ -70,7 +73,7 @@
     <string name="developer_instagram_url" translatable="false">https://www.instagram.com/drewstephensdesigns/</string>
     <string name="developer_github_url" translatable="false">https://github.com/DrewStephensCoding</string>
     <string name="developer_linkedin_url" translatable="false">https://www.linkedin.com/in/drewstephens/</string>
-
+    <string name="reddit_url">We would like to thank <a href="https://www.reddit.com/r/AirForce/">r/AirForce</a> for the continuous feedback and support. We wouldn\'t be here today if it wasn\'t for you!</string>
     <!-- Github Change Log -->
     <string name="change_log">Change Log</string>
     <string name="change_summary">Changes and improvements</string>
@@ -82,7 +85,7 @@
     <string name="privacy_summary">How AFI Explorer collects information</string>
     <string name="privacy_url" translatable="false">https://afiexplorer.com/privacypolicy/</string>
 
-    <!-- MAJCOM Strings -->
+    <!-- Content Descriptions -->
     <string name="cd_vertical_menu">Vertical menu</string>
     <string name="cd_favorites">favorites</string>
     <string name="cd_filter_main">Filter for main publications</string>

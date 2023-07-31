@@ -35,6 +35,8 @@ class PubsAdapter(
 ) : ListAdapter<Pubs, PubsViewHolder>(PubsDiffCallback()), Filterable {
 
     private var pubsListFiltered: List<Pubs> = pubsList
+
+
     private val favoriteDAO = FavoriteDatabase.getDatabase(ct).favoriteDAO()
     private lateinit var viewLifecycleOwner: LifecycleOwner
 
@@ -255,6 +257,7 @@ class PubsAdapter(
                 pubsListFiltered = results?.values as ArrayList<Pubs>
                 results.count = pubsListFiltered.size
                 notifyDataSetChanged()
+                showInfoToast("Results: " + results.count + " Publications")
             }
         }
     }

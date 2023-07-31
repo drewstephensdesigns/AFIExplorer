@@ -17,57 +17,83 @@ import es.dmoral.toasty.Toasty
 class PubsViewModel(
     private val app: Application,
 ) : AndroidViewModel(app) {
-   private var request: JsonArrayRequest? = null
+    private var request: JsonArrayRequest? = null
 
     private var _pubsList = ArrayList<Pubs>()
+
     private val _publications = MutableLiveData<List<Pubs>>()
+
     val publications: MutableLiveData<List<Pubs>>
         get() = _publications
+
+    private var fetchedListsCount = 0
+    private var baseAPI: List<Pubs>? = null
+    private var angAPI: List<Pubs>? = null
 
     init {
         fetchPubs()
     }
 
-    // Volley
+    // handle the merging and sorting of data:
+    private fun mergeAndSortLists(baseList: List<Pubs>, angList: List<Pubs>): List<Pubs> {
+        val mergedList = mutableListOf<Pubs>()
+        mergedList.addAll(baseList)
+        mergedList.addAll(angList)
+        return mergedList.sortedByDescending { it.getCertDate() }
+    }
+
+    // Request 1 = AFI Explorer API
+    // Request 2 = Hand-Jammed ANG Pubs from GitHub
     private fun fetchPubs() {
-        request = JsonArrayRequest(
+        val request1 = JsonArrayRequest(
             Request.Method.GET,
-            Config.BASE_URL,
-            null,{ response ->
+            Config.BASE_URL, // Replace with your first source URL
+            null, { response ->
                 val items: List<Pubs> =
                     Gson().fromJson(response.toString(), object : TypeToken<List<Pubs>>() {}.type)
-
-                // Sort the list by getCertDate() in descending order
-                val sortedPubsList = items.sortedByDescending { it.getCertDate() }
-
-                // Update the _pubsList data with the sorted list
-                _pubsList.clear()
-
-                // Used for Testing
-                /*
-                _pubsList.add(Pubs(
-                    100000,
-                    "TEST TEST TEST",
-                    "TEST-ACTION-WORKING",
-                    "TEST",
-                    "030484879209393",
-                    "https://media.defense.gov/2023/Jun/14/2003241815/-1/-1/1/2023-DEPARTMENT-OF-DEFENSE-JUNETEENTH-NATIONAL-INDEPENDENCE-DAY-OBSERVANCE.PDF",
-
-                    //"https://media.defense.gov/2023/May/26/2003231006/-1/-1/1/2023-DOD-CYBER-STRATEGY-FACT-SHEET.PDF",
-                    "DoD TEST"
-                ))
-                */
-                _pubsList.addAll(sortedPubsList)
-
-                // Notify observers that the data has changed
-                _publications.postValue(_pubsList)
+                handleResponse(items)
             },
-            {error ->
+            { error ->
                 println(error.printStackTrace())
                 showErrorToast()
             }
         )
-        MyApplication.instance.addToRequestQueue(request!!)
+
+        val request2 = JsonArrayRequest(
+            Request.Method.GET,
+            Config.ANG_URL, // Replace with your second source URL
+            null, { response ->
+                val items: List<Pubs> =
+                    Gson().fromJson(response.toString(), object : TypeToken<List<Pubs>>() {}.type)
+                handleResponse(items)
+            },
+            { error ->
+                println(error.printStackTrace())
+                showErrorToast()
+            }
+        )
+
+        MyApplication.instance.addToRequestQueue(request1)
+        MyApplication.instance.addToRequestQueue(request2)
+    }
+
+
+    // Helper function to handle the response from both requests:
+    private fun handleResponse(items: List<Pubs>) {
+        fetchedListsCount++
+        if (fetchedListsCount == 1) {
+            baseAPI = items
+        } else if (fetchedListsCount == 2) {
+            angAPI = items
+            val sortedList = mergeAndSortLists(
+                baseAPI ?: emptyList(),
+                angAPI ?: emptyList()
+            )
+
+            _pubsList.clear()
+            _pubsList.addAll(sortedList)
+            _publications.postValue(_pubsList)
+        }
     }
 
     private fun showErrorToast() {

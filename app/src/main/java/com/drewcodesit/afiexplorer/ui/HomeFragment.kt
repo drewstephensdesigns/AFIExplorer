@@ -42,8 +42,7 @@ import es.dmoral.toasty.Toasty
 
 
 class HomeFragment : Fragment(),
-    PubsAdapter.PubsAdapterListener,
-    MenuProvider {
+    PubsAdapter.PubsAdapterListener {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -56,12 +55,13 @@ class HomeFragment : Fragment(),
 
     //The OnBackPressedDispatcher is a class that allows you
     // to register a OnBackPressedCallback to a LifecycleOwner
-    private val onBackPressedCallback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
-        @RequiresApi(Build.VERSION_CODES.N)
-        override fun handleOnBackPressed() {
-            closeOrRefreshApp()
+    private val onBackPressedCallback: OnBackPressedCallback =
+        object : OnBackPressedCallback(true) {
+            @RequiresApi(Build.VERSION_CODES.N)
+            override fun handleOnBackPressed() {
+                closeOrRefreshApp()
+            }
         }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,13 +74,15 @@ class HomeFragment : Fragment(),
         binding.loading.visibility = View.VISIBLE
 
         // Separates business logic from the UI
-        pubsViewModel = ViewModelProvider(requireActivity(),
+        pubsViewModel = ViewModelProvider(
+            requireActivity(),
             ViewModelProvider.AndroidViewModelFactory
-                .getInstance(requireActivity().application))[PubsViewModel::class.java]
+                .getInstance(requireActivity().application)
+        )[PubsViewModel::class.java]
 
         pubsViewModel?.publications?.observe(viewLifecycleOwner) { pubsList ->
             pubsList?.let {
-                adapter = PubsAdapter(requireContext(), it, this)
+                adapter = PubsAdapter(requireContext(), it,this)
                 _binding?.recyclerView?.adapter = adapter
                 binding.loading.visibility = View.GONE
             }
@@ -95,7 +97,10 @@ class HomeFragment : Fragment(),
         initUI()
         setupMenu()
         setupBottomSheet()
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressedCallback)
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            onBackPressedCallback
+        )
     }
 
     // While the Fragment menu API, which could be used for creating menu items and
@@ -103,66 +108,62 @@ class HomeFragment : Fragment(),
     // replaces these functionalities by implementing the MenuHost interface.
     // Source: https://medium.com/tech-takeaways/how-to-migrate-the-deprecated-oncreateoptionsmenu-b59635d9fe10
     private fun setupMenu() {
-        val menuHost: MenuHost = requireActivity()
-        menuHost.addMenuProvider(
-            this,           // your Fragment implements MenuProvider, so we use this here
-            viewLifecycleOwner,     // Only show the Menu when your Fragment's View exists
-            Lifecycle.State.CREATED // And when the Fragment is Created
-        )
-    }
+        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
+            override fun onPrepareMenu(menu: Menu) {
+                // Handle for example visibility of menu items
+            }
 
-    // the code first inflates the menu. It then obtains a reference to the SearchManager system service
-    // and creates a SearchView widget by retrieving the MenuItem with the ID R.id.action_search from the
-    // menu and casting its action view to a SearchView. Then configured to use the SearchableInfo obtained
-    // from the SearchManager. Finally, an OnQueryTextListener is set on the SearchView to listen for changes
-    // in the query text. When the query text changes, the adapter's filter is applied with the new text
-    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.menu_search, menu)
-        val searchManager =
-            requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        searchView = menu.findItem(R.id.action_search)?.actionView as SearchView
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_search, menu)
+                val searchManager =
+                    requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
+                searchView = menu.findItem(R.id.action_search)?.actionView as SearchView
 
-        searchView?.apply {
-            setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
-            setIconifiedByDefault(true)
-            maxWidth = Int.MAX_VALUE
+                searchView?.apply {
+                    setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
+                    setIconifiedByDefault(true)
+                    maxWidth = Int.MAX_VALUE
 
-            setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    searchView?.clearFocus()
-                    return true
+                    setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+                        override fun onQueryTextSubmit(query: String?): Boolean {
+                            searchView?.clearFocus()
+                            return false
+                        }
+
+                        // Source: https://stackoverflow.com/questions/61570173/display-no-results-found
+                        override fun onQueryTextChange(newText: String?): Boolean {
+                            adapter?.filter?.filter(newText) { i ->
+                                if (i == 0) {
+                                    _binding?.recyclerView?.visibility = View.GONE
+                                    _binding?.noResultsFound?.visibility = View.VISIBLE
+                                    _binding?.noResultsFound?.text =
+                                        resources.getString(R.string.no_results_found, newText)
+                                } else {
+                                    (activity as MainActivity).supportActionBar?.title = resources.getString(R.string.app_home)
+                                    _binding?.noResultsFound?.visibility = View.GONE
+                                    _binding?.recyclerView?.visibility = View.VISIBLE
+                                }
+                            }
+                            return false
+                        }
+                    })
                 }
+            }
 
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    adapter?.filter?.filter(newText)
-                    when (adapter?.itemCount) {
-                        0 -> {
-                            // Kotlin View Binding
-                            _binding?.noResultsFound?.visibility = View.VISIBLE
-                            _binding?.noResultsFound?.text = getString(R.string.no_results_found, newText)
-                            _binding?.recyclerView?.visibility = View.GONE
-                        }
-                        else -> {
-                            _binding?.noResultsFound?.visibility = View.GONE
-                            _binding?.recyclerView?.visibility = View.VISIBLE
-                        }
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                // Validate and handle the selected menu item
+                return when (menuItem.itemId) {
+                    R.id.action_search -> {
+                        true
                     }
-                    return false
-                }
-            })
-        }
-    }
 
-    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        // Validate and handle the selected menu item
-        return when (menuItem.itemId) {
-            R.id.action_search -> {
-                true
+                    else -> {
+                        false
+                    }
+                }
             }
-            else -> {
-                false
-            }
-        }
+        }, viewLifecycleOwner, Lifecycle.State.CREATED)
     }
 
     // Sets up the RecyclerView with a layout manager, fixed size, animation, and a
@@ -186,22 +187,38 @@ class HomeFragment : Fragment(),
     // Radio Buttons for non Major Commands
     // Spinner Selection for Major Commands
     private fun setupBottomSheet() {
-       binding.fabFilterMain.setOnClickListener {
-            InputSheet().show(requireContext()){
+        binding.fabFilterMain.setOnClickListener {
+            InputSheet().show(requireContext()) {
                 title("Filter Publications")
 
                 // Input buttons for non-epubs/MAJCOM publications
                 // DoD: JTR, GTC, DTS regs
                 // AF/: All HAF level publications (SAF, AF, JAG, etc)
                 // LeMay Center: Air Force Doctrine (TTPs are restricted)
+                // Added 18 JUL: Air National Guard Publications
                 with(InputRadioButtons {
                     label("Select an Organization")
-                    options(mutableListOf("DoD", "HAF", "LeMay Center"))
+                    options(mutableListOf("DoD", "HAF", "LeMay Center", "Air National Guard"))
                     changeListener { value ->
-                        when(value){
-                            0 -> {updateFilter("DoD", "DoD")}
-                            1 -> {updateFilter("AF/", "HAF")}
-                            2 -> {updateFilter("LeMay", "Doctrine")}
+                        when (value) {
+                            0 -> {
+                                updateFilter("DoD", "DoD")
+                            }
+
+                            1 -> {
+                                updateFilter("AF/", "HAF")
+                            }
+
+                            2 -> {
+                                updateFilter("LeMay", "Doctrine")
+                            }
+
+                            3 -> {
+                                updateFilter("ANG", "ANG")
+                            }
+                            else ->{
+                                (activity as MainActivity).supportActionBar?.title = getString(R.string.app_home)
+                            }
                         }
                     }
                 })
@@ -219,21 +236,50 @@ class HomeFragment : Fragment(),
                         )
                     )
                     changeListener { value ->
-                        when(value){
-                            0 -> {updateFilter("ACC", "ACC")}
-                            1 -> {updateFilter("AMC", "AMC")}
-                            2 -> {updateFilter("AETC", "AETC")}
-                            3 -> {updateFilter("PACAF", "PACAF")}
-                            4 -> {updateFilter("USAFE-AFAFRICA", "USAFE-AFAFRICA")}
-                            5 -> {updateFilter("AFGSC", "AFGSC")}
-                            6 -> {updateFilter("AFMC", "AFMC")}
-                            7 -> {updateFilter("AFRC", "AFRC")}
-                            8 -> {updateFilter("AFSOC", "AFSOC")}
+                        when (value) {
+                            0 -> {
+                                updateFilter("ACC", "ACC")
+                            }
+
+                            1 -> {
+                                updateFilter("AMC", "AMC")
+                            }
+
+                            2 -> {
+                                updateFilter("AETC", "AETC")
+                            }
+
+                            3 -> {
+                                updateFilter("PACAF", "PACAF")
+                            }
+
+                            4 -> {
+                                updateFilter("USAFE-AFAFRICA", "USAFE-AFAFRICA")
+                            }
+
+                            5 -> {
+                                updateFilter("AFGSC", "AFGSC")
+                            }
+
+                            6 -> {
+                                updateFilter("AFMC", "AFMC")
+                            }
+
+                            7 -> {
+                                updateFilter("AFRC", "AFRC")
+                            }
+
+                            8 -> {
+                                updateFilter("AFSOC", "AFSOC")
+                            }
+                            else -> {
+                                (activity as MainActivity).supportActionBar?.title = getString(R.string.app_home)
+                            }
                         }
                     }
                 })
             }
-       }
+        }
     }
 
     // Change ToolBar Title: (activity as MainActivity).supportActionBar?.title = ""
@@ -257,8 +303,8 @@ class HomeFragment : Fragment(),
                 || (pubs.DocumentUrl?.contains("generic_fouo.pdf")) == true
                 || (pubs.DocumentUrl?.contains("stocked_and_issued")) == true
                 || (pubs.DocumentUrl?.contains("generic_opr1.pdf")) == true
-                || (pubs.DocumentUrl?.contains("generic_opr.pdf")) == true) {
-
+                || (pubs.DocumentUrl?.contains("generic_opr.pdf")) == true
+            ) {
                 showRestrictedToast(getString(R.string.pub_restricted))
 
             } else {
@@ -272,7 +318,7 @@ class HomeFragment : Fragment(),
         } catch (e: ActivityNotFoundException) {
             startActivity(
                 // Use 'launchPdfFromPath' if you want to use assets file (enable "fromAssets" flag) / internal directory
-                PdfViewerActivity.launchPdfFromUrl(     //PdfViewerActivity.Companion.launchPdfFromUrl(..   :: incase of JAVA
+                PdfViewerActivity.launchPdfFromUrl(     //PdfViewerActivity.Companion.launchPdfFromUrl(..   :: in-case of JAVA
                     requireContext(),
                     "${pubs.DocumentUrl}",     // PDF URL in String format
                     "${pubs.Title}",          // PDF Name/Title in String format
@@ -286,11 +332,14 @@ class HomeFragment : Fragment(),
     // Callback to refresh (show all) publications list when user selects back button
     // or closes app after hitting back twice within 2 seconds
     private fun closeOrRefreshApp() {
-        (activity as MainActivity).supportActionBar?.title = getString(R.string.app_home)
-        adapter?.filter?.filter("")
-        if (exit){
+        (activity as MainActivity).supportActionBar?.title = resources.getString(R.string.app_home)
+
+        // Filters list back to all pubs view
+        adapter?.filterByRescindOrg()?.filter("")
+
+        if (exit) {
             requireActivity().finish() // finish activity
-        }else{
+        } else {
             Toasty.normal(requireContext(), getString(R.string.action_exit_app)).show()
             exit = true
             Handler(Looper.getMainLooper()).postDelayed({ exit = false }, 1 * 1000)

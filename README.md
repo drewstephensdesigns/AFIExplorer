@@ -186,11 +186,11 @@ Project Link: [https://github.com/DrewStephensCoding/AFIExplorer](https://github
 
 * [r/AirForce](https://www.reddit.com/r/AirForce/)
 * [HAF/A4L Tesseract](https://www.tesseract.af.mil)
-
-"Optimism is the faith that leads to achievement. Nothing can be done without hope and confidence" 
-  ~ Helen Keller
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+> **Optimism is the faith that leads to achievement. Nothing can be done without hope and confidence** <br>
+> Helen Keller
 
 
 [product-screenshot]: screenshots/AFI%20Explorer.png

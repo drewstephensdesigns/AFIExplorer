@@ -1,6 +1,3 @@
-<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
-<a name="readme-top"></a>
-
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
@@ -135,7 +132,6 @@ To learn more about developer facing aspects of Android accessibility, read the 
    ```sh
    git clone https://github.com/DrewStephensCoding/AFIExplorer.git
    ```
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ROADMAP -->
 ## Roadmap
@@ -146,8 +142,6 @@ To learn more about developer facing aspects of Android accessibility, read the 
     - [ ] Nested Feature
 -->
 See the [Suggestions](https://github.com/DrewStephensCoding/AFIExplorer/blob/master/SUGGESTIONS.md) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- Contribute -->
 ## Contributing
@@ -162,14 +156,10 @@ Don't forget to give the project a star! Thanks again! See the guide at [Contrib
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 <!-- LICENSE -->
 ## License
 
 Distributed under the MIT License. See [`LICENSE.md`](https://github.com/DrewStephensCoding/AFIExplorer/blob/a35fcbcc52eeb488c80aed56598502ad45016266/LICENSE.md) for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTACT -->
 ## Contact
@@ -178,20 +168,20 @@ Drew - drewstephensdesigns@gmail.com
 
 Project Link: [https://github.com/DrewStephensCoding/AFIExplorer](https://github.com/DrewStephensCoding/AFIExplorer)
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
 * [r/AirForce](https://www.reddit.com/r/AirForce/)
 * [HAF/A4L Tesseract](https://www.tesseract.af.mil)
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 > **Optimism is the faith that leads to achievement. Nothing can be done without hope and confidence** <br>
 > Helen Keller
 
+<div align="right">
+  <table><td>
+    <a href="#start-of-content">↥ Scroll to top</a>
+  </td></table>
+</div>
 
 [product-screenshot]: screenshots/AFI%20Explorer.png
 [issues-shield]: https://img.shields.io/github/issues/DrewStephensCoding/AFIExplorer.svg?style=for-the-badge

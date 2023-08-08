@@ -129,8 +129,9 @@ To learn more about developer facing aspects of Android accessibility, read the 
 
 ### Installation
 
-1. Get the API at [https://api.afiexplorer.com](https://api.afiexplorer.com)
-2. Clone the repo
+1. Get the Base API at [https://api.afiexplorer.com](https://api.afiexplorer.com)
+2. Get the Air National Guard API at [https://drewstephensdesigns.github.io/ANGPublications/data.json](https://drewstephensdesigns.github.io/ANGPublications/data.json)
+3. Clone the repo
    ```sh
    git clone https://github.com/DrewStephensCoding/AFIExplorer.git
    ```

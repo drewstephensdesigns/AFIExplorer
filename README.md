@@ -37,9 +37,9 @@
      <a href="https://github.com/DrewStephensCoding/AFIExplorer/issues">Report Bug</a>
     ·
      <a href="https://github.com/DrewStephensCoding/AFIExplorer/issues">Request Feature</a>
-    ·
+    <br />
     <a href="https://github.com/DrewStephensCoding/AFIExplorer/blob/a35fcbcc52eeb488c80aed56598502ad45016266/CHANGE_LOG.md">Change Log</a>
-    <br /=>
+  ·
     <a href="https://github.com/drewstephensdesigns/AFIExplorer/tags">Releases</a>
   </p>
 </div>

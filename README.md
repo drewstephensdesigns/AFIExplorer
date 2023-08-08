@@ -1,7 +1,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/DrewStephensCoding/AFIExplorer">
+  <a href="https://github.com/drewstephensdesigns/AFIExplorer">
     <img src="screenshots/app-icon.jpg" alt="Logo" width="80" height="80">
   </a>
 <br />
@@ -32,13 +32,13 @@
      <a href="https://afiexplorer.com"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-     <a href="https://github.com/DrewStephensCoding/AFIExplorer">View Demo</a>
+     <a href="https://github.com/drewstephensdesigns/AFIExplorer">View Demo</a>
     ·
-     <a href="https://github.com/DrewStephensCoding/AFIExplorer/issues">Report Bug</a>
+     <a href="https://github.com/drewstephensdesigns/AFIExplorer/issues">Report Bug</a>
     ·
-     <a href="https://github.com/DrewStephensCoding/AFIExplorer/issues">Request Feature</a>
+     <a href="https://github.com/drewstephensdesigns/AFIExplorer/issues">Request Feature</a>
     <br />
-    <a href="https://github.com/DrewStephensCoding/AFIExplorer/blob/a35fcbcc52eeb488c80aed56598502ad45016266/CHANGE_LOG.md">Change Log</a>
+    <a href="https://github.com/drewstephensdesigns/AFIExplorer/blob/a35fcbcc52eeb488c80aed56598502ad45016266/CHANGE_LOG.md">Change Log</a>
   ·
     <a href="https://github.com/drewstephensdesigns/AFIExplorer/tags">Releases</a>
   </p>
@@ -143,14 +143,14 @@ To learn more about developer facing aspects of Android accessibility, read the 
 - [ ] Feature 3
     - [ ] Nested Feature
 -->
-See the [Suggestions](https://github.com/DrewStephensCoding/AFIExplorer/blob/master/SUGGESTIONS.md) for a full list of proposed features (and known issues).
+See the [Suggestions](https://github.com/drewstephensdesigns/AFIExplorer/blob/master/SUGGESTIONS.md) for a full list of proposed features (and known issues).
 
 <!-- Contribute -->
 ## Contributing
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again! See the guide at [Contributing](https://github.com/DrewStephensCoding/AFIExplorer/blob/master/CONTRIBUTING.md)
+Don't forget to give the project a star! Thanks again! See the guide at [Contributing](https://github.com/drewstephensdesigns/AFIExplorer/blob/master/CONTRIBUTING.md)
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
@@ -161,14 +161,14 @@ Don't forget to give the project a star! Thanks again! See the guide at [Contrib
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See [`LICENSE.md`](https://github.com/DrewStephensCoding/AFIExplorer/blob/a35fcbcc52eeb488c80aed56598502ad45016266/LICENSE.md) for more information.
+Distributed under the MIT License. See [`LICENSE.md`](https://github.com/drewstephensdesigns/AFIExplorer/blob/a35fcbcc52eeb488c80aed56598502ad45016266/LICENSE.md) for more information.
 
 <!-- CONTACT -->
 ## Contact
 
 Drew - drewstephensdesigns@gmail.com
 
-Project Link: [https://github.com/DrewStephensCoding/AFIExplorer](https://github.com/DrewStephensCoding/AFIExplorer)
+Project Link: [https://github.com/DrewStephensCoding/AFIExplorer](https://github.com/drewstephensdesigns/AFIExplorer)
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
@@ -186,9 +186,9 @@ Project Link: [https://github.com/DrewStephensCoding/AFIExplorer](https://github
 </div>
 
 [product-screenshot]: screenshots/AFI%20Explorer.png
-[issues-shield]: https://img.shields.io/github/issues/DrewStephensCoding/AFIExplorer.svg?style=for-the-badge
-[issues-url]: https://github.com/DrewStephensCoding/AFIExplorer/issues
-[license-shield]: https://img.shields.io/github/license/DrewStephensCoding/AFIExplorer.svg?style=for-the-badge
-[license-url]: https://github.com/DrewStephensCoding/AFIExplorer/blob/master/LICENSE.md
+[issues-shield]: https://img.shields.io/github/issues/drewstephensdesigns/AFIExplorer.svg?style=for-the-badge
+[issues-url]: https://github.com/drewstephensdesigns/AFIExplorer/issues
+[license-shield]: https://img.shields.io/github/license/drewstephensdesigns/AFIExplorer.svg?style=for-the-badge
+[license-url]: https://github.com/drewstephensdesigns/AFIExplorer/blob/master/LICENSE.md
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/drewstephens/

@@ -15,12 +15,12 @@ android {
         applicationId "io.github.drewstephenscoding.afiexplorer"
         minSdkVersion 21
         targetSdkVersion 33
-        // version code changed to 26
+        // version code changed to 27
         // 7 JUL 23
-        versionCode 26
-        // version name changed to 2.0.0_Beta2
+        versionCode 27
+        // version name changed to 2.0.1
         // 7 JUL 23
-        versionName "2.0.0_Beta2"
+        versionName "2.0.1"
 
         kapt {
             arguments {

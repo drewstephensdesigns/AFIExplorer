@@ -6,7 +6,7 @@ object Config {
     const val BASE_URL = "https://api.afiexplorer.com/"
 
     // Air Nation Guard
-    const val ANG_URL = "https://drewstephenscoding.github.io/ANGPublications/data.json"
+    const val ANG_URL = "https://drewstephensdesigns.github.io/ANGPublications/data.json"
 
     // Database
     const val DATABASE_NAME = "myfavdb"

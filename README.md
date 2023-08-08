@@ -133,7 +133,7 @@ To learn more about developer facing aspects of Android accessibility, read the 
 2. Get the Air National Guard API at [https://drewstephensdesigns.github.io/ANGPublications/data.json](https://drewstephensdesigns.github.io/ANGPublications/data.json)
 3. Clone the repo
    ```sh
-   git clone https://github.com/DrewStephensCoding/AFIExplorer.git
+   git clone https://github.com/drewstephensdesigns/AFIExplorer.git
    ```
 
 <!-- ROADMAP -->

@@ -32,8 +32,6 @@
      <a href="https://afiexplorer.com"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-     <a href="https://raw.githack.com/drewstephensdesigns/AFIExplorer/726f574c04ac77c3c373fffd3c247bcbce9e283e/screenshots/AFI-Explorer-Demo.mp4">View Demo</a>
-    ·
      <a href="https://github.com/drewstephensdesigns/AFIExplorer/issues">Report Bug</a>
     ·
      <a href="https://github.com/drewstephensdesigns/AFIExplorer/issues">Request Feature</a>
@@ -43,6 +41,12 @@
     <a href="https://github.com/drewstephensdesigns/AFIExplorer/tags">Releases</a>
   </p>
 </div>
+
+<h4 align="center">App Demo</h4>
+<div align="center"; style="width:100%; display:flex; justify-content:space-between;">
+<img src="screenshots/app-demo.gif" width=22% alt="Explorer">
+</div>
+
 
 
 <!-- TABLE OF CONTENTS -->
@@ -77,15 +81,16 @@
 [![Product Name Screen Shot][product-screenshot]](https://afiexplorer.com)
 -->
 
-This app was born out of necessity and started as a proof of concept by two U.S Air Force personnel.  Built with Modern Android development tools, this app allows you to quickly search, save and download Air Force and select Department of Defense guidance and publications.
+This app was born out of necessity and started as a proof of concept by two U.S Air Force personnel.  Built with Modern Android development tools, this app allows you to quickly search, save and download Air Force and select Department of Defense guidance and publications.  We're always looking to improve the app and graciously take feedback.  Please use the email at the bottom of the page, or in app feedback link to reach out.  You can also open an issue for review!
 
+<h3 align="center">Screenshots</h3>
 <div align="center"; style="width:100%; display:flex; justify-content:space-between;">
 
-[<img src="screenshots/screenshot1.jpeg" width=18% alt="Explorer">]()
-[<img src="screenshots/screenshot2.jpeg" width=18% alt="Search">]()
-[<img src="screenshots/screenshot3.jpeg" width=18% alt="Save">]()
-[<img src="screenshots/screenshot4.jpeg" width=18% alt="Filter">]()
-[<img src="screenshots/screenshot5.jpeg" width=18% alt="Themes">]()
+  [<img src="screenshots/screenshot1.jpeg" width=16% alt="Explorer">]()
+  [<img src="screenshots/screenshot2.jpeg" width=16% alt="Search">]()
+  [<img src="screenshots/screenshot3.jpeg" width=16% alt="Save">]()
+  [<img src="screenshots/screenshot4.jpeg" width=16% alt="Filter">]()
+  [<img src="screenshots/screenshot5.jpeg" width=16% alt="Themes">]()
 
 </div>
 

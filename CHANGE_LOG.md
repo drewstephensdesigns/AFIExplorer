@@ -1,18 +1,10 @@
 ## Change Log
 Here you can find all the changes, improvements and bugs that have been added to AFI Explorer since the beginning.  The most current version will always be shown at the top for visibility.
 
-### Pending Review: Version 25 (2.0.0_Beta1)
-- Complete rewrite of the app
-  - Integration of bottom navigation
-  - Improved filtering of publications
-- Performance improvements
-- UI improvements/fixes
-- Saved publications now automatically updated when a change to the reg is made (Example: Title, URL, or Number changes)
-
-### Current: Version 24 (1.3.8)
-- Publications are now sorted by date with most recent updated at the top
-- Fixed bug preventing search filter from filtering Rescind Org correctly
-- UI and performance improvements
+### Current: Version 28 (2.0.2)
+- Updated link serving the Air National Guard Publications
+- Updated/improved filtering of MAJCOMS
+- Bug Fixes
 
 ## Previous Versions
 #### Version 1 (1.0)
@@ -115,10 +107,34 @@ Here you can find all the changes, improvements and bugs that have been added to
 - Fixed issues causing crashes due to database migration
 - Removed hardcoded publications due to multi-platform repo standup
 
-- #### Version 23 (1.3.7)
+#### Version 23 (1.3.7)
 - Added filtering by Title/Number on Favorites
 - Increased search to show Rescind Org
   - Example: /A4 will pull all regs with A4 (Logistics, Engineering and Force Protection) as a Rescind Organization
 - Added Dialog for Filtering by MAJCOM
 - Added Warning Toast when accessing restricted access publications instead of opening blank document
 - Added flag to manifest file allowing keeping of data when uninstalling application
+
+#### Version 24 (1.3.8)
+- Publications are now sorted by date with most recent updated at the top
+- Fixed bug preventing search filter from filtering Rescind Org correctly
+- UI and performance improvements
+
+#### Version 25 (2.0.0_Beta1)
+- Complete rewrite of the app
+  - Integration of bottom navigation
+  - Improved filtering of publications
+- Performance improvements
+- UI improvements/fixes
+- Saved publications now automatically updated when a change to the reg is made (Example: Title, URL, or Number changes)
+
+#### Version 26 (2.0.0_Beta2)
+- Added publication support for Air National Guard personnel
+- Performance &amp; UI improvements
+- Added numerical identifier when filtering publications by MAJCOM
+
+#### Version 27 (2.0.1)
+- Updated link serving the Air National Guard Publications
+- Bug Fixes
+
+

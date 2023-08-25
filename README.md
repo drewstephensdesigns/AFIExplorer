@@ -32,7 +32,7 @@
      <a href="https://afiexplorer.com"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-     <a href="https://github.com/drewstephensdesigns/AFIExplorer">View Demo</a>
+     <a href="https://raw.githack.com/drewstephensdesigns/AFIExplorer/726f574c04ac77c3c373fffd3c247bcbce9e283e/screenshots/AFI-Explorer-Demo.mp4">View Demo</a>
     ·
      <a href="https://github.com/drewstephensdesigns/AFIExplorer/issues">Report Bug</a>
     ·

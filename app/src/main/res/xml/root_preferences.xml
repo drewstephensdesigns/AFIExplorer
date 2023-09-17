@@ -7,6 +7,12 @@
         app:title="@string/help_header">
         <Preference
             app:iconSpaceReserved="false"
+            app:key="deviceInfo"
+            app:title="Device Info">
+        </Preference>
+
+        <Preference
+            app:iconSpaceReserved="false"
             app:key="versionInfo"
             app:title="@string/version_header"
             app:summary="@string/versionName">
@@ -17,14 +23,6 @@
             app:key="feedPref"
             app:title="@string/feedback_header"
             app:summary="@string/feedback_subheading">
-            <intent
-                android:action="android.intent.action.SENDTO"
-                android:data="mailto:drewstephensdesigns@gmail.com">
-
-                <!-- https://issuetracker.google.com/issues/37129926
-                <extra android:name="android.intent.extra.SUBJECT"
-                    android:value="App Feedback"/>-->
-            </intent>
         </Preference>
 
         <Preference
@@ -97,7 +95,6 @@
             app:iconSpaceReserved="false"
             app:title="@string/change_log"
             app:summary="@string/change_summary">
-
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="@string/change_log_url">
@@ -107,13 +104,12 @@
         <Preference
             app:key="@string/epubs_notice"
             app:iconSpaceReserved="false"
-            android:title="@string/epubs_notice">
+            android:title="@string/epubs_notice"
+            app:summary="Recent updates or changes">
                 <intent
                     android:action="android.intent.action.VIEW"
                     android:data="@string/epubs_notice_url">
                 </intent>
         </Preference>
-
-
     </PreferenceCategory>
 </PreferenceScreen>

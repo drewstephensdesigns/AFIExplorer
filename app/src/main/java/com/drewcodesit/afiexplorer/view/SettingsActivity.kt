@@ -94,6 +94,7 @@ class SettingsActivity : AppCompatActivity() {
                 true
             }
 
+            // Sort of an Easter Egg
             findPreference<Preference>("acknowledge")?.setOnPreferenceClickListener {
                 context?.let {
                     InfoSheet().show(requireContext()) {
@@ -117,12 +118,35 @@ class SettingsActivity : AppCompatActivity() {
                 true
             }
 
+            // Email Pref
             findPreference<Preference>("feedPref")?.setOnPreferenceClickListener {
                 context.let {
                     val intent = Intent(Intent.ACTION_SENDTO)
                     intent.data = Uri.parse("mailto:drewstephensdesigns@gmail.com")
-                    intent.putExtra(Intent.EXTRA_SUBJECT, "App Feedback")
-                    startActivity(intent)
+                    intent.putExtra(Intent.EXTRA_SUBJECT, arrayOf("App Feedback"))
+                    startActivity(Intent.createChooser(intent, "Send Feedback"))
+                }
+                true
+            }
+
+            // Device info
+            findPreference<Preference>("deviceInfo")?.setOnPreferenceClickListener {
+                context.let {
+                    val text =
+                        "Manufacturer: ${Build.MANUFACTURER}\n" +
+                        "Model: ${Build.MODEL}\n" +
+                        "SDK: ${Build.VERSION.SDK_INT}\n" +
+                        "Board: ${Build.BOARD}\n" +
+                        "OS: Android ${Build.VERSION.RELEASE}\n" +
+                        "Arch: ${Build.SUPPORTED_ABIS[0]}\n" +
+                        "Product: ${Build.PRODUCT}"
+
+                    InfoSheet().show(requireContext()){
+                        style(SheetStyle.DIALOG)
+                        title("Device Build Info")
+                        content(text)
+                        onPositive("Ok")
+                    }
                 }
                 true
             }

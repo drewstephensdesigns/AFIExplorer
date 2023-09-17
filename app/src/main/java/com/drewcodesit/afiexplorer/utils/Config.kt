@@ -13,4 +13,5 @@ object Config {
 
     // Table
     const val TABLE_NAME = "favoriteslist"
+
 }

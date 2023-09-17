@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:$USER_HOME$/Library/Android/sdk/icons/material/materialicons/thumb_up_off_alt/baseline_thumb_up_off_alt_24.xml" />
+                                      <entry key="url" value="file:$USER_HOME$/Library/Android/sdk/icons/material/materialicons/chat_bubble_outline/baseline_chat_bubble_outline_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -34,7 +34,7 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_thumbs_up" />
+                            <entry key="outputName" value="ic_chat" />
                             <entry key="sourceFile" value="$USER_HOME$/Downloads/AMC_logo.svg" />
                           </map>
                         </option>

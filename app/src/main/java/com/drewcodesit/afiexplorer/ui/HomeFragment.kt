@@ -195,31 +195,27 @@ class HomeFragment : Fragment(),
                 // DoD: JTR, GTC, DTS regs
                 // AF/: All HAF level publications (SAF, AF, JAG, etc)
                 // LeMay Center: Air Force Doctrine (TTPs are restricted)
-                // Added 18 JUL: Air National Guard Publications
                 with(InputRadioButtons {
                     label("Select an Organization")
-                    options(mutableListOf("DoD", "HAF", "LeMay Center", "Air National Guard"))
+                    options(
+                        mutableListOf(
+                            "DoD",
+                            "HAF",
+                            "LeMay Center",
+                        )
+                    )
+
+                    val orgs = mapOf(
+                        0 to "DoD",
+                        1 to "HAF",
+                        2 to "LeMay Center"
+                    )
+
                     changeListener { value ->
-                        when (value) {
-                            0 -> {
-                                updateFilter("DoD", "DoD")
-                            }
-
-                            1 -> {
-                                updateFilter("AF/", "HAF")
-                            }
-
-                            2 -> {
-                                updateFilter("LeMay", "Doctrine")
-                            }
-
-                            3 -> {
-                                updateFilter("ANG", "ANG")
-                            }
-                            else ->{
-                                (activity as MainActivity).supportActionBar?.title = getString(R.string.app_home)
-                            }
+                        orgs[value]?.let {
+                            updateFilter(it, it)
                         }
+
                     }
                 })
 
@@ -228,55 +224,36 @@ class HomeFragment : Fragment(),
                     label("Select a Command from the dropdown")
                     options(
                         mutableListOf(
-                            "ACC", "AMC",
-                            "AETC", "PACAF",
+                            "ACC",
+                            "AMC",
+                            "AETC",
+                            "PACAF",
                             "USAFE-AFAFRICA",
-                            "AFGSC", "AFMC",
-                            "AFRC", "AFSOC"
+                            "AFGSC",
+                            "AFMC",
+                            "AFRC",
+                            "AFSOC",
+                            "ANG"
                         )
                     )
-                    changeListener { value ->
-                        when (value) {
-                            0 -> {
-                                updateFilter("ACC", "ACC")
-                            }
 
-                            1 -> {
-                                updateFilter("AMC", "AMC")
-                            }
-
-                            2 -> {
-                                updateFilter("AETC", "AETC")
-                            }
-
-                            3 -> {
-                                updateFilter("PACAF", "PACAF")
-                            }
-
-                            4 -> {
-                                updateFilter("USAFE-AFAFRICA", "USAFE-AFAFRICA")
-                            }
-
-                            5 -> {
-                                updateFilter("AFGSC", "AFGSC")
-                            }
-
-                            6 -> {
-                                updateFilter("AFMC", "AFMC")
-                            }
-
-                            7 -> {
-                                updateFilter("AFRC", "AFRC")
-                            }
-
-                            8 -> {
-                                updateFilter("AFSOC", "AFSOC")
-                            }
-                            else -> {
-                                (activity as MainActivity).supportActionBar?.title = getString(R.string.app_home)
-                            }
-                        }
-                    }
+                    val commands = mapOf(
+                        0 to "ACC",
+                        1 to "AMC",
+                        2 to "AETC",
+                        3 to "PACAF",
+                        4 to "USAFE-AFAFRICA",
+                        5 to "AFGSC",
+                        6 to "AFMC",
+                        7 to "AFRC",
+                        8 to "AFSOC",
+                        9 to "ANG"
+                    )
+                     changeListener { value ->
+                         commands[value]?.let {
+                             updateFilter(it, it)
+                         }
+                     }
                 })
             }
         }

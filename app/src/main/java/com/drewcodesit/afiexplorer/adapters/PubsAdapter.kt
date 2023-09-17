@@ -257,7 +257,6 @@ class PubsAdapter(
                 pubsListFiltered = results?.values as ArrayList<Pubs>
                 results.count = pubsListFiltered.size
                 notifyDataSetChanged()
-                showInfoToast("Results: " + results.count + " Publications")
             }
         }
     }

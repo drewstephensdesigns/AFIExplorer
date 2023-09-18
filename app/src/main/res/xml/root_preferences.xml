@@ -7,12 +7,6 @@
         app:title="@string/help_header">
         <Preference
             app:iconSpaceReserved="false"
-            app:key="deviceInfo"
-            app:title="Device Info">
-        </Preference>
-
-        <Preference
-            app:iconSpaceReserved="false"
             app:key="versionInfo"
             app:title="@string/version_header"
             app:summary="@string/versionName">

@@ -39,7 +39,9 @@ class PubsViewModel(
         val mergedList = mutableListOf<Pubs>()
         mergedList.addAll(baseList)
         mergedList.addAll(angList)
-        return mergedList.sortedByDescending { it.getCertDate() }
+        return mergedList.sortedByDescending {
+            it.getCertDate()
+        }
     }
 
     // Request 1 = AFI Explorer API

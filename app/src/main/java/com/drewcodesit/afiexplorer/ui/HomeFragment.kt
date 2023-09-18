@@ -137,11 +137,13 @@ class HomeFragment : Fragment(),
                                 if (i == 0) {
                                     _binding?.recyclerView?.visibility = View.GONE
                                     _binding?.noResultsFound?.visibility = View.VISIBLE
-                                    _binding?.noResultsFound?.text =
-                                        resources.getString(R.string.no_results_found, newText)
+                                    _binding?.noResultsFoundText?.visibility  = View.VISIBLE
+                                    _binding?.noResultsFoundText?.text =
+                                       resources.getString(R.string.no_results_found, newText)
                                 } else {
                                     (activity as MainActivity).supportActionBar?.title = resources.getString(R.string.app_home)
                                     _binding?.noResultsFound?.visibility = View.GONE
+                                    _binding?.noResultsFoundText?.visibility = View.GONE
                                     _binding?.recyclerView?.visibility = View.VISIBLE
                                 }
                             }

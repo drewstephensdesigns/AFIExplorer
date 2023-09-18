@@ -50,7 +50,6 @@ class PubsAdapter(
         return PubsViewHolder(binding)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: PubsViewHolder, position: Int) {
         val publication = pubsListFiltered[position]
 
@@ -69,8 +68,24 @@ class PubsAdapter(
         holder.apply {
             pubNumber.text = publication.Number
             pubTitle.text = publication.Title
-            pubCertDate.text = "Certified Current: ${publication.getCertDate()}"
-            pubRescindOrg.text = "Rescind Org: ${publication.RescindOrg}"
+
+            // string resource with a placeholder, and you're inserting the dynamic value returned
+            val certifiedDateString: String = ct.getString(R.string.certified_date_placeholder, publication.getCertDate())
+            val gmDateString: String = ct.getString(R.string.gm_date_placeholder, publication.getGMDate())
+            val rescindOrgString: String = ct.getString(R.string.rescind_placeholder, publication.RescindOrg)
+
+            // Displays Certified Current Date of publication
+            pubCertDate.text = certifiedDateString
+
+            // Gets date if pub has Guidance Memorandum
+            if(publication.GMDate != null){
+                pubGMDate.text = gmDateString
+            } else {
+                pubGMDate.text = ct.getString(R.string.gm_placeholder)
+            }
+
+            // Displays Rescind Org
+            pubRescindOrg.text = rescindOrgString
 
             // Last Action category hardcoded for brevity
             val actionText = when (publication.LastAction) {
@@ -228,10 +243,12 @@ class PubsAdapter(
         }
     }
 
-    // This method is called by the system whenever the user selects an organization
-    // from the filtering dialog in HomeFragment. The FilterResults object returned
-    // by performFiltering() is passed to the publishResults() method of the adapter, which
-    // updates the contents of the list or grid to display the filtered items
+    /**
+     * This method is called by the system whenever the user selects an organization
+     * from the filtering dialog in HomeFragment. The FilterResults object returned
+     * by performFiltering() is passed to the publishResults() method of the adapter, which
+     * updates the contents of the list or grid to display the filtered items
+     */
     fun filterByRescindOrg(): Filter {
         return object : Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
@@ -261,9 +278,11 @@ class PubsAdapter(
         }
     }
 
-    // The PubsViewHolder class has a bind() function that takes a Pubs
-    // object and sets its data to the views. we set the Number, Title, Last Action
-    // Cert Date and Rescind Org properties of the Pubs object to their respective views.
+    /**
+     * The PubsViewHolder class has a bind() function that takes a Pubs
+     * object and sets its data to the views. we set the Number, Title, Last Action
+     * Cert Date and Rescind Org properties of the Pubs object to their respective views.
+     */
     inner class PubsViewHolder(binding: PubRowItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         // used to pass the click events to the Fragment that is hosting the RecyclerView
@@ -280,9 +299,9 @@ class PubsAdapter(
         var pubTitle: TextView = binding.pubTitle
         var pubLastAction: TextView = binding.pubLastAction
         var pubCertDate: TextView = binding.pubCertDate
+        var pubGMDate: TextView = binding.pubGMDate
         var pubRescindOrg: TextView = binding.pubRescindOrg
         var buttonViewOption: ImageView = binding.textViewOptions
-
     }
 
     // compares the old and new Pubs objects and returns

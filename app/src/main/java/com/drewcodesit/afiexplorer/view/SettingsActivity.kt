@@ -120,33 +120,22 @@ class SettingsActivity : AppCompatActivity() {
 
             // Email Pref
             findPreference<Preference>("feedPref")?.setOnPreferenceClickListener {
-                context.let {
-                    val intent = Intent(Intent.ACTION_SENDTO)
-                    intent.data = Uri.parse("mailto:drewstephensdesigns@gmail.com")
-                    intent.putExtra(Intent.EXTRA_SUBJECT, arrayOf("App Feedback"))
-                    startActivity(Intent.createChooser(intent, "Send Feedback"))
-                }
-                true
-            }
-
-            // Device info
-            findPreference<Preference>("deviceInfo")?.setOnPreferenceClickListener {
-                context.let {
-                    val text =
+                val text = "Troubleshooting\n" +
                         "Manufacturer: ${Build.MANUFACTURER}\n" +
                         "Model: ${Build.MODEL}\n" +
                         "SDK: ${Build.VERSION.SDK_INT}\n" +
-                        "Board: ${Build.BOARD}\n" +
                         "OS: Android ${Build.VERSION.RELEASE}\n" +
-                        "Arch: ${Build.SUPPORTED_ABIS[0]}\n" +
-                        "Product: ${Build.PRODUCT}"
+                        "*************"
 
-                    InfoSheet().show(requireContext()){
-                        style(SheetStyle.DIALOG)
-                        title("Device Build Info")
-                        content(text)
-                        onPositive("Ok")
-                    }
+                context.let {
+                    val send = Intent(Intent.ACTION_SENDTO)
+                    val uriText = "mailto:" + Uri.encode("drewstephensdesigns@gmail.com") +
+                            "?subject=" + Uri.encode("App Feedback") +
+                            "&body=" + Uri.encode(text)
+                    val uri = Uri.parse(uriText)
+
+                    send.data = uri
+                    startActivity(Intent.createChooser(send, "Send mail..."))
                 }
                 true
             }

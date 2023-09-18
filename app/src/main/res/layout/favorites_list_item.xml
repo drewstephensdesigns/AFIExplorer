@@ -41,4 +41,19 @@
         android:fontFamily="@font/noto_sans"
         android:textColor="?attr/colorControlNormal"
         android:textSize="@dimen/pub_number" />
+
+    <TextView
+        android:id="@+id/savedDate"
+        android:layout_toEndOf="@id/textViewOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pubTitle"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:textAllCaps="false"
+        android:fontFamily="@font/noto_sans"
+        android:textColor="?attr/colorControlNormal"
+        android:textSize="@dimen/pub_number" />
+
+
 </RelativeLayout>

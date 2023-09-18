@@ -12,4 +12,5 @@ data class FavoriteEntity (
     @ColumnInfo(name = "number") var Number: String? = null,
     @ColumnInfo(name = "title")  var Title: String? = null,
     @ColumnInfo(name = "url") var DocumentUrl: String? = null
+
 )

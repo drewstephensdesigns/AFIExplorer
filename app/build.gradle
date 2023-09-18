@@ -1,10 +1,10 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
+apply plugin: 'com.google.devtools.ksp'
 
 android {
     defaultConfig {
@@ -23,11 +23,11 @@ android {
         // 8 AUG 23
         versionName "2.0.3"
 
-        kapt {
-            arguments {
-                arg("room.schemaLocation", "$projectDir/schemas")
-            }
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
         }
+
+
         vectorDrawables {
             useSupportLibrary true
         }
@@ -95,7 +95,7 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.5.2'
     implementation "androidx.room:room-ktx:2.5.2"
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
-    kapt "androidx.room:room-compiler:2.5.2"
+    ksp 'androidx.room:room-compiler:2.5.2'
 
     // Firebase
     implementation 'com.google.firebase:firebase-crashlytics:18.4.3'
@@ -126,5 +126,9 @@ dependencies {
     implementation "com.maxkeppeler.sheets:option:$sheets_version"
     implementation "com.maxkeppeler.sheets:input:$sheets_version"
     implementation "com.maxkeppeler.sheets:lottie:$sheets_version"
+
+    // LottieFiles
+    def lottieVersion = "6.1.0"
+    implementation "com.airbnb.android:lottie:$lottieVersion"
 
 }

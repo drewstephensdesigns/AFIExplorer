@@ -8,10 +8,13 @@ object Config {
     // Air Nation Guard
     const val ANG_URL = "https://drewstephensdesigns.github.io/ANGPublications/data.json"
 
+    // Featured Pubs
+    const val FEATURED_PUBS_URL = "https://drewstephensdesigns.github.io/FeaturedPublications/data.json"
+
     // Database
     const val DATABASE_NAME = "myfavdb"
 
     // Table
     const val TABLE_NAME = "favoriteslist"
-
 }
+

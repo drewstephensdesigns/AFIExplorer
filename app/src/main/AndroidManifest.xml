@@ -36,6 +36,10 @@
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
+            <meta-data
+                android:name="firebase_analytics_collection_deactivated"
+                android:value="@bool/FIREBASE_ANALYTICS_DEACTIVATED"/>
+
         </activity> <!-- Favorites -->
         <activity
             android:name=".view.SettingsActivity"

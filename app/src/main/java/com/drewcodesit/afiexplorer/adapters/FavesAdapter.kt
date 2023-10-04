@@ -19,17 +19,15 @@ import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.adapters.FavesAdapter.FaveViewHolder
 import com.drewcodesit.afiexplorer.database.FavoriteEntity
 import com.drewcodesit.afiexplorer.databinding.FavoritesListItemBinding
+import com.drewcodesit.afiexplorer.utils.FavesClickListener
 import es.dmoral.toasty.Toasty
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
 
 class FavesAdapter(
     private var ct: Context,
     private val faveEntity: MutableList<FavoriteEntity>,
-    private var selectedListener: FavesSelectedListener,
-    private var deletedListener: FavesDeletedListener
+    private var selectedListener: FavesClickListener,
+    private var deletedListener: FavesClickListener
 
 ) : RecyclerView.Adapter<FaveViewHolder>(), Filterable {
 
@@ -44,11 +42,6 @@ class FavesAdapter(
        val fl = favePubsListFiltered[position]
         holder.pubNumber.text = fl.Number
         holder.pubTitle.text = fl.Title
-
-        val savedDateString: String = ct.getString(R.string.saved_date_placeholder, getSavedDate())
-        holder.pubSavedDate.text = savedDateString
-
-        //holder.pubSavedDate.text = "Saved: ${getSavedDate()}"
 
         val clipboard: ClipboardManager =
             ct.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -95,12 +88,6 @@ class FavesAdapter(
         }
     }
 
-    private fun getSavedDate(): String {
-        val calendar = Calendar.getInstance()
-        val simpleDateFormat = SimpleDateFormat("MMM-dd-yyyy", Locale.getDefault())
-        return simpleDateFormat.format(calendar.time).toString()
-    }
-
     private fun showToastMessage(message: String){
         Toasty.info(ct, message, Toast.LENGTH_SHORT, false).show()
     }
@@ -116,7 +103,6 @@ class FavesAdapter(
 
         var pubNumber: TextView = binding.pubNumber
         var pubTitle: TextView = binding.pubTitle
-        var pubSavedDate: TextView = binding.savedDate
         var buttonViewOption: ImageView = binding.textViewOptions
     }
 
@@ -136,7 +122,6 @@ class FavesAdapter(
 
             @Suppress("UNCHECKED_CAST")
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                //favePubsListFiltered = results?.values as MutableList<FavoriteEntity>
                 favePubsListFiltered.addAll(results?.values as MutableList<FavoriteEntity>)
                 notifyDataSetChanged()
             }
@@ -155,15 +140,5 @@ class FavesAdapter(
         faveEntity.sortWith { pubNumber1, pubNumber2 ->
             pubNumber1?.Number!!.compareTo(pubNumber2?.Number!!)
         }
-    }
-
-    // Opens Publication from the Favorites Screen
-    interface FavesSelectedListener{
-        fun onFavesSelectedListener(faves: FavoriteEntity)
-    }
-
-    // Deletes Individual Items from Favorites Screen
-    interface FavesDeletedListener{
-        fun onFavesDeletedListener(faveSingleItemDelete: FavoriteEntity, position: Int)
     }
 }

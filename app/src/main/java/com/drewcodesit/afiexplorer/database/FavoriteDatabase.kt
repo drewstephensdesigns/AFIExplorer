@@ -10,8 +10,12 @@ import com.drewcodesit.afiexplorer.utils.Config
 
 @Database
     (entities = [FavoriteEntity::class],
+
+    // change to 4
     version = 3,
     autoMigrations = [
+
+        // change to 3, 4
         AutoMigration (from = 2, to = 3)
     ],
     exportSchema = true)
@@ -31,7 +35,6 @@ abstract class FavoriteDatabase : RoomDatabase() {
                     .allowMainThreadQueries()
                     .fallbackToDestructiveMigration()
                     .build()
-                //Log.i("Database", "Database created")
             }
             return INSTANCE as FavoriteDatabase
         }

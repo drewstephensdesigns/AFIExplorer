@@ -15,4 +15,5 @@
         android:name="com.drewcodesit.afiexplorer.ui.FavoriteFragment"
         android:label="@string/app_faves"
         tools:layout="@layout/fragment_favorites" />
+
 </navigation>

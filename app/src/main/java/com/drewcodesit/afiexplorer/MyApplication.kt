@@ -17,7 +17,7 @@ class MyApplication : Application() {
 
     companion object {
         var instance: MyApplication by DelegatesExt.notNullSingleValue()
-        val TAG: String? = MyApplication::class.java.simpleName
+        val TAG: String = MyApplication::class.java.simpleName
     }
 
     private var mRequestQueue: RequestQueue? = null

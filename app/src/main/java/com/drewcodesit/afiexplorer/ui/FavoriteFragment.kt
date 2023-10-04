@@ -26,6 +26,7 @@ import com.drewcodesit.afiexplorer.adapters.FavesAdapter
 import com.drewcodesit.afiexplorer.database.FavoriteDatabase
 import com.drewcodesit.afiexplorer.database.FavoriteEntity
 import com.drewcodesit.afiexplorer.databinding.FragmentFavesBinding
+import com.drewcodesit.afiexplorer.utils.FavesClickListener
 import com.drewcodesit.afiexplorer.utils.MyDividerItemDecoration
 import com.maxkeppeler.sheets.core.ButtonStyle
 import com.maxkeppeler.sheets.core.SheetStyle
@@ -38,8 +39,7 @@ import com.rajat.pdfviewer.PdfViewerActivity
 import es.dmoral.toasty.Toasty
 
 class FavoriteFragment : Fragment(),
-    FavesAdapter.FavesSelectedListener ,
-    FavesAdapter.FavesDeletedListener,
+    FavesClickListener,
     MenuProvider {
 
     private var _binding: FragmentFavesBinding? = null

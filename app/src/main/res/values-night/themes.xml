@@ -33,6 +33,11 @@
         <item name="sheetsTitleFont">@font/noto_sans</item>
         <item name="sheetsNegativeButtonColor">@color/bottom_nav_icon</item>
 
+        <item name="actionOverflowMenuStyle">@style/popupOverflowMenu</item>
+    </style>
+
+    <style name="popupOverflowMenu" parent="@style/Widget.MaterialComponents.PopupMenu.Overflow">
+        <item name="android:popupBackground">@color/black</item>
     </style>
 
     <!-- PDF Reader Fallback -->

@@ -15,7 +15,7 @@ import com.google.gson.reflect.TypeToken
 import es.dmoral.toasty.Toasty
 
 class PubsViewModel(
-    private val app: Application,
+    private val app: Application
 ) : AndroidViewModel(app) {
     private var request: JsonArrayRequest? = null
 

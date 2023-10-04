@@ -23,6 +23,7 @@
     <string name="action_download">Download File</string>
     <string name="action_exit_app">Press Back again to exit</string>
     <string name="action_nuke_database">This action will delete the entire database…</string>
+    <string name="action_featured">Add to Featured</string>
 
     <!-- Hints/Notices -->
     <string name="intent_title">Select PDF Reader…</string>
@@ -96,5 +97,6 @@
     <string name="gm_date_placeholder">Guidance Memorandum: %s</string>
     <string name="gm_placeholder">Guidance Memorandum:</string>
     <string name="rescind_placeholder">Rescind Org: %s</string>
+    <string name="featured_pub_header">Essential</string>
 
 </resources>

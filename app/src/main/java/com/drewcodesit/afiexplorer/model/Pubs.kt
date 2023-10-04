@@ -32,8 +32,7 @@ class Pubs(
     var RescindOrg: String? = "",
 
     @SerializedName("GMDate")
-    var GMDate: String? = ""
-
+    var GMDate: String? = "",
 ) {
     // Gets Certified Current Date
     @JvmName("getCertDate1")

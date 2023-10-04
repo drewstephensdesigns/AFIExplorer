@@ -24,6 +24,7 @@ import com.drewcodesit.afiexplorer.database.FavoriteDatabase
 import com.drewcodesit.afiexplorer.database.FavoriteEntity
 import com.drewcodesit.afiexplorer.databinding.PubRowItemBinding
 import com.drewcodesit.afiexplorer.model.Pubs
+import com.drewcodesit.afiexplorer.utils.MainClickListener
 import es.dmoral.toasty.Toasty.info
 import es.dmoral.toasty.Toasty.success
 import java.util.*
@@ -31,13 +32,14 @@ import java.util.*
 class PubsAdapter(
     private var ct: Context,
     private var pubsList: List<Pubs>,
-    private val listener: PubsAdapterListener
+    private val listener: MainClickListener
 ) : ListAdapter<Pubs, PubsViewHolder>(PubsDiffCallback()), Filterable {
 
     private var pubsListFiltered: List<Pubs> = pubsList
 
-
     private val favoriteDAO = FavoriteDatabase.getDatabase(ct).favoriteDAO()
+
+
     private lateinit var viewLifecycleOwner: LifecycleOwner
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -319,12 +321,5 @@ class PubsAdapter(
         override fun areContentsTheSame(oldItem: Pubs, newItem: Pubs): Boolean {
             return oldItem == newItem
         }
-    }
-
-    // notify the parent class when a main item in the RecyclerView is clicked.
-    // This allows the parent class to respond to the click event and perform some action,
-    // such as opening a detail view for the selected item.
-    interface PubsAdapterListener {
-        fun onMainPubsClickListener(pubs: Pubs)
     }
 }

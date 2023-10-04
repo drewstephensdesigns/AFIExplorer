@@ -29,10 +29,14 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.adapters.PubsAdapter
+import com.drewcodesit.afiexplorer.adapters.SinglePubAdapter
 import com.drewcodesit.afiexplorer.databinding.FragmentHomeBinding
+import com.drewcodesit.afiexplorer.model.FeaturedPubs
 import com.drewcodesit.afiexplorer.model.Pubs
+import com.drewcodesit.afiexplorer.utils.MainClickListener
 import com.drewcodesit.afiexplorer.utils.MyDividerItemDecoration
 import com.drewcodesit.afiexplorer.view.MainActivity
+import com.drewcodesit.afiexplorer.viewModel.FeaturedPubsViewModel
 import com.drewcodesit.afiexplorer.viewModel.PubsViewModel
 import com.maxkeppeler.sheets.input.InputSheet
 import com.maxkeppeler.sheets.input.type.InputRadioButtons
@@ -42,15 +46,18 @@ import es.dmoral.toasty.Toasty
 
 
 class HomeFragment : Fragment(),
-    PubsAdapter.PubsAdapterListener {
+    MainClickListener {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
     private var pubsViewModel: PubsViewModel? = null
-    private var adapter: PubsAdapter? = null
-    private var searchView: SearchView? = null
+    private var featuredPubsViewModel: FeaturedPubsViewModel? = null
 
+    private var adapter: PubsAdapter? = null
+    private var singlePubsAdapter: SinglePubAdapter? = null
+
+    private var searchView: SearchView? = null
     private var exit: Boolean = false
 
     //The OnBackPressedDispatcher is a class that allows you
@@ -73,6 +80,9 @@ class HomeFragment : Fragment(),
         // Loading Indicator
         binding.loading.visibility = View.VISIBLE
 
+        _binding?.singlePubRv?.visibility = View.GONE
+        _binding?.featuredHeader?.visibility = View.GONE
+
         // Separates business logic from the UI
         pubsViewModel = ViewModelProvider(
             requireActivity(),
@@ -82,11 +92,29 @@ class HomeFragment : Fragment(),
 
         pubsViewModel?.publications?.observe(viewLifecycleOwner) { pubsList ->
             pubsList?.let {
-                adapter = PubsAdapter(requireContext(), it,this)
-                _binding?.recyclerView?.adapter = adapter
+                adapter = PubsAdapter(requireContext(), it, this)
+                binding.recyclerView.adapter = adapter
                 binding.loading.visibility = View.GONE
+
+                binding.singlePubRv.visibility = View.VISIBLE
+                binding.featuredHeader.visibility = View.VISIBLE
             }
         }
+
+        featuredPubsViewModel = ViewModelProvider(
+            requireActivity(),
+            ViewModelProvider.AndroidViewModelFactory
+                .getInstance(requireActivity().application)
+        )[FeaturedPubsViewModel::class.java]
+
+        featuredPubsViewModel?.featuredPubs?.observe(viewLifecycleOwner) { featuredPubsList ->
+            featuredPubsList?.let {
+                singlePubsAdapter = SinglePubAdapter(requireContext(), it, this)
+                _binding?.singlePubRv?.adapter = singlePubsAdapter
+                singlePubsAdapter?.notifyDataSetChanged()
+            }
+        }
+
         return binding.root
     }
 
@@ -95,6 +123,7 @@ class HomeFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initUI()
+        initSinglePubUI()
         setupMenu()
         setupBottomSheet()
         requireActivity().onBackPressedDispatcher.addCallback(
@@ -134,17 +163,37 @@ class HomeFragment : Fragment(),
                         // Source: https://stackoverflow.com/questions/61570173/display-no-results-found
                         override fun onQueryTextChange(newText: String?): Boolean {
                             adapter?.filter?.filter(newText) { i ->
+
+                                // No results matching the searched text
                                 if (i == 0) {
+                                    // Hides the layout
                                     _binding?.recyclerView?.visibility = View.GONE
+                                    _binding?.singlePubRv?.visibility = View.GONE
+                                    _binding?.featuredHeader?.visibility = View.GONE
+
+                                    // Hiding filter to prevent weird bug
+                                    _binding?.fabFilterMain?.visibility = View.GONE
+
+                                    // Displays the lottie animation
                                     _binding?.noResultsFound?.visibility = View.VISIBLE
-                                    _binding?.noResultsFoundText?.visibility  = View.VISIBLE
+                                    _binding?.noResultsFoundText?.visibility = View.VISIBLE
                                     _binding?.noResultsFoundText?.text =
-                                       resources.getString(R.string.no_results_found, newText)
+                                        resources.getString(R.string.no_results_found, newText)
+
+                                // Results are found matching the searched text
                                 } else {
-                                    (activity as MainActivity).supportActionBar?.title = resources.getString(R.string.app_home)
+                                    (activity as MainActivity).supportActionBar?.title =
+                                        resources.getString(R.string.app_home)
+
+                                    // Hides the lottie animation
                                     _binding?.noResultsFound?.visibility = View.GONE
                                     _binding?.noResultsFoundText?.visibility = View.GONE
+
+                                    // Displays the layout
                                     _binding?.recyclerView?.visibility = View.VISIBLE
+                                    _binding?.singlePubRv?.visibility = View.VISIBLE
+                                    _binding?.featuredHeader?.visibility = View.VISIBLE
+                                    _binding?.fabFilterMain?.visibility = View.VISIBLE
                                 }
                             }
                             return false
@@ -183,6 +232,12 @@ class HomeFragment : Fragment(),
                 )
             )
         }
+    }
+
+    private fun initSinglePubUI() {
+
+        _binding?.singlePubRv?.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
     }
 
     // Displays bottom sheet for filtering of publications
@@ -251,11 +306,11 @@ class HomeFragment : Fragment(),
                         8 to "AFSOC",
                         9 to "ANG"
                     )
-                     changeListener { value ->
-                         commands[value]?.let {
-                             updateFilter(it, it)
-                         }
-                     }
+                    changeListener { value ->
+                        commands[value]?.let {
+                            updateFilter(it, it)
+                        }
+                    }
                 })
             }
         }
@@ -301,6 +356,31 @@ class HomeFragment : Fragment(),
                     requireContext(),
                     "${pubs.DocumentUrl}",     // PDF URL in String format
                     "${pubs.Title}",          // PDF Name/Title in String format
+                    "",                  // If nothing specific, Put "" it will save to Downloads
+                    enableDownload = true             // This param is true by default.
+                )
+            )
+        }
+    }
+
+    // Launches document natively if application is installed
+    // Launches PDFViewer Library is fall back if else
+    // Source: https://github.com/afreakyelf/Pdf-Viewer
+    override fun onFeaturedPubsClickListener(featured: FeaturedPubs) {
+
+        try {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.setDataAndType(Uri.parse(featured.DocumentUrl), "application/pdf")
+            startActivity(intent)
+
+
+        } catch (e: ActivityNotFoundException) {
+            startActivity(
+                // Use 'launchPdfFromPath' if you want to use assets file (enable "fromAssets" flag) / internal directory
+                PdfViewerActivity.launchPdfFromUrl(     //PdfViewerActivity.Companion.launchPdfFromUrl(..   :: in-case of JAVA
+                    requireContext(),
+                    "${featured.DocumentUrl}",     // PDF URL in String format
+                    "${featured.Title}",          // PDF Name/Title in String format
                     "",                  // If nothing specific, Put "" it will save to Downloads
                     enableDownload = true             // This param is true by default.
                 )

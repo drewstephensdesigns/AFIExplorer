@@ -66,25 +66,26 @@
     <string name="github">Github</string>
     <string name="linkedin">LinkedIn</string>
     <string name="instagram_id">\@drewstephensdesigns</string>
-    <string name="github_id">\@DrewStephensCoding</string>
+    <string name="github_id">\@drewstephensdesigns</string>
     <string name="linkedin_id">\@DrewStephens</string>
     <string name="epubs_notice">E-Pubs Product Announcements</string>
 
     <!-- Social Media URLs -->
     <string name="developer_instagram_url" translatable="false">https://www.instagram.com/drewstephensdesigns/</string>
-    <string name="developer_github_url" translatable="false">https://github.com/DrewStephensCoding</string>
+    <string name="developer_github_url" translatable="false">https://github.com/drewstephensdesigns</string>
     <string name="developer_linkedin_url" translatable="false">https://www.linkedin.com/in/drewstephens/</string>
-    <string name="reddit_url">We would like to thank <a href="https://www.reddit.com/r/AirForce/">r/AirForce</a> for the continuous feedback and support. We wouldn\'t be here today if it wasn\'t for you!</string>
+    <string name="reddit_url">We would like to thank everyone for the continuous feedback and support. We wouldn\'t be here today if it wasn\'t for you!</string>
+
     <!-- Github Change Log -->
     <string name="change_log">Change Log</string>
     <string name="change_summary">Changes and improvements</string>
-    <string name="change_log_url" translatable="false">https://github.com/DrewStephensCoding/AFIExplorer/blob/master/CHANGE_LOG.md</string>
+    <string name="change_log_url" translatable="false">https://github.com/drewstephensdesigns/AFIExplorer/blob/master/CHANGE_LOG.md</string>
     <string name="epubs_notice_url" translatable="false">https://www.e-publishing.af.mil/Tools/Product-Announcements/</string>
 
     <!-- Privacy Policy-->
     <string name="privacy_policy">Privacy Policy</string>
     <string name="privacy_summary">How AFI Explorer collects information</string>
-    <string name="privacy_url" translatable="false">https://afiexplorer.com/privacypolicy/</string>
+    <string name="privacy_url" translatable="false">https://github.com/drewstephensdesigns/AFIExplorer/blob/master/PRIVACY.md</string>
 
     <!-- Content Descriptions -->
     <string name="cd_vertical_menu">Vertical menu</string>

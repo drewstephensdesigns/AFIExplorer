@@ -4,6 +4,7 @@
     <PreferenceCategory
         app:iconSpaceReserved="false"
         app:title="@string/help_header">
+
         <Preference
             app:iconSpaceReserved="false"
             app:key="versionInfo"

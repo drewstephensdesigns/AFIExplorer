@@ -75,7 +75,8 @@
     </style>
 
     <style name="FabExtendedMaterialTheme" parent="Theme.Material3.Light.NoActionBar">
-        <item name="android:backgroundTint">@color/fab_background</item>
+        <item name="android:backgroundTint">@color/bottom_nav_icon</item>
+        <item name="iconTint">?android:colorControlNormal</item>
     </style>
 
     <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog"><item name="bottomSheetStyle">@style/AppModalStyle</item></style>

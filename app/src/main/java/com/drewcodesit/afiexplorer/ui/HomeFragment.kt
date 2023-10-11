@@ -166,34 +166,9 @@ class HomeFragment : Fragment(),
 
                                 // No results matching the searched text
                                 if (i == 0) {
-                                    // Hides the layout
-                                    _binding?.recyclerView?.visibility = View.GONE
-                                    _binding?.singlePubRv?.visibility = View.GONE
-                                    _binding?.featuredHeader?.visibility = View.GONE
-
-                                    // Hiding filter to prevent weird bug
-                                    _binding?.fabFilterMain?.visibility = View.GONE
-
-                                    // Displays the lottie animation
-                                    _binding?.noResultsFound?.visibility = View.VISIBLE
-                                    _binding?.noResultsFoundText?.visibility = View.VISIBLE
-                                    _binding?.noResultsFoundText?.text =
-                                        resources.getString(R.string.no_results_found, newText)
-
-                                // Results are found matching the searched text
+                                    queryHasNoItems(newText)
                                 } else {
-                                    (activity as MainActivity).supportActionBar?.title =
-                                        resources.getString(R.string.app_home)
-
-                                    // Hides the lottie animation
-                                    _binding?.noResultsFound?.visibility = View.GONE
-                                    _binding?.noResultsFoundText?.visibility = View.GONE
-
-                                    // Displays the layout
-                                    _binding?.recyclerView?.visibility = View.VISIBLE
-                                    _binding?.singlePubRv?.visibility = View.VISIBLE
-                                    _binding?.featuredHeader?.visibility = View.VISIBLE
-                                    _binding?.fabFilterMain?.visibility = View.VISIBLE
+                                    queryHasItems()
                                 }
                             }
                             return false
@@ -388,6 +363,44 @@ class HomeFragment : Fragment(),
         }
     }
 
+    // Cleans up toast notification for restricted access publications
+    private fun showRestrictedToast(message: String) {
+        Toasty.error(requireContext(), message, Toast.LENGTH_SHORT, false).show()
+    }
+
+    private fun queryHasNoItems(newText: String?){
+        // Hides the layout
+        _binding?.recyclerView?.visibility = View.GONE
+        _binding?.singlePubRv?.visibility = View.GONE
+        _binding?.featuredHeader?.visibility = View.GONE
+
+        // Hiding filter to prevent weird bug
+        _binding?.fabFilterMain?.visibility = View.GONE
+
+        // Displays the lottie animation
+        _binding?.noResultsFound?.visibility = View.VISIBLE
+        _binding?.noResultsFoundText?.visibility = View.VISIBLE
+        _binding?.noResultsFoundText?.text =
+            resources.getString(R.string.no_results_found, newText)
+
+    }
+
+    private fun queryHasItems(){
+        (activity as MainActivity).supportActionBar?.title =
+            resources.getString(R.string.app_home)
+
+        // Hides the lottie animation
+        _binding?.noResultsFound?.visibility = View.GONE
+        _binding?.noResultsFoundText?.visibility = View.GONE
+
+        // Displays the layout
+        _binding?.recyclerView?.visibility = View.VISIBLE
+        _binding?.singlePubRv?.visibility = View.VISIBLE
+        _binding?.featuredHeader?.visibility = View.VISIBLE
+        _binding?.fabFilterMain?.visibility = View.VISIBLE
+
+    }
+
     // Callback to refresh (show all) publications list when user selects back button
     // or closes app after hitting back twice within 2 seconds
     private fun closeOrRefreshApp() {
@@ -403,11 +416,6 @@ class HomeFragment : Fragment(),
             exit = true
             Handler(Looper.getMainLooper()).postDelayed({ exit = false }, 1 * 1000)
         }
-    }
-
-    // Cleans up toast notification for restricted access publications
-    private fun showRestrictedToast(message: String) {
-        Toasty.error(requireContext(), message, Toast.LENGTH_SHORT, false).show()
     }
 
     override fun onDestroyView() {

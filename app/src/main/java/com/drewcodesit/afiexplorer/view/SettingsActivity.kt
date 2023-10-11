@@ -33,6 +33,7 @@ class SettingsActivity : AppCompatActivity() {
 
         // Kotlin View Binding
         _binding = SettingsActivityBinding.inflate(layoutInflater)
+
         setContentView(_binding.root)
 
         if (savedInstanceState == null) {
@@ -56,6 +57,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     class SettingsFragment : PreferenceFragmentCompat() {
+
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
         }
@@ -101,7 +103,7 @@ class SettingsActivity : AppCompatActivity() {
                         style(SheetStyle.BOTTOM_SHEET)
                         title("Special Thanks and Consideration")
                         content(R.string.reddit_url)
-                        onPositive("View Subreddit") {
+                        onPositive("View r/AirForce") {
                             val intent = Intent(Intent.ACTION_VIEW,
                                 Uri.parse("https://www.reddit.com/r/AirForce")
                             )

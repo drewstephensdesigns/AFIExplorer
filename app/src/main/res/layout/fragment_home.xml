@@ -120,6 +120,5 @@
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/cd_filter_main"
         android:theme="@style/FabExtendedMaterialTheme"
-        app:srcCompat="@drawable/ic_filter_list"
-        app:iconTint="?android:colorControlNormal" />
+        app:srcCompat="@drawable/ic_filter_list" />
 </RelativeLayout>

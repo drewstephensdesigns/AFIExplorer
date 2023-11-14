@@ -40,5 +40,12 @@
     "Title": "JOINT TRAVEL REGULATIONS",
     "RescindLevel": "DOD",
     "DocumentUrl":"https://media.defense.gov/2022/Jan/04/2002917147/-1/-1/0/JTR.PDF"
+  },
+     {
+    "PubID": 7,
+    "Number": "DAFMAN41-210",
+    "Title": "TRICARE OPERATIONS AND PATIENT ADMIN",
+    "RescindLevel": "AF/SG",
+    "DocumentUrl":"https://static.e-publishing.af.mil/production/1/af_sg/publication/afman41-210/afman41-210.pdf"
   }
 ]

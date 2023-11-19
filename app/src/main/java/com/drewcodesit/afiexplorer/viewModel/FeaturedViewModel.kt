@@ -8,48 +8,49 @@ import com.android.volley.Request
 import com.android.volley.toolbox.JsonArrayRequest
 import com.drewcodesit.afiexplorer.MyApplication
 import com.drewcodesit.afiexplorer.R
-import com.drewcodesit.afiexplorer.model.Pubs
+import com.drewcodesit.afiexplorer.model.FeaturedPubs
 import com.drewcodesit.afiexplorer.utils.Config
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import es.dmoral.toasty.Toasty
 
-class PubsViewModel(
-    private val app: Application,
-) : AndroidViewModel(app) {
+
+class FeaturedViewModel(
+    private val app: Application
+) :
+    AndroidViewModel(app) {
+
     private var request: JsonArrayRequest? = null
 
+    private var _featuredList = ArrayList<FeaturedPubs>()
 
-    private var _pubsList = ArrayList<Pubs>()
-    private val _publications = MutableLiveData<List<Pubs>>()
-    val publications: MutableLiveData<List<Pubs>>
-        get() = _publications
+    private val _featuredPublications = MutableLiveData<List<FeaturedPubs>>()
+
+    val featuredPublications: MutableLiveData<List<FeaturedPubs>>
+        get() = _featuredPublications
 
     init {
-        fetchPubs()
+        fetchFeaturedPubs()
     }
-
-    // Volley
-    private fun fetchPubs() {
+    private fun fetchFeaturedPubs() {
         request = JsonArrayRequest(
             Request.Method.GET,
-            Config.BASE_URL,
-            null,{ response ->
-                val items: List<Pubs> =
-                    Gson().fromJson(response.toString(), object : TypeToken<List<Pubs>>() {}.type)
+            Config.FEATURED_PUBS_URL,
+            null, { response ->
+                val items: List<FeaturedPubs> =
+                    Gson().fromJson(response.toString(), object : TypeToken<List<FeaturedPubs>>() {}.type)
 
-                // Sort the list by getCertDate() in descending order
-                val sortedPubsList = items.sortedByDescending { it.getCertDate() }
+                // Sort the list by ID
+                val sortedPubsList = items.sortedByDescending { it.PubID }
 
-                // Update the _pubsList data with the sorted list
-                _pubsList.clear()
+                _featuredList.clear()
 
-                _pubsList.addAll(sortedPubsList)
+                _featuredList.addAll(sortedPubsList/*.take(3)*/)
 
                 // Notify observers that the data has changed
-                _publications.postValue(_pubsList)
+                _featuredPublications.postValue(_featuredList)
             },
-            {error ->
+            { error ->
                 println(error.printStackTrace())
                 showErrorToast()
             }

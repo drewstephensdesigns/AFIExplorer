@@ -61,7 +61,7 @@ class FavesAdapter(
                     R.id.menuActionCopy -> {
                         val clip = ClipData.newPlainText("Copied Pub!", fl.DocumentUrl)
                         clipboard.setPrimaryClip(clip)
-                        showToastMessage("Saved to clipboard!")
+                        showToastMessage(it.resources.getString(R.string.copied_to_clipboard))
                     }
 
                     // Share Publication URL
@@ -113,8 +113,7 @@ class FavesAdapter(
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val searchTerm = constraint?.toString() ?: ""
                 favePubsListFiltered = faveEntity.filter {
-                    it.Title?.contains(searchTerm, ignoreCase = true) == true ||
-                            it.Number?.contains(searchTerm, ignoreCase = true) == true
+                    it.Title.contains(searchTerm, ignoreCase = true) || it.Number.contains(searchTerm, ignoreCase = true)
                 } as MutableList<FavoriteEntity>
 
                 return FilterResults().apply { values = favePubsListFiltered }
@@ -122,7 +121,8 @@ class FavesAdapter(
 
             @Suppress("UNCHECKED_CAST")
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                favePubsListFiltered.addAll(results?.values as MutableList<FavoriteEntity>)
+                favePubsListFiltered = results?.values as MutableList<FavoriteEntity>
+                results.count = favePubsListFiltered.size
                 notifyDataSetChanged()
             }
         }

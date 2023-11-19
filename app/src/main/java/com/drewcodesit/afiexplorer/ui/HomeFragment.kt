@@ -29,15 +29,17 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.adapters.PubsAdapter
-import com.drewcodesit.afiexplorer.adapters.SinglePubAdapter
 import com.drewcodesit.afiexplorer.databinding.FragmentHomeBinding
 import com.drewcodesit.afiexplorer.model.FeaturedPubs
 import com.drewcodesit.afiexplorer.model.Pubs
 import com.drewcodesit.afiexplorer.utils.MainClickListener
 import com.drewcodesit.afiexplorer.utils.MyDividerItemDecoration
 import com.drewcodesit.afiexplorer.view.MainActivity
-import com.drewcodesit.afiexplorer.viewModel.FeaturedPubsViewModel
 import com.drewcodesit.afiexplorer.viewModel.PubsViewModel
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.logEvent
+import com.google.firebase.ktx.Firebase
 import com.maxkeppeler.sheets.input.InputSheet
 import com.maxkeppeler.sheets.input.type.InputRadioButtons
 import com.maxkeppeler.sheets.input.type.spinner.InputSpinner
@@ -45,17 +47,16 @@ import com.rajat.pdfviewer.PdfViewerActivity
 import es.dmoral.toasty.Toasty
 
 
-class HomeFragment : Fragment(),
-    MainClickListener {
+class HomeFragment : Fragment(), MainClickListener{
+
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
     private var pubsViewModel: PubsViewModel? = null
-    private var featuredPubsViewModel: FeaturedPubsViewModel? = null
 
     private var adapter: PubsAdapter? = null
-    private var singlePubsAdapter: SinglePubAdapter? = null
 
     private var searchView: SearchView? = null
     private var exit: Boolean = false
@@ -77,44 +78,8 @@ class HomeFragment : Fragment(),
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        // Loading Indicator
-        binding.loading.visibility = View.VISIBLE
-
-        _binding?.singlePubRv?.visibility = View.GONE
-        _binding?.featuredHeader?.visibility = View.GONE
-
-        // Separates business logic from the UI
-        pubsViewModel = ViewModelProvider(
-            requireActivity(),
-            ViewModelProvider.AndroidViewModelFactory
-                .getInstance(requireActivity().application)
-        )[PubsViewModel::class.java]
-
-        pubsViewModel?.publications?.observe(viewLifecycleOwner) { pubsList ->
-            pubsList?.let {
-                adapter = PubsAdapter(requireContext(), it, this)
-                binding.recyclerView.adapter = adapter
-                binding.loading.visibility = View.GONE
-
-                binding.singlePubRv.visibility = View.VISIBLE
-                binding.featuredHeader.visibility = View.VISIBLE
-            }
-        }
-
-        featuredPubsViewModel = ViewModelProvider(
-            requireActivity(),
-            ViewModelProvider.AndroidViewModelFactory
-                .getInstance(requireActivity().application)
-        )[FeaturedPubsViewModel::class.java]
-
-        featuredPubsViewModel?.featuredPubs?.observe(viewLifecycleOwner) { featuredPubsList ->
-            featuredPubsList?.let {
-                singlePubsAdapter = SinglePubAdapter(requireContext(), it, this)
-                _binding?.singlePubRv?.adapter = singlePubsAdapter
-                singlePubsAdapter?.notifyDataSetChanged()
-            }
-        }
-
+        // Obtain the FirebaseAnalytics instance.
+        firebaseAnalytics = Firebase.analytics
         return binding.root
     }
 
@@ -122,14 +87,35 @@ class HomeFragment : Fragment(),
     // view has been created. It performs necessary UI initialization
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupViewModel()
         initUI()
-        initSinglePubUI()
         setupMenu()
         setupBottomSheet()
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             onBackPressedCallback
         )
+    }
+
+    private fun setupViewModel(){
+        // Loading Indicator
+        binding.loading.visibility = View.VISIBLE
+
+        // Separates business logic from the UI
+        pubsViewModel = ViewModelProvider(requireActivity(),
+            ViewModelProvider.AndroidViewModelFactory
+                .getInstance(requireActivity().application)
+        )[PubsViewModel::class.java]
+
+
+        pubsViewModel?.publications?.observe(viewLifecycleOwner) { pubsList ->
+            pubsList?.let {
+                adapter = PubsAdapter(requireContext(), it, this)
+
+                _binding?.recyclerView?.adapter = adapter
+                binding.loading.visibility = View.GONE
+            }
+        }
     }
 
     // While the Fragment menu API, which could be used for creating menu items and
@@ -166,9 +152,28 @@ class HomeFragment : Fragment(),
 
                                 // No results matching the searched text
                                 if (i == 0) {
-                                    queryHasNoItems(newText)
+                                    _binding?.recyclerView?.visibility = View.GONE
+
+                                    // Hiding filter to prevent weird bug
+                                    _binding?.fabFilterMain?.visibility = View.GONE
+
+                                    // Displays the lottie animation
+                                    _binding?.noResultsFound?.visibility = View.VISIBLE
+                                    _binding?.noResultsFoundText?.visibility = View.VISIBLE
+                                    _binding?.noResultsFoundText?.text =
+                                        resources.getString(R.string.no_results_found, newText)
+
                                 } else {
-                                    queryHasItems()
+                                    (activity as MainActivity).supportActionBar?.title =
+                                        resources.getString(R.string.app_home)
+
+                                    // Hides the lottie animation
+                                    _binding?.noResultsFound?.visibility = View.GONE
+                                    _binding?.noResultsFoundText?.visibility = View.GONE
+
+                                    // Displays the layout
+                                    _binding?.recyclerView?.visibility = View.VISIBLE
+                                    _binding?.fabFilterMain?.visibility = View.VISIBLE
                                 }
                             }
                             return false
@@ -180,13 +185,8 @@ class HomeFragment : Fragment(),
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 // Validate and handle the selected menu item
                 return when (menuItem.itemId) {
-                    R.id.action_search -> {
-                        true
-                    }
-
-                    else -> {
-                        false
-                    }
+                    R.id.action_search -> { true }
+                    else -> { false }
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.CREATED)
@@ -197,6 +197,7 @@ class HomeFragment : Fragment(),
     private fun initUI() {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.setHasFixedSize(true)
+
         binding.recyclerView.apply {
             itemAnimator = DefaultItemAnimator()
             addItemDecoration(
@@ -207,12 +208,6 @@ class HomeFragment : Fragment(),
                 )
             )
         }
-    }
-
-    private fun initSinglePubUI() {
-
-        _binding?.singlePubRv?.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
     }
 
     // Displays bottom sheet for filtering of publications
@@ -298,6 +293,7 @@ class HomeFragment : Fragment(),
         (activity as MainActivity).supportActionBar?.title = title
     }
 
+
     // The function first checks if the DocumentUrl property of the Pubs object contains certain keywords
     // that indicate that the document is restricted. If the DocumentUrl contains any of these keywords,
     // the function shows a Toast message indicating that the document is restricted and cannot be accessed.
@@ -305,6 +301,7 @@ class HomeFragment : Fragment(),
     // the PDF document with a PDF viewer application. If an ActivityNotFoundException is caught, it means that there
     // is no PDF viewer application installed on the device, so the function launches a PDF viewer activity
     override fun onMainPubsClickListener(pubs: Pubs) {
+        firebaseAnalytics.logEvent("main_pubs_view"){ param("event_name", pubs.Title!!) }
         try {
             if (pubs.DocumentUrl?.contains("generic_restricted.pdf") == true
                 || (pubs.DocumentUrl?.contains("restricted_access.pdf")) == true
@@ -338,67 +335,11 @@ class HomeFragment : Fragment(),
         }
     }
 
-    // Launches document natively if application is installed
-    // Launches PDFViewer Library is fall back if else
-    // Source: https://github.com/afreakyelf/Pdf-Viewer
-    override fun onFeaturedPubsClickListener(featured: FeaturedPubs) {
-
-        try {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.setDataAndType(Uri.parse(featured.DocumentUrl), "application/pdf")
-            startActivity(intent)
-
-
-        } catch (e: ActivityNotFoundException) {
-            startActivity(
-                // Use 'launchPdfFromPath' if you want to use assets file (enable "fromAssets" flag) / internal directory
-                PdfViewerActivity.launchPdfFromUrl(     //PdfViewerActivity.Companion.launchPdfFromUrl(..   :: in-case of JAVA
-                    requireContext(),
-                    "${featured.DocumentUrl}",     // PDF URL in String format
-                    "${featured.Title}",          // PDF Name/Title in String format
-                    "",                  // If nothing specific, Put "" it will save to Downloads
-                    enableDownload = true             // This param is true by default.
-                )
-            )
-        }
-    }
+    override fun onFeaturedPubsClickListener(featured: FeaturedPubs) {}
 
     // Cleans up toast notification for restricted access publications
     private fun showRestrictedToast(message: String) {
         Toasty.error(requireContext(), message, Toast.LENGTH_SHORT, false).show()
-    }
-
-    private fun queryHasNoItems(newText: String?){
-        // Hides the layout
-        _binding?.recyclerView?.visibility = View.GONE
-        _binding?.singlePubRv?.visibility = View.GONE
-        _binding?.featuredHeader?.visibility = View.GONE
-
-        // Hiding filter to prevent weird bug
-        _binding?.fabFilterMain?.visibility = View.GONE
-
-        // Displays the lottie animation
-        _binding?.noResultsFound?.visibility = View.VISIBLE
-        _binding?.noResultsFoundText?.visibility = View.VISIBLE
-        _binding?.noResultsFoundText?.text =
-            resources.getString(R.string.no_results_found, newText)
-
-    }
-
-    private fun queryHasItems(){
-        (activity as MainActivity).supportActionBar?.title =
-            resources.getString(R.string.app_home)
-
-        // Hides the lottie animation
-        _binding?.noResultsFound?.visibility = View.GONE
-        _binding?.noResultsFoundText?.visibility = View.GONE
-
-        // Displays the layout
-        _binding?.recyclerView?.visibility = View.VISIBLE
-        _binding?.singlePubRv?.visibility = View.VISIBLE
-        _binding?.featuredHeader?.visibility = View.VISIBLE
-        _binding?.fabFilterMain?.visibility = View.VISIBLE
-
     }
 
     // Callback to refresh (show all) publications list when user selects back button

@@ -57,9 +57,9 @@ class PubsAdapter(
 
         val fEntity = FavoriteEntity().apply {
             id = publication.PubID
-            Number = publication.Number
-            Title = publication.Title
-            DocumentUrl = publication.DocumentUrl
+            Number = publication.Number!!
+            Title = publication.Title!!
+            DocumentUrl = publication.DocumentUrl!!
         }
 
         if (favoriteDAO?.titleExists(publication.Number.toString()) == 1) {

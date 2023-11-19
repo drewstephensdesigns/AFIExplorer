@@ -8,7 +8,7 @@ import java.util.*
  * Created by drewstephens
  */
 
-class Pubs(
+data class Pubs(
 
     @SerializedName("PubID")
     var PubID: Int,

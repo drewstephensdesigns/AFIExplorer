@@ -2,7 +2,13 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/navigation_home">
+    app:startDestination="@id/navigation_featured">
+
+    <fragment
+        android:id="@+id/navigation_featured"
+        android:name="com.drewcodesit.afiexplorer.ui.FeaturedFragment"
+        android:label="@string/app_featured"
+        tools:layout="@layout/fragment_featured" />
 
     <fragment
         android:id="@+id/navigation_home"

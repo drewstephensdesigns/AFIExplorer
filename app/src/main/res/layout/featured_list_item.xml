@@ -2,17 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:layout_width="310dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <!-- Essential -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/single_pub_card"
         android:layout_width="300dp"
-        android:layout_height="80dp"
-        app:cardCornerRadius="18dp"
-        android:layout_margin="10dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        app:cardCornerRadius="10dp"
+        android:layout_margin="8dp"
         android:clickable="true"
-        app:cardElevation="10dp"
+        app:cardElevation="5dp"
         android:focusable="true">
 
         <LinearLayout
@@ -22,7 +24,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/single_pub_number"
+                android:id="@+id/single_pub_title"
                 android:layout_width="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_gravity="center_horizontal"
@@ -33,7 +35,7 @@
                 android:textStyle="bold"/>
 
             <TextView
-                android:id="@+id/single_pub_title"
+                android:id="@+id/single_pub_number"
                 android:layout_width="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:textColor="@color/white"
@@ -41,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="3"
                 android:textAlignment="center"
-                android:textSize="@dimen/pub_number"/>
+                android:textSize="@dimen/pub_number" />
 
         </LinearLayout>
 

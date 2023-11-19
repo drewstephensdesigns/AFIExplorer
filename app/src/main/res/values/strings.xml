@@ -9,6 +9,7 @@
     <string name="app_name">AFI Explorer</string>
     <string name="app_home">Publications</string>
     <string name="app_faves">Favorites</string>
+    <string name="app_featured">Featured</string>
 
     <!-- Menu/Toolbar Titles -->
     <string name="action_support">Support</string>
@@ -32,6 +33,7 @@
     <string name="no_results_found_db">"No saved items \n Add publications from the \n home screen to view later."</string>
     <string name="no_internet">Connection Error</string>
     <string name="pub_restricted">Restricted, see E-Pubs for official source</string>
+    <string name="device_info">Device Info</string>
 
     <!-- Shared Preference Keys-->
     <string name="pref_key_mode_night">PREF_MODE_NIGHT</string>
@@ -59,18 +61,24 @@
     <string name="help_header">Help &amp; Feedback</string>
     <string name="social_header">Connect with Me</string>
     <string name="legal_header">Legal</string>
-    <string name="version_header">Build Version</string>
+    <string name="version_header">Build Version </string>
+    <string name="version_text">%1$s %2$s</string>
+    <string name="open_copied">Open</string>
+    <string name="copied">Copied</string>
+    <string name="copied_to_clipboard">Copied to clipboard</string>
 
     <!-- Social Media Links -->
-    <string name="instagram">Instagram</string>
-    <string name="github">Github</string>
-    <string name="linkedin">LinkedIn</string>
+    <string name="instagram">Follow me on Instagram</string>
+    <string name="github">Follow me on Github</string>
+    <string name="linkedin">Connect with me on LinkedIn</string>
     <string name="instagram_id">\@drewstephensdesigns</string>
     <string name="github_id">\@drewstephensdesigns</string>
     <string name="linkedin_id">\@DrewStephens</string>
     <string name="epubs_notice">E-Pubs Product Announcements</string>
 
     <!-- Social Media URLs -->
+    <string name="playstore_link" translatable="false">"https://play.google.com/store/apps/details?id=io.github.drewstephenscoding.afiexplorer&amp;hl=en_US&amp;gl=US"</string>
+    <string name="app_sponsorship_url" translatable="false">https://github.com/drewstephensdesigns/AFIExplorer#donate</string>
     <string name="developer_instagram_url" translatable="false">https://www.instagram.com/drewstephensdesigns/</string>
     <string name="developer_github_url" translatable="false">https://github.com/drewstephensdesigns</string>
     <string name="developer_linkedin_url" translatable="false">https://www.linkedin.com/in/drewstephens/</string>
@@ -99,5 +107,5 @@
     <string name="gm_placeholder">Guidance Memorandum:</string>
     <string name="rescind_placeholder">Rescind Org: %s</string>
     <string name="featured_pub_header">Essential</string>
-
+    <string name="app_sponsorship">Buy a Coffee</string>
 </resources>

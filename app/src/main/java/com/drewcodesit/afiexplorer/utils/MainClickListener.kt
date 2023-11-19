@@ -11,4 +11,5 @@ import com.drewcodesit.afiexplorer.model.Pubs
 interface MainClickListener {
     fun onMainPubsClickListener(pubs: Pubs)
     fun onFeaturedPubsClickListener(featured: FeaturedPubs)
+
 }

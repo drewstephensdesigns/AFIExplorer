@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
         val appBarConfiguration = AppBarConfiguration(
             setOf(
+                id.navigation_featured,
                 id.navigation_home,
                 id.navigation_favorites,
             )
@@ -121,8 +122,13 @@ class MainActivity : AppCompatActivity() {
                     id.action_feedback -> {
                         startActivity(
                             Intent(
+                            this@MainActivity,
+                                AboutActivity::class.java
+                            /*
                                 this@MainActivity,
                                 SettingsActivity::class.java
+
+                                 */
                             )
                         )
                         true

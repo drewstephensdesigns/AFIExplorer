@@ -86,6 +86,37 @@ class FavoriteFragment : Fragment(),
             setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
             setIconifiedByDefault(true)
             maxWidth = Int.MAX_VALUE
+
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    searchViewFaves?.clearFocus()
+                    return false
+                }
+
+                // Source: https://stackoverflow.com/questions/61570173/display-no-results-found
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    favesAdapter?.filter?.filter(newText){i ->
+                        if (i == 0){
+                            binding.rvFavorites.visibility = View.GONE
+
+                            // Displays the lottie animation
+                            binding.noResultsFound.visibility = View.VISIBLE
+                            binding.noResultsFoundText.visibility = View.VISIBLE
+                            binding.noResultsFoundText.text = resources.getString(R.string.no_results_found, newText)
+                        }else{
+                            binding.rvFavorites.visibility = View.VISIBLE
+
+                            // Hides the lottie animation
+                            binding.noResultsFound.visibility = View.GONE
+                            binding.noResultsFound.visibility = View.GONE
+                            binding.noResultsFoundText.visibility = View.GONE
+
+                        }
+                    }
+                    return false
+                }
+            })
         }
     }
 
@@ -205,8 +236,8 @@ class FavoriteFragment : Fragment(),
                 // Use 'launchPdfFromPath' if you want to use assets file (enable "fromAssets" flag) / internal directory
                 PdfViewerActivity.launchPdfFromUrl(      //PdfViewerActivity.Companion.launchPdfFromUrl(..   :: incase of JAVA
                     requireContext(),
-                    "${faves.DocumentUrl}",       // PDF URL in String format
-                    "${faves.Number}",           // PDF Name/Title in String format
+                    faves.DocumentUrl,       // PDF URL in String format
+                    faves.Number,           // PDF Name/Title in String format
                     "",                     // If nothing specific, Put "" it will save to Downloads
                     enableDownload = true                // This param is true by default.
                 )

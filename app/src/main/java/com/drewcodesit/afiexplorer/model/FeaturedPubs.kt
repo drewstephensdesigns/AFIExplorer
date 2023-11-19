@@ -2,7 +2,7 @@ package com.drewcodesit.afiexplorer.model
 
 import com.google.gson.annotations.SerializedName
 
-data class FeaturedPubs (
+data class FeaturedPubs(
     @SerializedName("PubID")
     var PubID: Int,
 
@@ -14,7 +14,4 @@ data class FeaturedPubs (
 
     @SerializedName("DocumentUrl")
     var DocumentUrl: String? = "",
-
-    @SerializedName("RescindOrg")
-    var RescindOrg: String? = "",
 )

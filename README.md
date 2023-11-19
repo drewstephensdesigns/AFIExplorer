@@ -188,6 +188,7 @@ Project Link: [https://github.com/DrewStephensCoding/AFIExplorer](https://github
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
+Special thanks to all our supporters who made this app possible, especially my incredible family for their unwavering support and encouragement. Your belief in me has been the driving force behind this project's success. I am endlessly grateful for your love and encouragement. I'd especially to thank:
 
 * [r/AirForce](https://www.reddit.com/r/AirForce/)
 * [HAF/A4L Tesseract](https://www.tesseract.af.mil)

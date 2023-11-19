@@ -164,6 +164,18 @@ Don't forget to give the project a star! Thanks again! See the guide at [Contrib
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
+<h2 align="left">
+<sub>
+<img  src="screenshots/donate.svg"
+      height="30"
+      width="30">
+</sub>
+Donate
+</h2>
+
+Donations can be made at:
+* The sponsor icon at the top of the page or at https://www.buymeacoffee.com/drewcodesit
+
 <!-- LICENSE -->
 ## License
 

@@ -4,23 +4,23 @@ import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.android.volley.Request
-import com.android.volley.toolbox.JsonArrayRequest
-import com.drewcodesit.afiexplorer.MyApplication
+import androidx.lifecycle.viewModelScope
 import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.model.FeaturedPubs
 import com.drewcodesit.afiexplorer.utils.Config
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import es.dmoral.toasty.Toasty
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
 
 
 class FeaturedViewModel(
     private val app: Application
 ) :
     AndroidViewModel(app) {
-
-    private var request: JsonArrayRequest? = null
 
     private var _featuredList = ArrayList<FeaturedPubs>()
 
@@ -30,41 +30,39 @@ class FeaturedViewModel(
         get() = _featuredPublications
 
     init {
-        fetchFeaturedPubs()
+        fetchPubs()
     }
-    private fun fetchFeaturedPubs() {
-        request = JsonArrayRequest(
-            Request.Method.GET,
-            Config.FEATURED_PUBS_URL,
-            null, { response ->
-                val items: List<FeaturedPubs> =
-                    Gson().fromJson(response.toString(), object : TypeToken<List<FeaturedPubs>>() {}.type)
+    private fun fetchPubs() {
+        viewModelScope.launch {
+            try {
+                val retrofit = Retrofit.Builder()
+                    .baseUrl(Config.FEATURED_PUBS_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
 
-                // Sort the list by ID
-                val sortedPubsList = items.sortedByDescending { it.PubID }
+                val service = retrofit.create(ApiService::class.java)
+                val response = withContext(Dispatchers.IO) {
+                    service.getPubs()
+                }
+
+                val sortedPubsList = response.sortedByDescending { it.Number }
 
                 _featuredList.clear()
+                _featuredList.addAll(sortedPubsList)
 
-                _featuredList.addAll(sortedPubsList/*.take(3)*/)
-
-                // Notify observers that the data has changed
                 _featuredPublications.postValue(_featuredList)
-            },
-            { error ->
-                println(error.printStackTrace())
+            } catch (e: Exception) {
                 showErrorToast()
             }
-        )
-        MyApplication.instance.addToRequestQueue(request!!)
+        }
     }
 
     private fun showErrorToast() {
         Toasty.error(app.applicationContext, R.string.no_internet, Toast.LENGTH_SHORT, false).show()
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        // Cancel any pending requests when the ViewModel is destroyed
-        request?.cancel()
+    interface ApiService {
+        @GET("data.json") // Replace "endpoint" with your actual endpoint
+        suspend fun getPubs(): List<FeaturedPubs> // Replace Pubs with your data model
     }
 }

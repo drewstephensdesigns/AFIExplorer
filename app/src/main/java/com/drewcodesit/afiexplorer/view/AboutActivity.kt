@@ -145,9 +145,9 @@ class AboutActivity : AppCompatActivity() {
     // Thank you Easter Egg for the support from r/AirForce
     private fun thankYouEasterEgg(){
         InfoSheet().show(this@AboutActivity) {
-            style(SheetStyle.BOTTOM_SHEET)
+            style(SheetStyle.DIALOG)
             title("Special Thanks and Consideration")
-            content(R.string.reddit_url)
+            content(R.string.thank_you_notice)
             onPositive("View r/AirForce") {
                 val intent = Intent(Intent.ACTION_VIEW,
                     Uri.parse("https://www.reddit.com/r/AirForce")

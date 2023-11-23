@@ -50,7 +50,6 @@ class FeaturedAdapter(
             singlePubTitle.text = featured.Title
 
             // list of colors stored in the colorResources array
-            // TODO("theme the card background based on light/dark mode")
             val colorResources = intArrayOf(
                 R.color.bottom_nav_icon,
                 R.color.bottom_nav_icon_dark,

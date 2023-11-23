@@ -4,21 +4,21 @@ import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.android.volley.Request
-import com.android.volley.toolbox.JsonArrayRequest
-import com.drewcodesit.afiexplorer.MyApplication
+import androidx.lifecycle.viewModelScope
 import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.model.Pubs
 import com.drewcodesit.afiexplorer.utils.Config
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import es.dmoral.toasty.Toasty
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
 
 class PubsViewModel(
     private val app: Application,
 ) : AndroidViewModel(app) {
-    private var request: JsonArrayRequest? = null
-
 
     private var _pubsList = ArrayList<Pubs>()
     private val _publications = MutableLiveData<List<Pubs>>()
@@ -29,41 +29,37 @@ class PubsViewModel(
         fetchPubs()
     }
 
-    // Volley
     private fun fetchPubs() {
-        request = JsonArrayRequest(
-            Request.Method.GET,
-            Config.BASE_URL,
-            null,{ response ->
-                val items: List<Pubs> =
-                    Gson().fromJson(response.toString(), object : TypeToken<List<Pubs>>() {}.type)
+        viewModelScope.launch {
+            try {
+                val retrofit = Retrofit.Builder()
+                    .baseUrl(Config.BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
 
-                // Sort the list by getCertDate() in descending order
-                val sortedPubsList = items.sortedByDescending { it.getCertDate() }
+                val service = retrofit.create(ApiService::class.java)
+                val response = withContext(Dispatchers.IO) {
+                    service.getPubs()
+                }
 
-                // Update the _pubsList data with the sorted list
+                val sortedPubsList = response.sortedByDescending { it.getCertDate() }
+
                 _pubsList.clear()
-
                 _pubsList.addAll(sortedPubsList)
 
-                // Notify observers that the data has changed
                 _publications.postValue(_pubsList)
-            },
-            {error ->
-                println(error.printStackTrace())
+            } catch (e: Exception) {
                 showErrorToast()
             }
-        )
-        MyApplication.instance.addToRequestQueue(request!!)
+        }
     }
 
     private fun showErrorToast() {
         Toasty.error(app.applicationContext, R.string.no_internet, Toast.LENGTH_SHORT, false).show()
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        // Cancel any pending requests when the ViewModel is destroyed
-        request?.cancel()
+    interface ApiService {
+        @GET("/") // Replace "endpoint" with your actual endpoint
+        suspend fun getPubs(): List<Pubs> // Replace Pubs with your data model
     }
 }

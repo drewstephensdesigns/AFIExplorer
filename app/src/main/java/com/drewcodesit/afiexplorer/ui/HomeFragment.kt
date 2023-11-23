@@ -1,5 +1,6 @@
 package com.drewcodesit.afiexplorer.ui
 
+import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -80,6 +81,12 @@ class HomeFragment : Fragment(), MainClickListener{
 
         // Obtain the FirebaseAnalytics instance.
         firebaseAnalytics = Firebase.analytics
+        // Separates business logic from the UI
+        pubsViewModel = ViewModelProvider(requireActivity(),
+            ViewModelProvider.AndroidViewModelFactory
+                .getInstance(requireActivity().application)
+        )[PubsViewModel::class.java]
+
         return binding.root
     }
 
@@ -87,33 +94,28 @@ class HomeFragment : Fragment(), MainClickListener{
     // view has been created. It performs necessary UI initialization
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupViewModel()
         initUI()
         setupMenu()
         setupBottomSheet()
+        setupViewModel()
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             onBackPressedCallback
         )
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun setupViewModel(){
         // Loading Indicator
         binding.loading.visibility = View.VISIBLE
 
-        // Separates business logic from the UI
-        pubsViewModel = ViewModelProvider(requireActivity(),
-            ViewModelProvider.AndroidViewModelFactory
-                .getInstance(requireActivity().application)
-        )[PubsViewModel::class.java]
-
-
         pubsViewModel?.publications?.observe(viewLifecycleOwner) { pubsList ->
             pubsList?.let {
-                adapter = PubsAdapter(requireContext(), it, this)
+                adapter = PubsAdapter(requireActivity(), it, this)
 
                 _binding?.recyclerView?.adapter = adapter
                 binding.loading.visibility = View.GONE
+                adapter?.notifyDataSetChanged()
             }
         }
     }

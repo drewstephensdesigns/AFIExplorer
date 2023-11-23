@@ -49,6 +49,16 @@
             android:textSize="15sp"
             android:textStyle="bold" />
 
+        <!-- Thank You -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/acknowledgement"
+            style="@style/AboutCard">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/AboutItem"
+                android:text="@string/title_acknowledgement" />
+
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- Buy a Coffee -->
         <com.google.android.material.card.MaterialCardView
@@ -156,17 +166,6 @@
                 style="@style/AboutItem"
                 android:text="@string/epubs_notice"
                 app:drawableStartCompat="@drawable/ic_change_log" />
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Thank You -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/acknowledgement"
-            style="@style/AboutCard">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                style="@style/AboutItem"
-                android:text="@string/title_acknowledgement" />
 
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>

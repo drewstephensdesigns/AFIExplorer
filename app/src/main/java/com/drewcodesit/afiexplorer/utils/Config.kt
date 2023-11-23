@@ -9,10 +9,10 @@ import com.drewcodesit.afiexplorer.R
 object Config {
 
     // Base API
-    const val BASE_URL = "https://api.afiexplorer.com/"
+    const val BASE_URL = "https://api.afiexplorer.com"
 
     // Featured Pubs
-    const val FEATURED_PUBS_URL = "https://drewstephensdesigns.github.io/AFIExplorer/Featured/data.json"
+    const val FEATURED_PUBS_URL = "https://drewstephensdesigns.github.io/AFIExplorer/Featured/"
 
     // Database
     const val DATABASE_NAME = "myfavdb"

@@ -19,7 +19,6 @@ import com.drewcodesit.afiexplorer.utils.MainClickListener
 import com.drewcodesit.afiexplorer.viewModel.FeaturedViewModel
 import com.rajat.pdfviewer.PdfViewerActivity
 
-
 class FeaturedFragment : Fragment(), MainClickListener {
 
     private var _binding: FragmentFeaturedBinding? = null
@@ -41,6 +40,8 @@ class FeaturedFragment : Fragment(), MainClickListener {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun initViewModel() {
+        binding.loading.visibility = View.VISIBLE
+
         // Separates business logic from the UI
         featuredViewModel = ViewModelProvider(
             requireActivity(),
@@ -53,6 +54,7 @@ class FeaturedFragment : Fragment(), MainClickListener {
                 featuredAdapter = FeaturedAdapter(requireContext(), it, this)
                 _binding?.singlePubRv?.adapter = featuredAdapter
                 featuredAdapter!!.notifyDataSetChanged()
+                binding.loading.visibility = View.GONE
             }
         }
     }
@@ -84,5 +86,10 @@ class FeaturedFragment : Fragment(), MainClickListener {
                 )
             )
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

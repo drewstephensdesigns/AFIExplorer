@@ -82,7 +82,7 @@
     <string name="developer_instagram_url" translatable="false">https://www.instagram.com/drewstephensdesigns/</string>
     <string name="developer_github_url" translatable="false">https://github.com/drewstephensdesigns</string>
     <string name="developer_linkedin_url" translatable="false">https://www.linkedin.com/in/drewstephens/</string>
-    <string name="reddit_url">We would like to thank everyone for the continuous feedback and support. We wouldn\'t be here today if it wasn\'t for you!</string>
+    <string name="thank_you_notice">Special thanks to all our supporters who made this app possible, especially my incredible family for their unwavering support and encouragement. Your belief in me has been the driving force behind this project\'s success.</string>
 
     <!-- Github Change Log -->
     <string name="change_log">Change Log</string>

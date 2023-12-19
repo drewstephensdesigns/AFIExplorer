@@ -2,7 +2,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/drewstephensdesigns/AFIExplorer">
-    <img src="screenshots/app-icon.jpg" alt="Logo" width="80" height="80">
+    <img src="screenshots/app-icon-new.png" alt="Logo" width="150" height="150">
   </a>
 <br />
     <a href='https://play.google.com/store/apps/details?id=io.github.drewstephenscoding.afiexplorer'>

@@ -27,7 +27,6 @@ import com.drewcodesit.afiexplorer.database.FavoriteDatabase
 import com.drewcodesit.afiexplorer.database.FavoriteEntity
 import com.drewcodesit.afiexplorer.databinding.FragmentFavesBinding
 import com.drewcodesit.afiexplorer.utils.FavesClickListener
-import com.drewcodesit.afiexplorer.utils.MyDividerItemDecoration
 import com.maxkeppeler.sheets.core.ButtonStyle
 import com.maxkeppeler.sheets.core.SheetStyle
 import com.maxkeppeler.sheets.info.InfoSheet
@@ -139,7 +138,7 @@ class FavoriteFragment : Fragment(),
         binding.rvFavorites.apply {
             itemAnimator = DefaultItemAnimator()
             addItemDecoration(
-                MyDividerItemDecoration(
+                com.drewcodesit.afiexplorer.utils.LineDividerItemDecoration(
                     context,
                     DividerItemDecoration.VERTICAL,
                     36

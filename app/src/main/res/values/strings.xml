@@ -66,6 +66,7 @@
     <string name="open_copied">Open</string>
     <string name="copied">Copied</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
+    <string name="see_all">See All</string>
 
     <!-- Social Media Links -->
     <string name="instagram">Follow me on Instagram</string>
@@ -88,6 +89,11 @@
     <string name="change_log">Change Log</string>
     <string name="change_summary">Changes and improvements</string>
     <string name="change_log_url" translatable="false">https://github.com/drewstephensdesigns/AFIExplorer/blob/master/CHANGE_LOG.md</string>
+
+    <string name="epubs_summary">E-Publishing Website</string>
+    <string name="epubs_url" translatable="false">https://www.e-publishing.af.mil/product-index/</string>
+
+
     <string name="epubs_notice_url" translatable="false">https://www.e-publishing.af.mil/Tools/Product-Announcements/</string>
 
     <!-- Privacy Policy-->
@@ -108,4 +114,7 @@
     <string name="rescind_placeholder">Rescind Org: %s</string>
     <string name="featured_pub_header">Essential</string>
     <string name="app_sponsorship">Buy a Coffee</string>
+    <string name="recently_updated_header">Recently Updated</string>
+    <string name="recently_updated_subheader">New publications and revisions</string>
+    <string name="quick_links_header">App Quick Links</string>
 </resources>

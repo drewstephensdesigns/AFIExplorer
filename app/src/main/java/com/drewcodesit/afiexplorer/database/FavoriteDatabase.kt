@@ -11,10 +11,10 @@ import com.drewcodesit.afiexplorer.utils.Config
 @Database
     (entities = [FavoriteEntity::class],
 
-    version = 3,
+    version = 4,
     autoMigrations = [
 
-        AutoMigration (from = 2, to = 3)
+        AutoMigration (from = 3, to = 4)
     ],
     exportSchema = true)
 abstract class FavoriteDatabase : RoomDatabase() {

@@ -10,12 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.databinding.FeaturedListItemBinding
 import com.drewcodesit.afiexplorer.model.FeaturedPubs
-import com.drewcodesit.afiexplorer.utils.MainClickListener
 
 class FeaturedAdapter(
     private val ct: Context,
     private val featuredPubs: List<FeaturedPubs>,
-    val featuredClickListener: MainClickListener
+    val featuredClickListener: FeaturedPubsClickListener
 ) : RecyclerView.Adapter<FeaturedAdapter.FeaturedViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeaturedViewHolder {
@@ -51,9 +50,11 @@ class FeaturedAdapter(
 
             // list of colors stored in the colorResources array
             val colorResources = intArrayOf(
-                R.color.bottom_nav_icon,
+                R.color.teal_700,
                 R.color.bottom_nav_icon_dark,
-                R.color.card_bg_orange
+                R.color.bottom_nav_icon,
+                R.color.card_bg_orange,
+
             )
 
             // When you calculate position % colorResources.size, you're finding the remainder
@@ -80,5 +81,9 @@ class FeaturedAdapter(
         var singlePubCard: CardView = binding.singlePubCard
         var singlePubNumber: TextView = binding.singlePubNumber
         var singlePubTitle: TextView = binding.singlePubTitle
+    }
+
+    interface FeaturedPubsClickListener{
+        fun onFeaturedPubsClickListener(featured: FeaturedPubs)
     }
 }

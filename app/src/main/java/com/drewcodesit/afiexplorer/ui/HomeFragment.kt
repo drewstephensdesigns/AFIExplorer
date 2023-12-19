@@ -25,16 +25,14 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.adapters.PubsAdapter
 import com.drewcodesit.afiexplorer.databinding.FragmentHomeBinding
-import com.drewcodesit.afiexplorer.model.FeaturedPubs
 import com.drewcodesit.afiexplorer.model.Pubs
-import com.drewcodesit.afiexplorer.utils.MainClickListener
-import com.drewcodesit.afiexplorer.utils.MyDividerItemDecoration
 import com.drewcodesit.afiexplorer.view.MainActivity
 import com.drewcodesit.afiexplorer.viewModel.PubsViewModel
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -48,7 +46,7 @@ import com.rajat.pdfviewer.PdfViewerActivity
 import es.dmoral.toasty.Toasty
 
 
-class HomeFragment : Fragment(), MainClickListener{
+class HomeFragment : Fragment(), PubsAdapter.MainClickListener {
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
@@ -60,6 +58,7 @@ class HomeFragment : Fragment(), MainClickListener{
     private var adapter: PubsAdapter? = null
 
     private var searchView: SearchView? = null
+
     private var exit: Boolean = false
 
     //The OnBackPressedDispatcher is a class that allows you
@@ -68,7 +67,7 @@ class HomeFragment : Fragment(), MainClickListener{
         object : OnBackPressedCallback(true) {
             @RequiresApi(Build.VERSION_CODES.N)
             override fun handleOnBackPressed() {
-                closeOrRefreshApp()
+                refreshPubList()
             }
         }
 
@@ -98,6 +97,7 @@ class HomeFragment : Fragment(), MainClickListener{
         setupMenu()
         setupBottomSheet()
         setupViewModel()
+
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             onBackPressedCallback
@@ -166,8 +166,8 @@ class HomeFragment : Fragment(), MainClickListener{
                                         resources.getString(R.string.no_results_found, newText)
 
                                 } else {
-                                    (activity as MainActivity).supportActionBar?.title =
-                                        resources.getString(R.string.app_home)
+                                    val mainActivity = activity as? MainActivity
+                                    mainActivity?.supportActionBar?.title = resources.getString(R.string.app_home)
 
                                     // Hides the lottie animation
                                     _binding?.noResultsFound?.visibility = View.GONE
@@ -203,7 +203,7 @@ class HomeFragment : Fragment(), MainClickListener{
         binding.recyclerView.apply {
             itemAnimator = DefaultItemAnimator()
             addItemDecoration(
-                MyDividerItemDecoration(
+                com.drewcodesit.afiexplorer.utils.LineDividerItemDecoration(
                     context,
                     DividerItemDecoration.VERTICAL,
                     36
@@ -337,28 +337,24 @@ class HomeFragment : Fragment(), MainClickListener{
         }
     }
 
-    override fun onFeaturedPubsClickListener(featured: FeaturedPubs) {}
-
-    // Cleans up toast notification for restricted access publications
-    private fun showRestrictedToast(message: String) {
-        Toasty.error(requireContext(), message, Toast.LENGTH_SHORT, false).show()
-    }
-
     // Callback to refresh (show all) publications list when user selects back button
-    // or closes app after hitting back twice within 2 seconds
-    private fun closeOrRefreshApp() {
+    // or navigates back to featured fragment
+    private fun refreshPubList() {
         (activity as MainActivity).supportActionBar?.title = resources.getString(R.string.app_home)
 
         // Filters list back to all pubs view
         adapter?.filterByRescindOrg()?.filter("")
+        Handler(Looper.getMainLooper()).postDelayed({
+            exit = false
+            findNavController().navigate(R.id.navigation_featured)
+        },
+            1 * 1000
+        )
+    }
 
-        if (exit) {
-            requireActivity().finish() // finish activity
-        } else {
-            Toasty.normal(requireContext(), getString(R.string.action_exit_app)).show()
-            exit = true
-            Handler(Looper.getMainLooper()).postDelayed({ exit = false }, 1 * 1000)
-        }
+    // Cleans up toast notification for restricted access publications
+    private fun showRestrictedToast(message: String) {
+        Toasty.error(requireContext(), message, Toast.LENGTH_SHORT, false).show()
     }
 
     override fun onDestroyView() {

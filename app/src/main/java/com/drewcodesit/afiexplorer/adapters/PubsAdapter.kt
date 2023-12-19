@@ -24,7 +24,6 @@ import com.drewcodesit.afiexplorer.database.FavoriteDatabase
 import com.drewcodesit.afiexplorer.database.FavoriteEntity
 import com.drewcodesit.afiexplorer.databinding.PubRowItemBinding
 import com.drewcodesit.afiexplorer.model.Pubs
-import com.drewcodesit.afiexplorer.utils.MainClickListener
 import es.dmoral.toasty.Toasty.info
 import es.dmoral.toasty.Toasty.success
 import java.util.*
@@ -72,15 +71,18 @@ class PubsAdapter(
             pubTitle.text = publication.Title
 
             // string resource with a placeholder, and you're inserting the dynamic value returned
-            val certifiedDateString: String = ct.getString(R.string.certified_date_placeholder, publication.getCertDate())
-            val gmDateString: String = ct.getString(R.string.gm_date_placeholder, publication.getGMDate())
-            val rescindOrgString: String = ct.getString(R.string.rescind_placeholder, publication.RescindOrg)
+            val certifiedDateString: String =
+                ct.getString(R.string.certified_date_placeholder, publication.getCertDate())
+            val gmDateString: String =
+                ct.getString(R.string.gm_date_placeholder, publication.getGMDate())
+            val rescindOrgString: String =
+                ct.getString(R.string.rescind_placeholder, publication.RescindOrg)
 
             // Displays Certified Current Date of publication
             pubCertDate.text = certifiedDateString
 
             // Gets date if pub has Guidance Memorandum
-            if(publication.GMDate != null){
+            if (publication.GMDate != null) {
                 pubGMDate.text = gmDateString
             } else {
                 pubGMDate.text = ct.getString(R.string.gm_placeholder)
@@ -169,8 +171,7 @@ class PubsAdapter(
                             request.setTitle(publication.Number)
                             request.setDescription(publication.Title)
                             request.setDestinationInExternalPublicDir(
-                                fileDir,
-                                "$subPath.pdf"
+                                fileDir, "$subPath.pdf"
                             )
                             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
                             info(
@@ -222,11 +223,11 @@ class PubsAdapter(
                 pubsListFiltered = if (charString.isEmpty()) pubsList else {
                     val filteredList = ArrayList<Pubs>()
                     pubsList.filter {
-                        it.Title!!.contains(charString, ignoreCase = true) or
-                                it.Number!!.contains(charString, ignoreCase = true) or
-                                it.RescindOrg!!.contains(charString, ignoreCase = true)
-                    }
-                        .forEach {
+                        it.Title!!.contains(charString, ignoreCase = true) or it.Number!!.contains(
+                            charString,
+                            ignoreCase = true
+                        ) or it.RescindOrg!!.contains(charString, ignoreCase = true)
+                    }.forEach {
                             filteredList.add(it)
 
                         }
@@ -259,10 +260,10 @@ class PubsAdapter(
                     val filteredList = ArrayList<Pubs>()
                     pubsList.filter {
                         it.RescindOrg!!.lowercase(Locale.ROOT)
-                            .contains(charString.lowercase(Locale.ROOT)) or
-                                it.RescindOrg!!.contains(charString)
-                    }
-                        .forEach {
+                            .contains(charString.lowercase(Locale.ROOT)) or it.RescindOrg!!.contains(
+                            charString
+                        )
+                    }.forEach {
                             filteredList.add(it)
                         }
                     filteredList
@@ -311,10 +312,7 @@ class PubsAdapter(
     // optimize the updates in the RecyclerView.
     class PubsDiffCallback : DiffUtil.ItemCallback<Pubs>() {
         override fun areItemsTheSame(oldItem: Pubs, newItem: Pubs): Boolean {
-            return oldItem.DocumentUrl == newItem.DocumentUrl
-                    && oldItem.Title == newItem.Title
-                    && oldItem.Number == newItem.Number
-                    && oldItem.PubID == newItem.PubID
+            return oldItem.DocumentUrl == newItem.DocumentUrl && oldItem.Title == newItem.Title && oldItem.Number == newItem.Number && oldItem.PubID == newItem.PubID
         }
 
         @SuppressLint("DiffUtilEquals")
@@ -322,4 +320,9 @@ class PubsAdapter(
             return oldItem == newItem
         }
     }
+
+    // notify the parent class when a main item in the RecyclerView is clicked.
+    // This allows the parent class to respond to the click event and perform some action,
+    // such as opening a detail view for the selected item.
+    interface MainClickListener {fun onMainPubsClickListener(pubs: Pubs)}
 }

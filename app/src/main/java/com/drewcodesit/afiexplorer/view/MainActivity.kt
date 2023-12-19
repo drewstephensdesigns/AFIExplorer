@@ -122,13 +122,13 @@ class MainActivity : AppCompatActivity() {
                     id.action_feedback -> {
                         startActivity(
                             Intent(
-                            this@MainActivity,
-                                AboutActivity::class.java
-                            /*
                                 this@MainActivity,
-                                SettingsActivity::class.java
+                                AboutActivity::class.java
+                                /*
+                                    this@MainActivity,
+                                    SettingsActivity::class.java
 
-                                 */
+                                     */
                             )
                         )
                         true

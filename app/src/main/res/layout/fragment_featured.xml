@@ -125,12 +125,26 @@
             android:textSize="18sp" />
 
         <!-- Link
+        to AF Doctrine -->
+        <TextView
+            android:id="@+id/quick_link_doctrine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/quick_link_epub"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/noto_sans"
+            android:text="@string/doctrine_summary"
+            android:textColor="#1565C0"
+            android:textSize="18sp" />
+
+        <!-- Link
         to feedback -->
         <TextView
             android:id="@+id/quick_link_feedback"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/quick_link_epub"
+            android:layout_below="@id/quick_link_doctrine"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/noto_sans"

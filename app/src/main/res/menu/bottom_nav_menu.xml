@@ -15,5 +15,4 @@
         android:id="@+id/navigation_favorites"
         android:icon="@drawable/ic_outline_bookmarks"
         android:title="@string/app_faves" />
-
 </menu>

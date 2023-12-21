@@ -32,6 +32,7 @@
     <string name="no_results_found">No Results Found for %1$s</string>
     <string name="no_results_found_db">"No saved items \n Add publications from the \n home screen to view later."</string>
     <string name="no_internet">Connection Error</string>
+
     <string name="pub_restricted">Restricted, see E-Pubs for official source</string>
     <string name="device_info">Device Info</string>
 
@@ -39,7 +40,7 @@
     <string name="pref_key_mode_night">PREF_MODE_NIGHT</string>
 
     <!-- Publication Actions for Clarity -->
-    <string name="ac">Last Action: AC</string>
+    <string name="ac">Last Action: Administrative Change</string>
     <string name="guidance_memorandum">Last Action: Guidance Memorandum</string>
     <string name="interim_change">Last Action: Interim Change</string>
     <string name="update_contact">Last Action: Update Contact</string>
@@ -91,9 +92,9 @@
     <string name="change_log_url" translatable="false">https://github.com/drewstephensdesigns/AFIExplorer/blob/master/CHANGE_LOG.md</string>
 
     <string name="epubs_summary">E-Publishing Website</string>
+    <string name="doctrine_summary">AF Doctrine Website</string>
+    <string name="af_doctrine_url" translatable="false">https://www.doctrine.af.mil</string>
     <string name="epubs_url" translatable="false">https://www.e-publishing.af.mil/product-index/</string>
-
-
     <string name="epubs_notice_url" translatable="false">https://www.e-publishing.af.mil/Tools/Product-Announcements/</string>
 
     <!-- Privacy Policy-->
@@ -112,9 +113,10 @@
     <string name="gm_date_placeholder">Guidance Memorandum: %s</string>
     <string name="gm_placeholder">Guidance Memorandum:</string>
     <string name="rescind_placeholder">Rescind Org: %s</string>
-    <string name="featured_pub_header">Essential</string>
+
     <string name="app_sponsorship">Buy a Coffee</string>
     <string name="recently_updated_header">Recently Updated</string>
     <string name="recently_updated_subheader">New publications and revisions</string>
     <string name="quick_links_header">App Quick Links</string>
+
 </resources>

@@ -32,6 +32,7 @@
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
         android:background="?attr/colorOnPrimary"
+        app:labelVisibilityMode="labeled"
         app:itemTextColor="@drawable/bottom_nav_selector"
         app:itemIconTint="@drawable/bottom_nav_selector"
         app:layout_constraintBottom_toBottomOf="parent"

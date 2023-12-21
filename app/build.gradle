@@ -7,6 +7,10 @@ apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 apply plugin: 'com.google.devtools.ksp'
 
 android {
+    //Properties properties = new Properties()
+    //properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    //def apikey = properties.getProperty('key')
+
     defaultConfig {
         multiDexEnabled true
         applicationId "io.github.drewstephenscoding.afiexplorer"
@@ -30,6 +34,8 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+
+       // buildConfigField "String" , "API_KEY" ,  apikey
     }
     applicationVariants.configureEach { variant ->
         variant.resValue "string", "versionName", variant.versionName
@@ -64,6 +70,7 @@ android {
     }
     buildFeatures {
         viewBinding true
+        buildConfig true
     }
     sourceSets {
         named("androidTest") {

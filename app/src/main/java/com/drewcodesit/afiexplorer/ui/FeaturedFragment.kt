@@ -157,6 +157,13 @@ class FeaturedFragment : Fragment(),
             startActivity(intent)
         }
 
+        // AF Doctrine
+        binding.quickLinkDoctrine.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = (Uri.parse(resources.getString(R.string.af_doctrine_url)))
+            startActivity(intent)
+        }
+
         // Feedback to developer
         binding.quickLinkFeedback.setOnClickListener {
             val send = Intent(Intent.ACTION_SENDTO)

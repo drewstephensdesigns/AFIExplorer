@@ -13,9 +13,11 @@ import com.drewcodesit.afiexplorer.model.Pubs
 
 class RecentsAdapter(
     private var ct: Context,
-    private val recentUpdatedPubs: List<Pubs>,
+    //private val recentUpdatedPubs: List<Pubs>,
     val recentsClickListener: RecentUpdatedClickListener
 ) : RecyclerView.Adapter<RecentsAdapter.RecentUpdateViewHolder>() {
+
+    private var recentUpdatedPubs: List<Pubs> = emptyList()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -59,6 +61,11 @@ class RecentsAdapter(
         }
     }
 
+    fun setupRecents(recents : List<Pubs>){
+        recentUpdatedPubs = recents
+        notifyDataSetChanged()
+    }
+
     override fun getItemCount(): Int {
         return recentUpdatedPubs.size
     }
@@ -80,5 +87,6 @@ class RecentsAdapter(
 
     interface RecentUpdatedClickListener {
         fun onRecentUpdatedClickListener(pubs: Pubs)
+
     }
 }

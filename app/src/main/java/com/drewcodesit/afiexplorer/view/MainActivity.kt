@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = MainActivityBinding.inflate(layoutInflater)
         setContentView(_binding.root)
+
         setSupportActionBar(_binding.mainToolBar)
 
         val navView: BottomNavigationView = _binding.content.navView
@@ -124,11 +125,6 @@ class MainActivity : AppCompatActivity() {
                             Intent(
                                 this@MainActivity,
                                 AboutActivity::class.java
-                                /*
-                                    this@MainActivity,
-                                    SettingsActivity::class.java
-
-                                     */
                             )
                         )
                         true

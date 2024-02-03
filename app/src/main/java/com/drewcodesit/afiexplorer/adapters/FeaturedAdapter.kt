@@ -13,9 +13,11 @@ import com.drewcodesit.afiexplorer.model.FeaturedPubs
 
 class FeaturedAdapter(
     private val ct: Context,
-    private val featuredPubs: List<FeaturedPubs>,
+    //private val featuredPubs: List<FeaturedPubs>,
     val featuredClickListener: FeaturedPubsClickListener
 ) : RecyclerView.Adapter<FeaturedAdapter.FeaturedViewHolder>() {
+
+    private var featuredPubs: List<FeaturedPubs> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeaturedViewHolder {
         val binding = FeaturedListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -54,7 +56,6 @@ class FeaturedAdapter(
                 R.color.bottom_nav_icon_dark,
                 R.color.bottom_nav_icon,
                 R.color.card_bg_orange,
-
             )
 
             // When you calculate position % colorResources.size, you're finding the remainder
@@ -68,6 +69,11 @@ class FeaturedAdapter(
                 )
             )
         }
+    }
+
+    fun setupPubs(featured : List<FeaturedPubs>){
+        featuredPubs = featured
+        notifyDataSetChanged()
     }
 
     inner class FeaturedViewHolder(binding: FeaturedListItemBinding) :

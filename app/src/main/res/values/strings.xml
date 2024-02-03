@@ -23,6 +23,8 @@
     <string name="action_copy_url">Copy URL</string>
     <string name="action_download">Download File</string>
     <string name="action_exit_app">Press Back again to exit</string>
+    <string name="action_navigate_back">Press back again to navigate</string>
+
     <string name="action_nuke_database">This action will delete the entire database…</string>
     <string name="action_featured">Add to Featured</string>
 
@@ -93,6 +95,9 @@
 
     <string name="epubs_summary">E-Publishing Website</string>
     <string name="doctrine_summary">AF Doctrine Website</string>
+    <string name="resilience_summary">AF Resilience Website</string>
+
+    <string name="resilience_url" translatable="false">https://www.resilience.af.mil/Tools-and-Guidance/</string>
     <string name="af_doctrine_url" translatable="false">https://www.doctrine.af.mil</string>
     <string name="epubs_url" translatable="false">https://www.e-publishing.af.mil/product-index/</string>
     <string name="epubs_notice_url" translatable="false">https://www.e-publishing.af.mil/Tools/Product-Announcements/</string>

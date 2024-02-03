@@ -1,13 +1,10 @@
 package com.drewcodesit.afiexplorer.ui
 
-import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -32,6 +29,7 @@ import com.drewcodesit.afiexplorer.model.Pubs
 import com.drewcodesit.afiexplorer.utils.DotsIndicatorDecoration
 import com.drewcodesit.afiexplorer.view.MainActivity
 import com.drewcodesit.afiexplorer.viewModel.FeaturedViewModel
+import com.drewcodesit.afiexplorer.viewModel.RecentsViewModel
 import com.rajat.pdfviewer.PdfViewerActivity
 import es.dmoral.toasty.Toasty
 
@@ -47,6 +45,7 @@ class FeaturedFragment : Fragment(),
     private var recentsAdapter: RecentsAdapter? = null
 
     private var featuredViewModel: FeaturedViewModel? = null
+    private var recentsViewModel: RecentsViewModel? = null
 
     private var exit: Boolean = false
 
@@ -61,15 +60,11 @@ class FeaturedFragment : Fragment(),
         }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         _binding = FragmentFeaturedBinding.inflate(inflater, container, false)
-        initViewModel()
-        initUI()
-        initRecentsUI()
-        setUpQuickLinks()
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             onBackPressedCallback
@@ -77,37 +72,64 @@ class FeaturedFragment : Fragment(),
         return binding.root
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private fun initViewModel() {
-        binding.loading.visibility = View.VISIBLE
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setUpQuickLinks()
+        initFeaturedViewModel()
+        initRecentUpdateViewModel()
+    }
 
-        // Separates business logic from the UI
-        featuredViewModel = ViewModelProvider(
-            requireActivity(),
-            ViewModelProvider.AndroidViewModelFactory
-                .getInstance(requireActivity().application)
+    private fun initFeaturedViewModel(){
+
+        featuredViewModel = ViewModelProvider(requireActivity(),
+            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
         )[FeaturedViewModel::class.java]
 
-        featuredViewModel?.featuredPublications?.observe(viewLifecycleOwner) { featuredList ->
-            featuredList.let {
-                featuredAdapter = FeaturedAdapter(requireContext(), it, this)
-                _binding?.singlePubRv?.adapter = featuredAdapter
-                featuredAdapter!!.notifyDataSetChanged()
-
+        // Featured Card
+        featuredViewModel!!.featuredPublications.observe(viewLifecycleOwner){ featured ->
+            featured.let {
+                featuredAdapter = FeaturedAdapter(requireContext(), this)
+                binding.singlePubRv.adapter = featuredAdapter
             }
-        }
+            when{
+                featured.isEmpty() ->{
+                    Toasty.error(requireContext(), "Featured Items not Available", Toasty.LENGTH_SHORT, false).show()
+                }
 
-        featuredViewModel?.recentPublications?.observe(viewLifecycleOwner) { fullList ->
-            fullList.let {
-                recentsAdapter = RecentsAdapter(requireContext(), it, this)
-                _binding?.recentsRv?.adapter = recentsAdapter
-                recentsAdapter!!.notifyDataSetChanged()
-                binding.loading.visibility = View.GONE
+                featured != null ->{
+                    initFeaturedUI()
+                    featuredAdapter?.setupPubs(featured)
+                }
             }
         }
     }
 
-    private fun initUI() {
+    private fun initRecentUpdateViewModel(){
+        binding.loading.visibility = View.VISIBLE
+        recentsViewModel = ViewModelProvider(requireActivity(),
+            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))[RecentsViewModel::class.java]
+
+        recentsViewModel!!.recentPublications.observe(viewLifecycleOwner){recents ->
+            recents.let {
+                recentsAdapter = RecentsAdapter(requireContext(), this)
+                binding.recentsRv.adapter = recentsAdapter
+            }
+            when{
+                recents.isEmpty() ->{
+                    Toasty.error(requireContext(), "Recent Updates not Available", Toasty.LENGTH_SHORT, false).show()
+                }
+
+                recents != null ->{
+                    initRecentsUI()
+                    binding.loading.visibility = View.GONE
+                    recentsAdapter?.setupRecents(recents)
+
+                }
+            }
+        }
+    }
+
+    private fun initFeaturedUI() {
         val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.singlePubRv.layoutManager = layoutManager
         binding.singlePubRv.itemAnimator = DefaultItemAnimator()
@@ -139,10 +161,7 @@ class FeaturedFragment : Fragment(),
     }
 
     private fun initRecentsUI() {
-
-        // Horizontal List
         val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-
         binding.recentsRv.layoutManager = layoutManager
         binding.recentsRv.itemAnimator = DefaultItemAnimator()
     }
@@ -164,6 +183,13 @@ class FeaturedFragment : Fragment(),
             startActivity(intent)
         }
 
+        // AF Resilience
+        binding.quickLinkResilience.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = (Uri.parse(resources.getString(R.string.resilience_url)))
+            startActivity(intent)
+        }
+
         // Feedback to developer
         binding.quickLinkFeedback.setOnClickListener {
             val send = Intent(Intent.ACTION_SENDTO)
@@ -178,16 +204,15 @@ class FeaturedFragment : Fragment(),
             startActivity(Intent.createChooser(send, "Send feedback..."))
         }
 
-       // Navigates user to full publications list
-       binding.viewAll.setOnClickListener {
-           binding.viewAll.findNavController().navigate(R.id.navigation_home)
-       }
+        // Navigates user to full publications list
+        binding.viewAll.setOnClickListener {
+            findNavController().navigate(R.id.navigation_home)
+        }
     }
 
-
     // Launches document natively if application is installed
-    // Launches PDFViewer Library is fall back if else
-    // Source: https://github.com/afreakyelf/Pdf-Viewer
+// Launches PDFViewer Library is fall back if else
+// Source: https://github.com/afreakyelf/Pdf-Viewer
     override fun onFeaturedPubsClickListener(featured: FeaturedPubs) {
         try {
             val intent = Intent(Intent.ACTION_VIEW)
@@ -231,15 +256,11 @@ class FeaturedFragment : Fragment(),
     private fun closeOrRefreshApp() {
         (activity as MainActivity).supportActionBar?.title = resources.getString(R.string.app_home)
 
-        // Filters list back to all pubs view
-       // adapter?.filterByRescindOrg()?.filter("")
-
         if (exit) {
             requireActivity().finish() // finish activity
         } else {
             Toasty.normal(requireContext(), getString(R.string.action_exit_app)).show()
             exit = true
-            Handler(Looper.getMainLooper()).postDelayed({ exit = false }, 1 * 1000)
         }
     }
 

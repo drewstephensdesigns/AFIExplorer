@@ -21,7 +21,7 @@ object Config {
     const val TABLE_NAME = "favoriteslist"
 
     fun save(context: Context, text: String) {
-        val clip = ClipData.newPlainText(context.getString(R.string.copied), text)
+        val clip = ClipData.newPlainText(context.getString(R.string.copied_to_clipboard), text)
         context.getSystemService<ClipboardManager>()!!.setPrimaryClip(clip)
     }
 }

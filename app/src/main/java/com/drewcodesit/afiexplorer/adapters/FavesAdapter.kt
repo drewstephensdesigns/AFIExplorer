@@ -1,7 +1,5 @@
 package com.drewcodesit.afiexplorer.adapters
 
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.view.ContextThemeWrapper
@@ -12,15 +10,14 @@ import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.adapters.FavesAdapter.FaveViewHolder
 import com.drewcodesit.afiexplorer.database.FavoriteEntity
 import com.drewcodesit.afiexplorer.databinding.FavoritesListItemBinding
+import com.drewcodesit.afiexplorer.utils.Config
 import com.drewcodesit.afiexplorer.utils.FavesClickListener
-import es.dmoral.toasty.Toasty
 
 
 class FavesAdapter(
@@ -43,9 +40,6 @@ class FavesAdapter(
         holder.pubNumber.text = fl.Number
         holder.pubTitle.text = fl.Title
 
-        val clipboard: ClipboardManager =
-            ct.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-
         holder.buttonViewOption.setOnClickListener {
             // Setting Theme to Popup Menu
             // Creating a Popup Menu
@@ -59,9 +53,7 @@ class FavesAdapter(
 
                     // Copy to Clipboard
                     R.id.menuActionCopy -> {
-                        val clip = ClipData.newPlainText("Copied Pub!", fl.DocumentUrl)
-                        clipboard.setPrimaryClip(clip)
-                        showToastMessage(it.resources.getString(R.string.copied_to_clipboard))
+                        Config.save(ct, fl.DocumentUrl)
                     }
 
                     // Share Publication URL
@@ -86,10 +78,6 @@ class FavesAdapter(
             }
             popup.show()
         }
-    }
-
-    private fun showToastMessage(message: String){
-        Toasty.info(ct, message, Toast.LENGTH_SHORT, false).show()
     }
 
     inner class FaveViewHolder(binding: FavoritesListItemBinding) : RecyclerView.ViewHolder(binding.root) {

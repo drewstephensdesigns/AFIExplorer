@@ -8,15 +8,13 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.drewcodesit.afiexplorer.utils.Config
 
-@Database
-    (entities = [FavoriteEntity::class],
-
+@Database(
+    entities = [FavoriteEntity::class],
     version = 4,
-    autoMigrations = [
+    autoMigrations = [AutoMigration (from = 3, to = 4)],
+    exportSchema = true
+)
 
-        AutoMigration (from = 3, to = 4)
-    ],
-    exportSchema = true)
 abstract class FavoriteDatabase : RoomDatabase() {
     @RenameTable(fromTableName = "favoritelist", toTableName = Config.TABLE_NAME)
 

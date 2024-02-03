@@ -8,8 +8,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -59,7 +57,7 @@ class HomeFragment : Fragment(), PubsAdapter.MainClickListener {
 
     private var searchView: SearchView? = null
 
-    private var exit: Boolean = false
+    private var isFirstBackPress = true
 
     //The OnBackPressedDispatcher is a class that allows you
     // to register a OnBackPressedCallback to a LifecycleOwner
@@ -295,7 +293,6 @@ class HomeFragment : Fragment(), PubsAdapter.MainClickListener {
         (activity as MainActivity).supportActionBar?.title = title
     }
 
-
     // The function first checks if the DocumentUrl property of the Pubs object contains certain keywords
     // that indicate that the document is restricted. If the DocumentUrl contains any of these keywords,
     // the function shows a Toast message indicating that the document is restricted and cannot be accessed.
@@ -342,14 +339,15 @@ class HomeFragment : Fragment(), PubsAdapter.MainClickListener {
     private fun refreshPubList() {
         (activity as MainActivity).supportActionBar?.title = resources.getString(R.string.app_home)
 
-        // Filters list back to all pubs view
-        adapter?.filterByRescindOrg()?.filter("")
-        Handler(Looper.getMainLooper()).postDelayed({
-            exit = false
-            findNavController().navigate(R.id.navigation_featured)
-        },
-            1 * 1000
-        )
+        if (isFirstBackPress) {
+            isFirstBackPress = false
+            adapter?.filterByRescindOrg()?.filter("")
+            Toasty.info(requireContext(), resources.getString(R.string.action_navigate_back), Toast.LENGTH_SHORT, false).show()
+
+        } else {
+            findNavController().navigateUp()
+
+        }
     }
 
     // Cleans up toast notification for restricted access publications

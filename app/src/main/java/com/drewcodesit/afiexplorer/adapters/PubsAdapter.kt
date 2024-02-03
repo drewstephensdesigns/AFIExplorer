@@ -2,8 +2,6 @@ package com.drewcodesit.afiexplorer.adapters
 
 import android.annotation.SuppressLint
 import android.app.DownloadManager
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -24,6 +22,7 @@ import com.drewcodesit.afiexplorer.database.FavoriteDatabase
 import com.drewcodesit.afiexplorer.database.FavoriteEntity
 import com.drewcodesit.afiexplorer.databinding.PubRowItemBinding
 import com.drewcodesit.afiexplorer.model.Pubs
+import com.drewcodesit.afiexplorer.utils.Config
 import es.dmoral.toasty.Toasty.info
 import es.dmoral.toasty.Toasty.success
 import java.util.*
@@ -37,7 +36,6 @@ class PubsAdapter(
     private var pubsListFiltered: List<Pubs> = pubsList
 
     private val favoriteDAO = FavoriteDatabase.getDatabase(ct).favoriteDAO()
-
 
     private lateinit var viewLifecycleOwner: LifecycleOwner
 
@@ -105,10 +103,6 @@ class PubsAdapter(
             }
             pubLastAction.text = actionText
 
-            // Clipboard Service
-            val clipboard: ClipboardManager =
-                ct.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-
             // Popup Menu
             buttonViewOption.setOnClickListener {
                 // Setting Theme
@@ -135,9 +129,7 @@ class PubsAdapter(
 
                         // Copy AFI URL
                         R.id.mCopyURL -> {
-                            val clip = ClipData.newPlainText("Copied Pub!", publication.DocumentUrl)
-                            clipboard.setPrimaryClip(clip)
-                            showInfoToast("Saved URL to clipboard")
+                            Config.save(ct, publication.DocumentUrl!!)
                         }
 
                         // Share AFI by URL

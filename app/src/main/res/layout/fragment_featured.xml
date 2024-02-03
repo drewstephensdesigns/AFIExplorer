@@ -40,6 +40,7 @@
             android:fontFamily="@font/noto_sans"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:textColor="?colorControlNormal"
             android:layout_below="@id/single_pub_rv" />
 
         <!-- Recent
@@ -72,7 +73,7 @@
             android:textColor="@color/bottom_nav_icon"/>
 
         <!-- Recently Updated
-        Recyclerview -->
+        Recyclerview-->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recents_rv"
             android:layout_below="@id/featured_updated_subheader"
@@ -81,6 +82,7 @@
             android:visibility="visible"
             android:layout_height="wrap_content">
         </androidx.recyclerview.widget.RecyclerView>
+
 
         <!-- Placeholder
         View -->
@@ -104,10 +106,11 @@
             android:layout_height="wrap_content"
             android:text="@string/quick_links_header"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="40dp"
             android:fontFamily="@font/noto_sans"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:textColor="?colorControlNormal"
             android:layout_below="@id/placeholder_card" />
 
         <!-- Link
@@ -118,10 +121,10 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/quick_links_header"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="13dp"
             android:fontFamily="@font/noto_sans"
             android:text="@string/epubs_summary"
-            android:textColor="#1565C0"
+            android:textColor="#3F51B5"
             android:textSize="18sp" />
 
         <!-- Link
@@ -132,10 +135,24 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/quick_link_epub"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="13dp"
             android:fontFamily="@font/noto_sans"
             android:text="@string/doctrine_summary"
-            android:textColor="#1565C0"
+            android:textColor="#3F51B5"
+            android:textSize="18sp" />
+
+        <!-- Link
+        to AF Resilience -->
+        <TextView
+            android:id="@+id/quick_link_resilience"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/quick_link_doctrine"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="13dp"
+            android:fontFamily="@font/noto_sans"
+            android:text="@string/resilience_summary"
+            android:textColor="#3F51B5"
             android:textSize="18sp" />
 
         <!-- Link
@@ -144,12 +161,12 @@
             android:id="@+id/quick_link_feedback"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/quick_link_doctrine"
+            android:layout_below="@id/quick_link_resilience"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="13dp"
             android:fontFamily="@font/noto_sans"
             android:text="@string/feedback_header"
-            android:textColor="#1565C0"
+            android:textColor="#3F51B5"
             android:textSize="18sp" />
     </RelativeLayout>
 </ScrollView>

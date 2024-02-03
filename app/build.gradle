@@ -56,7 +56,7 @@ android {
             resValue("bool", "FIREBASE_ANALYTICS_DEACTIVATED", "false")
             android.applicationVariants.all { variant ->
                 variant.outputs.all {
-                    outputFileName = "${applicationId}_${versionCode}_${variant.flavorName}_${variant.buildType.name}.aab"
+                    outputFileName = "AFIExplorer_"+ "${versionCode}_${variant.flavorName}_${variant.buildType.name}.apk"
                 }
             }
         }
@@ -105,12 +105,12 @@ dependencies {
     // Room components
     implementation 'androidx.room:room-runtime:2.6.1'
     implementation "androidx.room:room-ktx:2.6.1"
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.7.0'
     implementation 'androidx.preference:preference-ktx:1.2.1'
     ksp 'androidx.room:room-compiler:2.6.1'
 
     // Firebase
-    implementation 'com.google.firebase:firebase-crashlytics:18.6.0'
+    implementation 'com.google.firebase:firebase-crashlytics:18.6.1'
     implementation 'com.google.firebase:firebase-analytics:21.5.0'
 
     // Navigation
@@ -118,8 +118,8 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.7.6'
 
     // Lifecycle
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.2'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.7.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0'
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
 
     // Toasty - Usual Toast, but with Steroids
@@ -142,5 +142,4 @@ dependencies {
     // LottieFiles
     def lottieVersion = "6.1.0"
     implementation "com.airbnb.android:lottie:$lottieVersion"
-
 }

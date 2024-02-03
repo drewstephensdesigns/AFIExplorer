@@ -104,6 +104,7 @@ This app was born out of necessity and started as a proof of concept by two U.S 
   - [LiveData](https://developer.android.com/topic/libraries/architecture/livedata) - Data objects that notify views when the underlying database changes.
   - [Room](https://developer.android.com/topic/libraries/architecture/room) - SQLite object mapping library.
 - [Material Components for Android](https://github.com/material-components/material-components-android) - Modular and customizable Material Design UI components for Android.
+- [Pdf-Viewer](https://github.com/afreakyelf/Pdf-Viewer) - A lightweight PDF viewer for Android
 
 
 ## Permissions 🔒

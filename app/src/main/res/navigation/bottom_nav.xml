@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/navigation_featured">
+
+    <fragment
+        android:id="@+id/navigation_featured"
+        android:name="com.drewcodesit.afiexplorer.ui.FeaturedFragment"
+        android:label="@string/app_featured"
+        tools:layout="@layout/fragment_featured" >
+
+        <action
+            android:id="@+id/action_navigation_featured_to_mainView"
+            app:destination="@id/navigation_home"
+            app:popUpToSaveState="true"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.drewcodesit.afiexplorer.ui.HomeFragment"
+        android:label="@string/app_home"
+        tools:layout="@layout/fragment_home" >
+
+        <action
+            android:id="@+id/action_navigation_mainView_to_featured"
+            app:destination="@id/navigation_featured"
+            app:popUpToSaveState="true"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_favorites"
+        android:name="com.drewcodesit.afiexplorer.ui.FavoriteFragment"
+        android:label="@string/app_faves"
+        tools:layout="@layout/fragment_faves"
+        app:restoreState="true"
+        app:popUpTo="@id/navigation_home"
+        app:popUpToSaveState="true"/>
+
+</navigation>

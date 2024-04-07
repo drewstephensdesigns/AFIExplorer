@@ -16,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
@@ -33,6 +34,7 @@ import com.drewcodesit.afiexplorer.databinding.FragmentHomeBinding
 import com.drewcodesit.afiexplorer.model.Pubs
 import com.drewcodesit.afiexplorer.view.MainActivity
 import com.drewcodesit.afiexplorer.viewModel.PubsViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.logEvent
@@ -51,23 +53,29 @@ class HomeFragment : Fragment(), PubsAdapter.MainClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private var pubsViewModel: PubsViewModel? = null
+    private val pubsViewModel: PubsViewModel by lazy {
+        ViewModelProvider(requireActivity())[PubsViewModel::class.java]
+    }
 
     private var adapter: PubsAdapter? = null
 
     private var searchView: SearchView? = null
 
-    private var isFirstBackPress = true
+   // private var isFirstBackPress = true
 
+    /*
     //The OnBackPressedDispatcher is a class that allows you
     // to register a OnBackPressedCallback to a LifecycleOwner
     private val onBackPressedCallback: OnBackPressedCallback =
         object : OnBackPressedCallback(true) {
             @RequiresApi(Build.VERSION_CODES.N)
             override fun handleOnBackPressed() {
-                refreshPubList()
+                //refreshPubList()
+                findNavController().navigate(R.id.navigation_featured)
             }
         }
+
+     */
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -78,12 +86,6 @@ class HomeFragment : Fragment(), PubsAdapter.MainClickListener {
 
         // Obtain the FirebaseAnalytics instance.
         firebaseAnalytics = Firebase.analytics
-        // Separates business logic from the UI
-        pubsViewModel = ViewModelProvider(requireActivity(),
-            ViewModelProvider.AndroidViewModelFactory
-                .getInstance(requireActivity().application)
-        )[PubsViewModel::class.java]
-
         return binding.root
     }
 
@@ -91,23 +93,33 @@ class HomeFragment : Fragment(), PubsAdapter.MainClickListener {
     // view has been created. It performs necessary UI initialization
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initUI()
-        setupMenu()
-        setupBottomSheet()
-        setupViewModel()
+       // initUI()
+       // setupMenu()
+       // setupBottomSheet()
+       // setupViewModel()
 
+
+        /*
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             onBackPressedCallback
         )
+
+         */
     }
+
+    override fun onMainPubsClickListener(pubs: Pubs) {
+       // TODO("Not yet implemented")
+    }
+
+    /*
 
     @SuppressLint("NotifyDataSetChanged")
     private fun setupViewModel(){
         // Loading Indicator
         binding.loading.visibility = View.VISIBLE
 
-        pubsViewModel?.publications?.observe(viewLifecycleOwner) { pubsList ->
+        pubsViewModel.publications.observe(viewLifecycleOwner) { pubsList ->
             pubsList?.let {
                 adapter = PubsAdapter(requireActivity(), it, this)
 
@@ -293,6 +305,8 @@ class HomeFragment : Fragment(), PubsAdapter.MainClickListener {
         (activity as MainActivity).supportActionBar?.title = title
     }
 
+
+
     // The function first checks if the DocumentUrl property of the Pubs object contains certain keywords
     // that indicate that the document is restricted. If the DocumentUrl contains any of these keywords,
     // the function shows a Toast message indicating that the document is restricted and cannot be accessed.
@@ -300,7 +314,7 @@ class HomeFragment : Fragment(), PubsAdapter.MainClickListener {
     // the PDF document with a PDF viewer application. If an ActivityNotFoundException is caught, it means that there
     // is no PDF viewer application installed on the device, so the function launches a PDF viewer activity
     override fun onMainPubsClickListener(pubs: Pubs) {
-        firebaseAnalytics.logEvent("main_pubs_view"){ param("event_name", pubs.Title!!) }
+        //firebaseAnalytics.logEvent("main_pubs_view"){ param("event_name", pubs.Title!!) }
         try {
             if (pubs.DocumentUrl?.contains("generic_restricted.pdf") == true
                 || (pubs.DocumentUrl?.contains("restricted_access.pdf")) == true
@@ -334,6 +348,7 @@ class HomeFragment : Fragment(), PubsAdapter.MainClickListener {
         }
     }
 
+    /*
     // Callback to refresh (show all) publications list when user selects back button
     // or navigates back to featured fragment
     private fun refreshPubList() {
@@ -346,17 +361,19 @@ class HomeFragment : Fragment(), PubsAdapter.MainClickListener {
 
         } else {
             findNavController().navigateUp()
-
         }
     }
+
+     */
 
     // Cleans up toast notification for restricted access publications
     private fun showRestrictedToast(message: String) {
         Toasty.error(requireContext(), message, Toast.LENGTH_SHORT, false).show()
     }
-
+*/
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
 }

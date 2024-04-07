@@ -5,16 +5,23 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavArgs
+import androidx.navigation.NavDirections
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -24,6 +31,7 @@ import com.drewcodesit.afiexplorer.adapters.FeaturedAdapter.FeaturedPubsClickLis
 import com.drewcodesit.afiexplorer.adapters.RecentsAdapter
 import com.drewcodesit.afiexplorer.adapters.RecentsAdapter.RecentUpdatedClickListener
 import com.drewcodesit.afiexplorer.databinding.FragmentFeaturedBinding
+import com.drewcodesit.afiexplorer.databinding.MainActivityBinding
 import com.drewcodesit.afiexplorer.model.FeaturedPubs
 import com.drewcodesit.afiexplorer.model.Pubs
 import com.drewcodesit.afiexplorer.utils.DotsIndicatorDecoration
@@ -51,6 +59,7 @@ class FeaturedFragment : Fragment(),
 
     //The OnBackPressedDispatcher is a class that allows you
     // to register a OnBackPressedCallback to a LifecycleOwner
+    /*
     private val onBackPressedCallback: OnBackPressedCallback =
         object : OnBackPressedCallback(true) {
             @RequiresApi(Build.VERSION_CODES.N)
@@ -59,16 +68,23 @@ class FeaturedFragment : Fragment(),
             }
         }
 
+     */
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFeaturedBinding.inflate(inflater, container, false)
+
+        /*
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             onBackPressedCallback
         )
+
+         */
+
         return binding.root
     }
 
@@ -167,6 +183,8 @@ class FeaturedFragment : Fragment(),
     }
 
     private fun setUpQuickLinks(){
+        val controller = findNavController()
+
         val versionName = requireActivity().packageManager.getPackageInfo(requireActivity().packageName, 0).versionName
 
         // E-Pubs Main Index
@@ -205,8 +223,11 @@ class FeaturedFragment : Fragment(),
         }
 
         // Navigates user to full publications list
-        binding.viewAll.setOnClickListener {
-            findNavController().navigate(R.id.navigation_home)
+        val viewAll: TextView = binding.viewAll
+
+
+       viewAll.setOnClickListener {
+            binding.root.findNavController().navigate(R.id.action_navigation_featured_to_mainView)
         }
     }
 

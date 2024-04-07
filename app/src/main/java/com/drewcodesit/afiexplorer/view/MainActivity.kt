@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
 
     //Moving back to list fragment by clicking on back arrow button
     override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(id.navigation_home)
+        val navController = findNavController(id.navigation_featured)
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 

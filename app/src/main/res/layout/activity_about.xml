@@ -59,6 +59,17 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Privacy Policy -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/privacy_policy"
+            style="@style/AboutCard">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/AboutItem"
+                android:text="@string/privacy_policy" />
+
+        </com.google.android.material.card.MaterialCardView>
+
         <!-- Buy a Coffee -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/donate"

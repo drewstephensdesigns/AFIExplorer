@@ -59,6 +59,10 @@ class AboutActivity : AppCompatActivity() {
         // EPubs Product Announcements
         setupCard(binding.epubsChanges, resources.getString(R.string.epubs_notice_url))
 
+        // Privacy Policy
+        setupCard(binding.privacyPolicy, resources.getString(R.string.privacy_url))
+
+
         // App Feedback
         binding.feedback.setOnClickListener {
             val send = Intent(Intent.ACTION_SENDTO)

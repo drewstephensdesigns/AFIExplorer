@@ -105,7 +105,7 @@
     <!-- Privacy Policy-->
     <string name="privacy_policy">Privacy Policy</string>
     <string name="privacy_summary">How AFI Explorer collects information</string>
-    <string name="privacy_url" translatable="false">https://github.com/drewstephensdesigns/AFIExplorer/blob/master/PRIVACY.md</string>
+    <string name="privacy_url" translatable="false">https://drewstephensdesigns.github.io/privacy-policy/afiexplorer</string>
 
     <!-- Content Descriptions -->
     <string name="cd_vertical_menu">Vertical menu</string>

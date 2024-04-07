@@ -20,12 +20,12 @@ android {
 
         minSdkVersion 21
         targetSdkVersion 34
-        // version code changed to 31
-        // 18 DEC 23
-        versionCode 31
-        // version name changed to 2.0.5
-        // 18 DEC 23
-        versionName "2.0.5"
+        // version code changed to 36
+        // 31 MAR 24
+        versionCode 36
+        // version name changed to 2.1.0
+        // 31 MAR 24
+        versionName "2.1.0"
 
         ksp {
             arg("room.schemaLocation", "$projectDir/schemas")
@@ -110,12 +110,12 @@ dependencies {
     ksp 'androidx.room:room-compiler:2.6.1'
 
     // Firebase
-    implementation 'com.google.firebase:firebase-crashlytics:18.6.1'
-    implementation 'com.google.firebase:firebase-analytics:21.5.0'
+    implementation 'com.google.firebase:firebase-crashlytics:18.6.3'
+    implementation 'com.google.firebase:firebase-analytics:21.6.1'
 
     // Navigation
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.6'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.7.6'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.7'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.7.7'
 
     // Lifecycle
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.7.0'

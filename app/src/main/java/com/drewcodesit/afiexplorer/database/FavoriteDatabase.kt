@@ -16,7 +16,7 @@ import com.drewcodesit.afiexplorer.utils.Config
 )
 
 abstract class FavoriteDatabase() : RoomDatabase(){
-    @RenameTable(fromTableName = "favoritelisr", toTableName = Config.TABLE_NAME)
+    @RenameTable(fromTableName = "favoritelist", toTableName = Config.TABLE_NAME)
 
     companion object {
         @Volatile

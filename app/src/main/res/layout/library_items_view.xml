@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:paddingBottom="@dimen/small_margin"
+    android:paddingLeft="14dp"
+    android:paddingRight="14dp"
+    android:paddingTop="@dimen/xsmall_margin"
+    android:focusable="true">
+
+    <ImageView
+        android:id="@+id/textViewOptions"
+        android:layout_width="@dimen/large_margin"
+        android:layout_height="@dimen/large_margin"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/small_margin"
+        android:src="@drawable/ic_menu_vert"
+        android:contentDescription="@string/cd_vertical_menu" />
+
+    <TextView
+        android:id="@+id/pubNumber"
+        android:layout_toEndOf="@id/textViewOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
+        android:textStyle="bold"
+        tools:text="Number"
+        android:textColor="?attr/colorControlNormal"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/pubTitle"
+        android:layout_toEndOf="@id/textViewOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pubNumber"
+        android:maxLines="2"
+        android:ellipsize="end"
+        tools:text="Title"
+        android:textAllCaps="false"
+        android:fontFamily="@font/noto_sans"
+        android:textColor="?attr/colorControlNormal"
+        android:textSize="@dimen/textview_small_text" />
+
+</RelativeLayout>

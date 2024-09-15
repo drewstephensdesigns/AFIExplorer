@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="?attr/selectableItemBackground"
+    android:paddingBottom="@dimen/small_margin"
+    android:paddingLeft="14dp"
+    android:paddingRight="14dp"
+    android:paddingTop="@dimen/small_margin"
+    android:focusable="true">
+
+    <ImageView
+        android:id="@+id/textViewOptions"
+        android:layout_width="@dimen/large_margin"
+        android:layout_height="@dimen/large_margin"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/small_margin"
+        android:src="@drawable/ic_menu_vert"
+        android:contentDescription="@string/cd_vertical_menu" />
+
+    <TextView
+        android:id="@+id/pubNumber"
+        android:layout_toEndOf="@id/textViewOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ibm_plex_sans"
+        tools:text="Number"
+        android:textStyle="bold"
+        android:textColor="?attr/colorControlNormal"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/pubTitle"
+        tools:text="Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pubNumber"
+        android:layout_toEndOf="@id/textViewOptions"
+        android:paddingTop="2dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/noto_sans"
+        android:maxLines="3"
+        android:textColor="?attr/colorControlNormal"
+        android:textSize="@dimen/textview_small_text" />
+
+    <TextView
+        android:id="@+id/pubLastAction"
+        tools:text="LastAction"
+        android:layout_below="@id/pubTitle"
+        android:paddingTop="2dp"
+        android:layout_toEndOf="@id/textViewOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/noto_sans"
+        android:textColor="?attr/colorControlNormal"
+        android:textSize="@dimen/textview_small_text" />
+
+    <TextView
+        android:id="@+id/pubCertDate"
+        tools:text="Certified"
+        android:paddingTop="2dp"
+        android:layout_below="@id/pubLastAction"
+        android:layout_toEndOf="@id/textViewOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/noto_sans"
+        android:textColor="?attr/colorControlNormal"
+        android:textSize="@dimen/textview_small_text" />
+
+    <TextView
+        android:id="@+id/pubGMDate"
+        tools:text="GMDate"
+        android:paddingTop="2dp"
+        android:layout_below="@id/pubCertDate"
+        android:layout_toEndOf="@id/textViewOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/noto_sans"
+        android:textColor="?attr/colorControlNormal"
+        android:textSize="@dimen/textview_small_text" />
+
+    <TextView
+        android:id="@+id/pubRescindOrg"
+        tools:text="RescindOrg"
+        android:paddingTop="2dp"
+        android:layout_below="@id/pubGMDate"
+        android:layout_toEndOf="@id/textViewOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
+        android:textColor="?attr/colorControlNormal"
+        android:textSize="@dimen/textview_small_text" />
+
+
+</RelativeLayout>

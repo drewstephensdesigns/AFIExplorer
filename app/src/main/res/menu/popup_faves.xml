@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menuActionCopy"
+        app:showAsAction="ifRoom"
+        android:title="@string/action_copy_url" />
+
+    <item
+        android:id="@+id/menuActionShare"
+        app:showAsAction="ifRoom"
+        android:title="@string/action_share" />
+
+    <item
+        android:id="@+id/menuActionDelete"
+        android:title="@string/action_delete"
+        app:showAsAction="ifRoom"/>
+</menu>

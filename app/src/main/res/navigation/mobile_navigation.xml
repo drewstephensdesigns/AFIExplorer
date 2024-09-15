@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_featured">
+
+    <fragment
+        android:id="@+id/navigation_featured"
+        android:name="com.drewcodesit.afiexplorer.ui.featured.FeaturedFragment"
+        android:label="@string/app_featured"
+        tools:layout="@layout/fragment_featured" />
+
+    <fragment
+        android:id="@+id/navigation_browse"
+        android:name="com.drewcodesit.afiexplorer.ui.browse.BrowseFragment"
+        android:label="@string/app_home"
+        tools:layout="@layout/fragment_browse" />
+
+    <fragment
+        android:id="@+id/navigation_library"
+        android:name="com.drewcodesit.afiexplorer.ui.library.LibraryFragment"
+        android:label="@string/app_faves"
+        tools:layout="@layout/fragment_library" />
+
+    <fragment
+        android:id="@+id/navigation_options_menu"
+        android:name="com.drewcodesit.afiexplorer.ui.options.OptionsFragment"
+        android:label="@string/app_options"
+        tools:layout="@layout/fragment_options" />
+</navigation>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="?actionBarSize"
+    android:fillViewport="true">
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="?actionBarSize">
+
+    <ImageView
+        android:id="@+id/icon_app_main"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="@dimen/large_margin"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/ic_launcher"
+        android:contentDescription="@string/change_theme" />
+
+    <!-- Settings Header -->
+    <TextView
+        android:id="@+id/text_settings_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/icon_app_main"
+        android:layout_marginStart="@dimen/xlarge_margin"
+        android:text="@string/app_settings"
+        android:fontFamily="@font/ibm_plex_sans"
+        android:textAppearance="@style/TextAppearance.Material3.HeadlineLarge" />
+
+    <!-- Settings Header -->
+    <TextView
+        android:id="@+id/text_build_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_settings_header"
+        android:layout_marginStart="@dimen/xlarge_margin"
+        android:text="@string/versionName"
+        android:fontFamily="@font/roboto"
+        android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+        tools:text="Build Version: 1.0.0(Beta)"/>
+
+    <!-- Theme Change -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/theme"
+        android:layout_marginTop="@dimen/small_margin"
+        android:layout_below="@id/text_build_version"
+        style="@style/AboutCard">
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/AboutItem"
+            android:text="@string/change_theme"
+            app:drawableStartCompat="@drawable/follow_system" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Buy a Coffee -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/donate"
+        style="@style/AboutCard"
+        android:layout_marginTop="@dimen/small_margin"
+        android:layout_below="@id/theme">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/AboutItem"
+            android:text="@string/app_sponsorship"
+            app:drawableStartCompat="@drawable/ic_coffee" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- App Rating -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/rate"
+        style="@style/AboutCard"
+        android:layout_marginTop="@dimen/small_margin"
+        android:layout_below="@id/donate">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/AboutItem"
+            android:text="@string/rating_header"
+            app:drawableStartCompat="@drawable/ic_thumbs_up" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Privacy Policy -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/privacy"
+        android:layout_marginTop="@dimen/small_margin"
+        android:layout_below="@id/rate"
+        style="@style/AboutCard">
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/AboutItem"
+            android:text="@string/privacy_policy"
+            app:drawableStartCompat="@drawable/ic_error" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Libraries -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/open_source"
+        android:layout_marginTop="@dimen/small_margin"
+        android:layout_below="@id/privacy"
+        style="@style/AboutCard">
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/AboutItem"
+            android:text="@string/licenses"
+            app:drawableStartCompat="@drawable/ic_publications" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Feedback -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/feedback"
+        android:layout_marginTop="@dimen/small_margin"
+        android:layout_below="@id/open_source"
+        style="@style/AboutCard">
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/AboutItem"
+            android:text="@string/feedback_subheading"
+            app:drawableStartCompat="@drawable/ic_feedback" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Connect -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/connect"
+        android:layout_marginTop="@dimen/small_margin"
+        android:layout_below="@id/feedback"
+        style="@style/AboutCard">
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/AboutItem"
+            android:text="@string/social_header"
+            app:drawableStartCompat="@drawable/ic_linkedin" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Connect -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/epubs_changes"
+        android:layout_marginTop="@dimen/small_margin"
+        android:layout_below="@id/connect"
+        style="@style/AboutCard">
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/AboutItem"
+            android:text="@string/epubs_notice"
+            app:drawableStartCompat="@drawable/ic_change_log" />
+    </com.google.android.material.card.MaterialCardView>
+</RelativeLayout>
+</ScrollView>

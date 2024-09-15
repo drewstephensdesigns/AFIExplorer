@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="teal_200">#FF03DAC5</color>
+    <!-- New Theme Colors
+    8 APR 2024 -->
+    <color name="columbia_blue">#BFD7EA</color>
+    <color name="cadet_blue">#91AEC1</color>
+    <color name="air_force_blue">#508CA4</color>
+    <color name="air_force_dark_blue">#183E4D</color>
+    <color name="sea_green">#05623C</color>
+    <color name="cal_poly_green">#004F2D</color>
     <color name="teal_200_transparent">#0003DAC5</color>
-    <color name="teal_700">#005756</color>
-    <color name="black">#10100F</color>
-    <color name="black_darker">#1B1B18</color>
-    <color name="light_white">#E5E2E2</color>
-    <color name="white">#AFBCC1</color>
-    <color name="pub_big_text">#252121</color>
-    <color name="pub_little_text">#BAB6B6</color>
-    <color name="bottom_nav_icon">#3E80B6</color>
-    <color name="bottom_nav_icon_dark">#183955</color>
-    <color name="card_bg_orange">#B24740</color>
+    <color name="charcoal">#192937</color>
+    <color name="white">#BEBCB4</color>
+    <color name="burnt_sienna">#B5512A</color>
+    <color name="attribution_text_background_color">#80192937</color>
+    <color name="attribution_text_color">#80F3FFBD</color>
+    <color name="lion">#9E753A</color>
+    <color name="black">#252525</color>
 </resources>

@@ -7,14 +7,14 @@
 
     <!-- App Screen Titles -->
     <string name="app_name">AFI Explorer</string>
-    <string name="app_home">Publications</string>
-    <string name="app_faves">Favorites</string>
+    <string name="app_home">Browse</string>
+    <string name="app_faves">Library</string>
     <string name="app_featured">Featured</string>
+    <string name="app_settings">Settings</string>
+    <string name="app_options">Options</string>
 
     <!-- Menu/Toolbar Titles -->
-    <string name="action_support">Support</string>
     <string name="change_theme">Change Theme</string>
-    <string name="action_feedback">App Info</string>
     <string name="action_search">Search</string>
     <string name="action_delete">Delete From Favorites</string>
     <string name="action_clear_database">Delete All Favorites</string>
@@ -22,24 +22,22 @@
     <string name="action_share">Share Publication</string>
     <string name="action_copy_url">Copy URL</string>
     <string name="action_download">Download File</string>
-    <string name="action_exit_app">Press Back again to exit</string>
     <string name="action_navigate_back">Press back again to navigate</string>
+    <string name="action_filter">Filter</string>
 
     <string name="action_nuke_database">This action will delete the entire database…</string>
-    <string name="action_featured">Add to Featured</string>
 
     <!-- Hints/Notices -->
-    <string name="intent_title">Select PDF Reader…</string>
     <string name="search_hint">Search pubs…</string>
     <string name="no_results_found">No Results Found for %1$s</string>
     <string name="no_results_found_db">"No saved items \n Add publications from the \n home screen to view later."</string>
     <string name="no_internet">Connection Error</string>
 
     <string name="pub_restricted">Restricted, see E-Pubs for official source</string>
-    <string name="device_info">Device Info</string>
 
     <!-- Shared Preference Keys-->
     <string name="pref_key_mode_night">PREF_MODE_NIGHT</string>
+    <string name="pref_key_sort_title">PREF_SORT_TITLE</string>
 
     <!-- Publication Actions for Clarity -->
     <string name="ac">Last Action: Administrative Change</string>
@@ -53,31 +51,18 @@
     <string name="unknown_action">Last Action: </string>
 
     <!-- Settings/App Info Screen -->
-    <string name="title_acknowledgement">Acknowledgement</string>
-    <string name="title_activity_settings">SettingsActivity</string>
     <string name="feedback_header">Send Feedback</string>
     <string name="feedback_subheading">Let us know how we can improve</string>
     <string name="rating_header">Rate App</string>
-    <string name="rating_subheading">Please consider rating us on the Play Store</string>
     <string name="licenses">Open Source Licenses</string>
-    <string name="licenses_summary">Libraries we use</string>
-    <string name="help_header">Help &amp; Feedback</string>
     <string name="social_header">Connect with Me</string>
-    <string name="legal_header">Legal</string>
     <string name="version_header">Build Version </string>
     <string name="version_text">%1$s %2$s</string>
     <string name="open_copied">Open</string>
-    <string name="copied">Copied</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="see_all">See All</string>
 
     <!-- Social Media Links -->
-    <string name="instagram">Follow me on Instagram</string>
-    <string name="github">Follow me on Github</string>
-    <string name="linkedin">Connect with me on LinkedIn</string>
-    <string name="instagram_id">\@drewstephensdesigns</string>
-    <string name="github_id">\@drewstephensdesigns</string>
-    <string name="linkedin_id">\@DrewStephens</string>
     <string name="epubs_notice">E-Pubs Product Announcements</string>
 
     <!-- Social Media URLs -->
@@ -86,17 +71,17 @@
     <string name="developer_instagram_url" translatable="false">https://www.instagram.com/drewstephensdesigns/</string>
     <string name="developer_github_url" translatable="false">https://github.com/drewstephensdesigns</string>
     <string name="developer_linkedin_url" translatable="false">https://www.linkedin.com/in/drewstephens/</string>
-    <string name="thank_you_notice">Special thanks to all our supporters who made this app possible, especially my incredible family for their unwavering support and encouragement. Your belief in me has been the driving force behind this project\'s success.</string>
 
     <!-- Github Change Log -->
-    <string name="change_log">Change Log</string>
-    <string name="change_summary">Changes and improvements</string>
     <string name="change_log_url" translatable="false">https://github.com/drewstephensdesigns/AFIExplorer/blob/master/CHANGE_LOG.md</string>
+    <string name="reddit" translatable="false">https://www.reddit.com/r/AirForce/</string>
 
+    <!-- Quick Link Headers -->
     <string name="epubs_summary">E-Publishing Website</string>
     <string name="doctrine_summary">AF Doctrine Website</string>
     <string name="resilience_summary">AF Resilience Website</string>
 
+    <!-- Quick Links -->
     <string name="resilience_url" translatable="false">https://www.resilience.af.mil/Tools-and-Guidance/</string>
     <string name="af_doctrine_url" translatable="false">https://www.doctrine.af.mil</string>
     <string name="epubs_url" translatable="false">https://www.e-publishing.af.mil/product-index/</string>
@@ -104,22 +89,19 @@
 
     <!-- Privacy Policy-->
     <string name="privacy_policy">Privacy Policy</string>
-    <string name="privacy_summary">How AFI Explorer collects information</string>
     <string name="privacy_url" translatable="false">https://drewstephensdesigns.github.io/privacy-policy/afiexplorer</string>
 
     <!-- Content Descriptions -->
     <string name="cd_vertical_menu">Vertical menu</string>
     <string name="cd_favorites">favorites</string>
-    <string name="cd_filter_main">Filter for main publications</string>
-    <string name="cd_image">image</string>
 
-    <string name="saved_date_placeholder">Saved: %s</string>
+    <!-- Placeholders -->
     <string name="certified_date_placeholder">Certified Current: %s</string>
     <string name="gm_date_placeholder">Guidance Memorandum: %s</string>
     <string name="gm_placeholder">Guidance Memorandum:</string>
     <string name="rescind_placeholder">Rescind Org: %s</string>
 
-    <string name="app_sponsorship">Buy a Coffee</string>
+    <string name="app_sponsorship">Support Future Updates</string>
     <string name="recently_updated_header">Recently Updated</string>
     <string name="recently_updated_subheader">New publications and revisions</string>
     <string name="quick_links_header">App Quick Links</string>

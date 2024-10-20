@@ -12,7 +12,7 @@ android {
     //def apikey = properties.getProperty('key')
 
     defaultConfig {
-        multiDexEnabled true
+        multiDexEnabled = true
         applicationId "io.github.drewstephenscoding.afiexplorer"
 
         //compileSdkVersion = deprecated
@@ -20,19 +20,19 @@ android {
 
         minSdkVersion 21
         targetSdkVersion 34
-        // version code changed to 36
-        // 31 MAR 24
-        versionCode 36
-        // version name changed to 2.1.0
-        // 31 MAR 24
-        versionName "2.1.0"
+        // version code changed to 37
+        // 20 OCT 24
+        versionCode 37
+        // version name changed to 2.1.1
+        // 20 OCT 24
+        versionName "2.1.1"
 
         ksp {
             arg("room.schemaLocation", "$projectDir/schemas")
         }
 
         vectorDrawables {
-            useSupportLibrary true
+            useSupportLibrary = true
         }
 
        // buildConfigField "String" , "API_KEY" ,  apikey
@@ -45,20 +45,15 @@ android {
         debug {
             ext.enableCrashlytics = false
             resValue("bool", "FIREBASE_ANALYTICS_DEACTIVATED", "true")
-            debuggable true
+            debuggable = true
         }
 
         release {
-            minifyEnabled false
+            minifyEnabled = false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            multiDexEnabled true
+            multiDexEnabled = true
             ext.enableCrashlytics = true
             resValue("bool", "FIREBASE_ANALYTICS_DEACTIVATED", "false")
-            android.applicationVariants.all { variant ->
-                variant.outputs.all {
-                    outputFileName = "AFIExplorer_"+ "${versionCode}_${variant.flavorName}_${variant.buildType.name}.apk"
-                }
-            }
         }
     }
     compileOptions {
@@ -69,8 +64,8 @@ android {
         jvmTarget = '17'
     }
     buildFeatures {
-        viewBinding true
-        buildConfig true
+        viewBinding = true
+        buildConfig = true
     }
     sourceSets {
         named("androidTest") {
@@ -105,21 +100,21 @@ dependencies {
     // Room components
     implementation 'androidx.room:room-runtime:2.6.1'
     implementation "androidx.room:room-ktx:2.6.1"
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.5'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.6'
     implementation 'androidx.preference:preference-ktx:1.2.1'
     ksp 'androidx.room:room-compiler:2.6.1'
 
     // Firebase
-    implementation 'com.google.firebase:firebase-crashlytics:19.1.0'
-    implementation 'com.google.firebase:firebase-analytics:22.1.0'
+    implementation 'com.google.firebase:firebase-crashlytics:19.2.0'
+    implementation 'com.google.firebase:firebase-analytics:22.1.2'
 
     // Navigation
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.8.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.8.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.8.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.8.3'
 
     // Lifecycle
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.8.5'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.5'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.8.6'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6'
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
 
     // Toasty - Usual Toast, but with Steroids
@@ -139,5 +134,5 @@ dependencies {
     implementation ("com.maxkeppeler.sheets:lottie:2.3.1")
 
     // Lottie Files
-    implementation ("com.airbnb.android:lottie:6.4.0")
+    implementation ("com.airbnb.android:lottie:6.5.2")
 }

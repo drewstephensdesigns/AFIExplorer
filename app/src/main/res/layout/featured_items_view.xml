@@ -44,9 +44,9 @@
                 android:fontFamily="@font/noto_sans"
                 android:layout_height="wrap_content"
                 android:maxLines="3"
-                tools:text="The Brown Book"
+                tools:text="Air Force Doctrine Publication 1-1"
                 android:textAlignment="center"
-                android:textSize="25sp" />
+                android:textSize="22sp" />
 
         </LinearLayout>
 

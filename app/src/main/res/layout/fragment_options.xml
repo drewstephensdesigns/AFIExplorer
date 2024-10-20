@@ -5,19 +5,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="?actionBarSize"
+    android:paddingBottom="20dp"
     android:fillViewport="true">
 
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="?actionBarSize">
+    android:paddingBottom="75dp">
 
     <ImageView
         android:id="@+id/icon_app_main"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:layout_marginTop="@dimen/large_margin"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
         android:src="@mipmap/ic_launcher"
         android:contentDescription="@string/change_theme" />

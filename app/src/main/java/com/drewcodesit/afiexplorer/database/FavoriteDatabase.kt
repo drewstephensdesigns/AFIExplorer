@@ -10,8 +10,8 @@ import com.drewcodesit.afiexplorer.utils.Config
 
 @Database(
     entities = [FavoriteEntity::class],
-    version = 6,
-    autoMigrations = [AutoMigration (from = 5, to = 6)],
+    version = 7,
+    autoMigrations = [AutoMigration (from = 6, to = 7)],
     exportSchema = true
 )
 

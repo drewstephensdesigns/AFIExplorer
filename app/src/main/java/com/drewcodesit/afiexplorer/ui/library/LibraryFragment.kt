@@ -21,6 +21,7 @@ import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.database.FavoriteDatabase
 import com.drewcodesit.afiexplorer.database.FavoriteEntity
 import com.drewcodesit.afiexplorer.databinding.FragmentLibraryBinding
+import com.drewcodesit.afiexplorer.models.Pubs
 import com.drewcodesit.afiexplorer.utils.FavesListenerItem
 import com.maxkeppeler.sheets.core.ButtonStyle
 import com.maxkeppeler.sheets.core.SheetStyle
@@ -165,14 +166,30 @@ class LibraryFragment : Fragment(), FavesListenerItem {
         }
     }
 
+    // Force code document URL due to api.afiexplorer.com not being updated
+    private fun updateDocumentUrlForSpecificPubs(favedItems: FavoriteEntity) {
+        favedItems.pubDocumentUrl = when (favedItems.pubTitle) {
+            "JTR" -> "https://media.defense.gov/2022/Jan/04/2002917147/-1/-1/1/JTR.PDF"
+            "Air Transportation Eligibility" -> "https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/451513p.pdf"
+            else -> favedItems.pubDocumentUrl
+        }
+    }
+
+
     // Opens document from the Favorites Screen
     // If PDF Reader installed the doc will open natively
     // Else falls back to the PDFViewer Activity
     override fun onFavesSelectedListener(onOpened: FavoriteEntity) {
         try {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.setDataAndType(Uri.parse(onOpened.pubDocumentUrl), "application/pdf")
-            startActivity(intent)
+            if (onOpened.pubNumber == "JTR"){
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.setDataAndType(Uri.parse(resources.getString(R.string.updated_jtr_link)), "application/pdf")
+                startActivity(intent)
+            } else{
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.setDataAndType(Uri.parse(onOpened.pubDocumentUrl), "application/pdf")
+                startActivity(intent)
+            }
         } catch (e: ActivityNotFoundException) {
             startActivity(
                 // Use 'launchPdfFromPath' if you want to use assets file (enable "fromAssets" flag) / internal directory

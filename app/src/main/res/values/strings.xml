@@ -106,4 +106,7 @@
     <string name="recently_updated_subheader">New publications and revisions</string>
     <string name="quick_links_header">App Quick Links</string>
 
+    <string name="updated_jtr_link">https://media.defense.gov/2022/Jan/04/2002917147/-1/-1/1/JTR.PDF</string>
+    <string name="updated_ate_link">https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/451513p.pdf</string>
+
 </resources>

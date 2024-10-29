@@ -271,38 +271,57 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
     }
 
     override fun onMainPubsClickListener(pubs: Pubs) {
-        //firebaseAnalytics.logEvent("main_pubs_view"){ param("event_name", pubs.pubTitle!!) }
+        firebaseAnalytics.logEvent("main_pubs_view"){ param("event_name", pubs.pubTitle!!) }
         try {
-            if (pubs.pubDocumentUrl?.contains("generic_restricted.pdf") == true
-                || (pubs.pubDocumentUrl?.contains("restricted_access.pdf")) == true
-                || (pubs.pubDocumentUrl?.contains("for_official_use_only.pdf")) == true
-                || (pubs.pubDocumentUrl?.contains("generic_fouo.pdf")) == true
-                || (pubs.pubDocumentUrl?.contains("stocked_and_issued")) == true
-                || (pubs.pubDocumentUrl?.contains("generic_opr1.pdf")) == true
-                || (pubs.pubDocumentUrl?.contains("generic_opr.pdf")) == true
-            ) {
+            updateDocumentUrlForSpecificPubs(pubs)
+            if (isRestrictedDocument(pubs.pubDocumentUrl)) {
                 showRestrictedToast(getString(R.string.pub_restricted))
-
             } else {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.setDataAndType(Uri.parse(pubs.pubDocumentUrl), "application/pdf")
-                startActivity(intent)
+                openPdfDocument(pubs.pubDocumentUrl, pubs.pubTitle)
             }
-
-            // Launches PDFViewer Library if no reader is installed
-            // Source: https://github.com/afreakyelf/Pdf-Viewer
         } catch (e: ActivityNotFoundException) {
-            startActivity(
-                // Use 'launchPdfFromPath' if you want to use assets file (enable "fromAssets" flag) / internal directory
-                PdfViewerActivity.launchPdfFromUrl(     //PdfViewerActivity.Companion.launchPdfFromUrl(..   :: in-case of JAVA
-                    requireContext(),
-                    "${pubs.pubDocumentUrl}",     // PDF URL in String format
-                    "${pubs.pubTitle}",          // PDF Name/Title in String format
-                    "",                  // If nothing specific, Put "" it will save to Downloads
-                    enableDownload = true             // This param is true by default.
-                )
-            )
+            openPdfWithFallback(pubs.pubDocumentUrl, pubs.pubTitle)
         }
+    }
+
+    // Force code document URL due to api.afiexplorer.com not being updated
+    private fun updateDocumentUrlForSpecificPubs(pubs: Pubs) {
+        pubs.pubDocumentUrl = when (pubs.pubID) {
+            10 -> requireContext().getString(R.string.updated_jtr_link)
+            18 -> requireContext().getString(R.string.updated_ate_link)
+            else -> pubs.pubDocumentUrl
+        }
+    }
+
+    // Restricted pubs are still listed on e-pubs, but open a generic page
+    // describing actual location. This displays a Toast indicating the
+    // file is not publicly accessible
+    private fun isRestrictedDocument(url: String?): Boolean {
+        return url?.let {
+            listOf(
+                "generic_restricted.pdf", "restricted_access.pdf", "for_official_use_only.pdf",
+                "generic_fouo.pdf", "stocked_and_issued", "generic_opr1.pdf", "generic_opr.pdf"
+            ).any { it in url }
+        } == true
+    }
+
+    private fun openPdfDocument(url: String?, title: String?) {
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            setDataAndType(Uri.parse(url), "application/pdf")
+        }
+        startActivity(intent)
+    }
+
+    private fun openPdfWithFallback(url: String?, title: String?) {
+        startActivity(
+            PdfViewerActivity.launchPdfFromUrl(
+                requireContext(),
+                url.orEmpty(),
+                title.orEmpty(),
+                "",  // If nothing specific, leave empty
+                enableDownload = true
+            )
+        )
     }
 
     // Callback to refresh (show all) publications list when user selects back button

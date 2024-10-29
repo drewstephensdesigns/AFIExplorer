@@ -48,19 +48,46 @@ class LibraryAdapter(
                 popup.setOnMenuItemClickListener {item ->
                     when(item.itemId){
                         R.id.menuActionCopy ->{
-                            Config.save(ct, saved.pubDocumentUrl)
+                            if(saved.pubNumber == "DODI4515.13"){
+                                Config.save(ct, ct.getString(R.string.updated_ate_link))
+                            }
+                            if(saved.pubNumber == "JTR"){
+                                Config.save(ct, ct.getString(R.string.updated_jtr_link))
+                            }else {
+                                Config.save(ct, saved.pubDocumentUrl)
+                            }
                         }
 
                         R.id.menuActionShare ->{
-                            val sendIntent: Intent = Intent().apply {
-                                action = Intent.ACTION_SEND
-                                putExtra(Intent.EXTRA_TEXT, saved.pubDocumentUrl)
-                                type = "text/plain"
+                            if (saved.pubNumber == "DODI4515.13"){
+                                val sendIntent: Intent = Intent().apply {
+                                    action = Intent.ACTION_SEND
+                                    putExtra(Intent.EXTRA_TEXT, ct.getString(R.string.updated_ate_link))
+                                    type = "text/plain"
+                                }
+                                val shareIntent = Intent.createChooser(sendIntent, null)
+                                shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                ContextCompat.startActivity(ct, shareIntent, null)
                             }
-
-                            val shareIntent = Intent.createChooser(sendIntent, null)
-                            shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            ContextCompat.startActivity(ct, shareIntent, null)
+                            if(saved.pubNumber == "JTR"){
+                                val sendIntent: Intent = Intent().apply {
+                                    action = Intent.ACTION_SEND
+                                    putExtra(Intent.EXTRA_TEXT, ct.getString(R.string.updated_jtr_link))
+                                    type = "text/plain"
+                                }
+                                val shareIntent = Intent.createChooser(sendIntent, null)
+                                shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                ContextCompat.startActivity(ct, shareIntent, null)
+                            }else{
+                                val sendIntent: Intent = Intent().apply {
+                                    action = Intent.ACTION_SEND
+                                    putExtra(Intent.EXTRA_TEXT, saved.pubDocumentUrl)
+                                    type = "text/plain"
+                                }
+                                val shareIntent = Intent.createChooser(sendIntent, null)
+                                shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                ContextCompat.startActivity(ct, shareIntent, null)
+                            }
                         }
 
                         R.id.menuActionDelete ->{

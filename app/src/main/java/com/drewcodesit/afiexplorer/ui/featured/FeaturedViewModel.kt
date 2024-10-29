@@ -1,6 +1,7 @@
 package com.drewcodesit.afiexplorer.ui.featured
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -11,10 +12,15 @@ import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 import java.lang.Exception
+import kotlin.math.log
 
 class FeaturedViewModel(
     private val app: Application
@@ -49,13 +55,14 @@ class FeaturedViewModel(
 
                 _featuredPublications.postValue(_featuredItemsList)
             } catch (e: Exception){
-                showErrorToast()
+                showErrorToast("Error: $e")
+                Log.e("Featured View Model", "Error is: $e")
             }
         }
     }
 
-    private fun showErrorToast(){
-        Toasty.error(app.applicationContext, R.string.no_internet, Toasty.LENGTH_SHORT, false).show()
+    private fun showErrorToast(message: String){
+        Toasty.error(app.applicationContext, message, Toasty.LENGTH_SHORT, false).show()
     }
 
     interface ApiService{

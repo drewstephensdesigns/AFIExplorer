@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -25,6 +27,7 @@ import com.drewcodesit.afiexplorer.utils.DotsIndicatorDecoration
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.rajat.pdfviewer.PdfViewerActivity
 import es.dmoral.toasty.Toasty
+import kotlinx.coroutines.launch
 
 class FeaturedFragment : Fragment(),
     FeaturedAdapter.FeaturedCardClickListener,

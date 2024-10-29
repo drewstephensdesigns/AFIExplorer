@@ -20,6 +20,8 @@ object Config {
     // Table
     const val TABLE_NAME = "favoriteslist"
 
+    const val SPOC_Pubs = "https://www.e-publishing.af.mil/DesktopModules/MVC/EPUBS/EPUB/GetPubsBySeriesView/?orgID=47&catID=20&series=-1#"
+
     fun save(context: Context, text: String) {
         val clip = ClipData.newPlainText(context.getString(R.string.copied_to_clipboard), text)
         context.getSystemService<ClipboardManager>()!!.setPrimaryClip(clip)

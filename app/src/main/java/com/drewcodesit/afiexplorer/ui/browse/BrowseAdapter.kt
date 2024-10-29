@@ -74,6 +74,14 @@ class BrowseAdapter(
 
         val fEntity = FavoriteEntity().apply {
             id = publications.pubID
+
+            if(publications.pubNumber == "JTR"){
+                pubDocumentUrl = ct.getString(R.string.updated_jtr_link)
+            }
+            if(publications.pubNumber == "DODI4515.13"){
+                pubDocumentUrl = ct.getString(R.string.updated_ate_link)
+            }
+
             pubNumber = publications.pubNumber!!
             pubTitle = publications.pubTitle!!
             pubDocumentUrl = publications.pubDocumentUrl!!
@@ -137,6 +145,9 @@ class BrowseAdapter(
                         // Bookmark
                         R.id.mSave -> {
                             if (favoriteDAO?.titleExists(publications.pubNumber.toString()) == 0) {
+                                if (publications.pubNumber == "JTR"){
+                                    publications.pubDocumentUrl = ct.getString(R.string.updated_jtr_link)
+                                }
                                 favoriteDAO.addData(fEntity)
                                 showSuccessToast("${publications.pubNumber}: added to database!")
                             } else {
@@ -147,11 +158,21 @@ class BrowseAdapter(
 
                         // Copy AFI URL
                         R.id.mCopyURL -> {
-                            Config.save(ct, publications.pubDocumentUrl!!)
+                            when(publications.pubID){
+                                10 -> Config.save(ct, ct.getString(R.string.updated_jtr_link))
+                                18 -> Config.save(ct, ct.getString(R.string.updated_ate_link))
+                                else ->Config.save(ct, publications.pubDocumentUrl!!)
+                            }
                         }
 
                         // Share AFI by URL
                         R.id.mShare -> {
+                            if (publications.pubID == 10){
+                                publications.pubDocumentUrl = ct.getString(R.string.updated_jtr_link)
+                            }
+                            if (publications.pubID == 18){
+                                publications.pubDocumentUrl = ct.getString(R.string.updated_ate_link)
+                            }
                             val sendIntent: Intent = Intent().apply {
                                 action = Intent.ACTION_SEND
                                 putExtra(Intent.EXTRA_TEXT, publications.pubDocumentUrl)

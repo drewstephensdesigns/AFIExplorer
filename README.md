@@ -48,7 +48,6 @@
 </div>
 
 
-
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
@@ -85,14 +84,12 @@ This app was born out of necessity and started as a proof of concept by two U.S 
 
 <h3 align="center">Screenshots</h3>
 <div align="center"; style="width:100%; display:flex; justify-content:space-between;">
-
-  [<img src="screenshots/screenshot1.jpeg" width=16% alt="Explorer">]()
-  [<img src="screenshots/screenshot2.jpeg" width=16% alt="Search">]()
-  [<img src="screenshots/light_2.png" width=16% alt="Native Viewing">]()
-  [<img src="screenshots/screenshot3.jpeg" width=16% alt="Save">]()
-  [<img src="screenshots/screenshot4.jpeg" width=16% alt="Filter">]()
-  [<img src="screenshots/screenshot5.jpeg" width=16% alt="Themes">]()
-
+  <img src="screenshots/screenshot1.jpeg" width=16% alt="Explorer">
+  <img src="screenshots/screenshot2.jpeg" width=16% alt="Search">
+  <img src="screenshots/light_2.png" width=16% alt="Native Viewing">
+  <img src="screenshots/screenshot3.jpeg" width=16% alt="Save">
+  <img src="screenshots/screenshot4.jpeg" width=16% alt="Filter">
+  <img src="screenshots/screenshot5.jpeg" width=16% alt="Themes">
 </div>
 
 ### Built With 🛠

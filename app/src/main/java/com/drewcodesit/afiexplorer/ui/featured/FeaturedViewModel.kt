@@ -5,22 +5,16 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.models.Pubs
 import com.drewcodesit.afiexplorer.utils.Config
 import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Query
 import java.lang.Exception
-import kotlin.math.log
 
 class FeaturedViewModel(
     private val app: Application
@@ -43,7 +37,7 @@ class FeaturedViewModel(
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
 
-                val service = retrofit.create(ApiService::class.java)
+                val service = retrofit.create(FeaturedApiService::class.java)
                 val response = withContext(Dispatchers.IO){
                     service.getFeaturedPublications()
                 }
@@ -65,7 +59,7 @@ class FeaturedViewModel(
         Toasty.error(app.applicationContext, message, Toasty.LENGTH_SHORT, false).show()
     }
 
-    interface ApiService{
+    interface FeaturedApiService{
         @GET("data.json")
         suspend fun getFeaturedPublications() : List<Pubs>
     }

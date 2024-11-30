@@ -11,18 +11,16 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
-import androidx.room.RoomDatabase
 import com.drewcodesit.afiexplorer.MainActivity
 import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.databinding.FragmentOptionsBinding
 import com.drewcodesit.afiexplorer.utils.Config
+import com.drewcodesit.afiexplorer.utils.Config.getDBVersion
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.snackbar.Snackbar
 import com.maxkeppeler.sheets.core.SheetStyle
 import com.maxkeppeler.sheets.info.InfoSheet
-import com.maxkeppeler.sheets.lottie.LottieAnimation
-import com.maxkeppeler.sheets.lottie.withCoverLottieAnimation
 import com.maxkeppeler.sheets.option.DisplayMode
 import com.maxkeppeler.sheets.option.Option
 import com.maxkeppeler.sheets.option.OptionSheet
@@ -60,7 +58,10 @@ class OptionsFragment : Fragment() {
         val versionName = requireActivity().packageManager.getPackageInfo(requireActivity().packageName, 0).versionName
         val formattedVersionText = resources.getString(R.string.version_text, versionHeader, versionName)
 
+        binding.iconAppMain.setOnClickListener { showDeviceInfo() }
+
         binding.textBuildVersion.text = formattedVersionText
+        binding.textDatabaseVersion.text = resources.getString(R.string.database_version, requireContext().getDBVersion())
 
         // displays back arrow
         (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -72,6 +73,7 @@ class OptionsFragment : Fragment() {
          * Privacy Policy
          */
         binding.theme.setOnClickListener { changeTheme() }
+
         setupCard(binding.donate, resources.getString(R.string.app_sponsorship_url))
         setupCard(binding.rate, resources.getString(R.string.playstore_link))
         setupCard(binding.privacy, resources.getString(R.string.privacy_url))

@@ -45,11 +45,23 @@
         android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
         tools:text="Build Version: 1.0.0(Beta)"/>
 
+    <!-- Settings Header -->
+    <TextView
+        android:id="@+id/text_database_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_build_version"
+        android:layout_marginStart="@dimen/xlarge_margin"
+        android:text="@string/versionName"
+        android:fontFamily="@font/roboto"
+        android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+        tools:text="Database Version: 8"/>
+
     <!-- Theme Change -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/theme"
         android:layout_marginTop="@dimen/small_margin"
-        android:layout_below="@id/text_build_version"
+        android:layout_below="@id/text_database_version"
         style="@style/AboutCard">
         <androidx.appcompat.widget.AppCompatTextView
             style="@style/AboutItem"

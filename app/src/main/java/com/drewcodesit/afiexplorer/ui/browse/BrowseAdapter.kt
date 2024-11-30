@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
@@ -15,6 +17,7 @@ import android.widget.TextView
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -74,14 +77,6 @@ class BrowseAdapter(
 
         val fEntity = FavoriteEntity().apply {
             id = publications.pubID
-
-            if(publications.pubNumber == "JTR"){
-                pubDocumentUrl = ct.getString(R.string.updated_jtr_link)
-            }
-            if(publications.pubNumber == "DODI4515.13"){
-                pubDocumentUrl = ct.getString(R.string.updated_ate_link)
-            }
-
             pubNumber = publications.pubNumber!!
             pubTitle = publications.pubTitle!!
             pubDocumentUrl = publications.pubDocumentUrl!!
@@ -145,9 +140,6 @@ class BrowseAdapter(
                         // Bookmark
                         R.id.mSave -> {
                             if (favoriteDAO?.titleExists(publications.pubNumber.toString()) == 0) {
-                                if (publications.pubNumber == "JTR"){
-                                    publications.pubDocumentUrl = ct.getString(R.string.updated_jtr_link)
-                                }
                                 favoriteDAO.addData(fEntity)
                                 showSuccessToast("${publications.pubNumber}: added to database!")
                             } else {
@@ -158,27 +150,16 @@ class BrowseAdapter(
 
                         // Copy AFI URL
                         R.id.mCopyURL -> {
-                            when(publications.pubID){
-                                10 -> Config.save(ct, ct.getString(R.string.updated_jtr_link))
-                                18 -> Config.save(ct, ct.getString(R.string.updated_ate_link))
-                                else ->Config.save(ct, publications.pubDocumentUrl!!)
-                            }
+                            Config.save(ct, publications.pubDocumentUrl!!)
                         }
 
                         // Share AFI by URL
                         R.id.mShare -> {
-                            if (publications.pubID == 10){
-                                publications.pubDocumentUrl = ct.getString(R.string.updated_jtr_link)
-                            }
-                            if (publications.pubID == 18){
-                                publications.pubDocumentUrl = ct.getString(R.string.updated_ate_link)
-                            }
                             val sendIntent: Intent = Intent().apply {
                                 action = Intent.ACTION_SEND
                                 putExtra(Intent.EXTRA_TEXT, publications.pubDocumentUrl)
                                 type = "text/plain"
                             }
-
                             val shareIntent = Intent.createChooser(sendIntent, null)
                             shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             startActivity(ct, shareIntent, null)
@@ -231,18 +212,32 @@ class BrowseAdapter(
         return object : Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val charString = constraint?.toString() ?: ""
-                publicationsList = if (charString.isEmpty()) pubsList else {
-                    val filteredList = ArrayList<Pubs>()
-                    pubsList.filter {
-                        it.pubTitle!!.contains(charString, ignoreCase = true) or it.pubNumber!!.contains(
-                            charString,
-                            ignoreCase = true
-                        ) or it.pubRescindOrg!!.contains(charString, ignoreCase = true)
-                    }.forEach {
-                        filteredList.add(it)
+                if (charString.equals("Air Force", ignoreCase = true)) {
+                    // Special case for Air Force
+                    showEasterEgg(
+                        "Air Force: To Fly, Fight, and Win!",
+                        R.drawable.air_force_logo
+                    )
+                } else if (charString.equals("Space Force", ignoreCase = true)) {
+                    // Special case for Space Force
+                    showEasterEgg(
+                        "Space Force: Semper Supra!",
+                        R.drawable.space_force_logo
+                    )
+                } else{
+                    publicationsList = if (charString.isEmpty()) pubsList else {
+                        val filteredList = ArrayList<Pubs>()
+                        pubsList.filter {
+                            it.pubTitle!!.contains(charString, ignoreCase = true) or it.pubNumber!!.contains(
+                                charString,
+                                ignoreCase = true
+                            ) or it.pubRescindOrg!!.contains(charString, ignoreCase = true)
+                        }.forEach {
+                            filteredList.add(it)
 
+                        }
+                        filteredList
                     }
-                    filteredList
                 }
                 return FilterResults().apply { values = publicationsList }
             }
@@ -257,6 +252,13 @@ class BrowseAdapter(
                 results.count = searchResults.size
                 notifyDataSetChanged()
             }
+        }
+    }
+
+    private fun showEasterEgg(message: String, drawable: Int?) {
+        val logo = ResourcesCompat.getDrawable(ct.resources, drawable!!, ct.theme)
+        Handler(Looper.getMainLooper()).post {
+            Toasty.normal(ct, message, logo).show()
         }
     }
 
@@ -288,13 +290,12 @@ class BrowseAdapter(
             @SuppressLint("NotifyDataSetChanged")
             @Suppress("UNCHECKED_CAST")
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                publicationsList = results?.values as ArrayList<Pubs>
-                results.count = publicationsList.size
+                val searchResults: ArrayList<Pubs> = results?.values as ArrayList<Pubs>
+                publicationsList = searchResults
                 notifyDataSetChanged()
             }
         }
     }
-
 
     inner class BrowseVH(binding: BrowseItemsViewBinding) : RecyclerView.ViewHolder(binding.root){
 

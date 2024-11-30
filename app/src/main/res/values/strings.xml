@@ -25,19 +25,18 @@
     <string name="action_navigate_back">Press back again to navigate</string>
     <string name="action_filter">Filter</string>
 
+
     <string name="action_nuke_database">This action will delete the entire database…</string>
 
     <!-- Hints/Notices -->
     <string name="search_hint">Search pubs…</string>
     <string name="no_results_found">No Results Found for %1$s</string>
     <string name="no_results_found_db">"No saved items \n Add publications from the \n home screen to view later."</string>
-    <string name="no_internet">Connection Error</string>
 
     <string name="pub_restricted">Restricted, see E-Pubs for official source</string>
 
     <!-- Shared Preference Keys-->
     <string name="pref_key_mode_night">PREF_MODE_NIGHT</string>
-    <string name="pref_key_sort_title">PREF_SORT_TITLE</string>
 
     <!-- Publication Actions for Clarity -->
     <string name="ac">Last Action: Administrative Change</string>
@@ -61,6 +60,7 @@
     <string name="open_copied">Open</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="see_all">See All</string>
+    <string name="database_version">Database Version: %s</string>
 
     <!-- Social Media Links -->
     <string name="epubs_notice">E-Pubs Product Announcements</string>

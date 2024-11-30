@@ -21,7 +21,6 @@ import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.database.FavoriteDatabase
 import com.drewcodesit.afiexplorer.database.FavoriteEntity
 import com.drewcodesit.afiexplorer.databinding.FragmentLibraryBinding
-import com.drewcodesit.afiexplorer.models.Pubs
 import com.drewcodesit.afiexplorer.utils.FavesListenerItem
 import com.maxkeppeler.sheets.core.ButtonStyle
 import com.maxkeppeler.sheets.core.SheetStyle
@@ -32,7 +31,6 @@ import com.maxkeppeler.sheets.lottie.LottieAnimation
 import com.maxkeppeler.sheets.lottie.withCoverLottieAnimation
 import com.rajat.pdfviewer.PdfViewerActivity
 import es.dmoral.toasty.Toasty
-import java.util.Collections
 
 
 class LibraryFragment : Fragment(), FavesListenerItem {
@@ -40,8 +38,6 @@ class LibraryFragment : Fragment(), FavesListenerItem {
     private var _binding: FragmentLibraryBinding? = null
 
     private var favesAdapter: LibraryAdapter? = null
-
-
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -62,7 +58,7 @@ class LibraryFragment : Fragment(), FavesListenerItem {
 
     // Initializes the menu for the by inflating a menu resource and setting up a MenuProvider
     // to handle menu creation, visibility, and item selection.
-    private fun initMenu(){
+    private fun initMenu() {
         (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
             override fun onPrepareMenu(menu: Menu) {
                 // Handle for example visibility of menu items
@@ -76,15 +72,20 @@ class LibraryFragment : Fragment(), FavesListenerItem {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.action_filter_faves -> {
-                        InputSheet().show(requireContext()){
+                        InputSheet().show(requireContext()) {
                             style(SheetStyle.BOTTOM_SHEET)
                             title("Sort By")
                             with(InputRadioButtons {
                                 options(mutableListOf("Publication Title", "Publication Number"))
                                 changeListener { value ->
-                                    when(value){
-                                        0 -> {favesAdapter?.sortFavorites() }
-                                        1 -> {favesAdapter?.sortFavoritesByNumber()}
+                                    when (value) {
+                                        0 -> {
+                                            favesAdapter?.sortFavorites()
+                                        }
+
+                                        1 -> {
+                                            favesAdapter?.sortFavoritesByNumber()
+                                        }
                                     }
                                 }
                             })
@@ -92,18 +93,20 @@ class LibraryFragment : Fragment(), FavesListenerItem {
                         true
                     }
 
-                    R.id.action_clear_database ->{
+                    R.id.action_clear_database -> {
                         nukeDatabase()
                         true
                     }
 
-                    else -> { false }
+                    else -> {
+                        false
+                    }
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    private fun initUI(){
+    private fun initUI() {
         binding.rvFavorites.layoutManager = LinearLayoutManager(context)
         binding.rvFavorites.setHasFixedSize(true)
         binding.rvFavorites.apply {
@@ -118,8 +121,9 @@ class LibraryFragment : Fragment(), FavesListenerItem {
         }
     }
 
-    private fun fetchFaves(){
-        val favorites = FavoriteDatabase.getDatabase(requireContext()).favoriteDAO()?.getFavoriteData()
+    private fun fetchFaves() {
+        val favorites =
+            FavoriteDatabase.getDatabase(requireContext()).favoriteDAO()?.getFavoriteData()
 
         favesAdapter = LibraryAdapter(requireContext(), favorites!!, this, this)
         binding.rvFavorites.adapter = favesAdapter
@@ -140,8 +144,8 @@ class LibraryFragment : Fragment(), FavesListenerItem {
 
     //  Prompts user for confirmation before deleting the app's database using an InfoSheet dialog
     // with informative content and a caution animation.
-    private fun nukeDatabase(){
-        InfoSheet().show(requireContext()){
+    private fun nukeDatabase() {
+        InfoSheet().show(requireContext()) {
             style(SheetStyle.DIALOG)
             // withIconButton(IconButton( R.drawable.ic_error)){}
             title("Delete Database?")
@@ -166,30 +170,14 @@ class LibraryFragment : Fragment(), FavesListenerItem {
         }
     }
 
-    // Force code document URL due to api.afiexplorer.com not being updated
-    private fun updateDocumentUrlForSpecificPubs(favedItems: FavoriteEntity) {
-        favedItems.pubDocumentUrl = when (favedItems.pubTitle) {
-            "JTR" -> "https://media.defense.gov/2022/Jan/04/2002917147/-1/-1/1/JTR.PDF"
-            "Air Transportation Eligibility" -> "https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/451513p.pdf"
-            else -> favedItems.pubDocumentUrl
-        }
-    }
-
-
     // Opens document from the Favorites Screen
     // If PDF Reader installed the doc will open natively
     // Else falls back to the PDFViewer Activity
     override fun onFavesSelectedListener(onOpened: FavoriteEntity) {
         try {
-            if (onOpened.pubNumber == "JTR"){
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.setDataAndType(Uri.parse(resources.getString(R.string.updated_jtr_link)), "application/pdf")
-                startActivity(intent)
-            } else{
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.setDataAndType(Uri.parse(onOpened.pubDocumentUrl), "application/pdf")
-                startActivity(intent)
-            }
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.setDataAndType(Uri.parse(onOpened.pubDocumentUrl), "application/pdf")
+            startActivity(intent)
         } catch (e: ActivityNotFoundException) {
             startActivity(
                 // Use 'launchPdfFromPath' if you want to use assets file (enable "fromAssets" flag) / internal directory
@@ -212,7 +200,7 @@ class LibraryFragment : Fragment(), FavesListenerItem {
         fetchFaves()
     }
 
-    private fun showDeleteToast(message: String){
+    private fun showDeleteToast(message: String) {
         Toasty.info(requireContext(), message, R.drawable.ic_error).show()
     }
 

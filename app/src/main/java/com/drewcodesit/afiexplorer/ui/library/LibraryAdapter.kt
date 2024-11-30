@@ -2,14 +2,12 @@ package com.drewcodesit.afiexplorer.ui.library
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.drewcodesit.afiexplorer.R
@@ -17,9 +15,6 @@ import com.drewcodesit.afiexplorer.database.FavoriteEntity
 import com.drewcodesit.afiexplorer.databinding.LibraryItemsViewBinding
 import com.drewcodesit.afiexplorer.utils.Config
 import com.drewcodesit.afiexplorer.utils.FavesListenerItem
-import java.util.Collections
-
-
 
 
 class LibraryAdapter(
@@ -48,46 +43,18 @@ class LibraryAdapter(
                 popup.setOnMenuItemClickListener {item ->
                     when(item.itemId){
                         R.id.menuActionCopy ->{
-                            if(saved.pubNumber == "DODI4515.13"){
-                                Config.save(ct, ct.getString(R.string.updated_ate_link))
-                            }
-                            if(saved.pubNumber == "JTR"){
-                                Config.save(ct, ct.getString(R.string.updated_jtr_link))
-                            }else {
-                                Config.save(ct, saved.pubDocumentUrl)
-                            }
+                            Config.save(ct, saved.pubDocumentUrl)
                         }
 
                         R.id.menuActionShare ->{
-                            if (saved.pubNumber == "DODI4515.13"){
-                                val sendIntent: Intent = Intent().apply {
-                                    action = Intent.ACTION_SEND
-                                    putExtra(Intent.EXTRA_TEXT, ct.getString(R.string.updated_ate_link))
-                                    type = "text/plain"
-                                }
-                                val shareIntent = Intent.createChooser(sendIntent, null)
-                                shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                ContextCompat.startActivity(ct, shareIntent, null)
+                            val sendIntent: Intent = Intent().apply {
+                                action = Intent.ACTION_SEND
+                                putExtra(Intent.EXTRA_TEXT, saved.pubDocumentUrl)
+                                type = "text/plain"
                             }
-                            if(saved.pubNumber == "JTR"){
-                                val sendIntent: Intent = Intent().apply {
-                                    action = Intent.ACTION_SEND
-                                    putExtra(Intent.EXTRA_TEXT, ct.getString(R.string.updated_jtr_link))
-                                    type = "text/plain"
-                                }
-                                val shareIntent = Intent.createChooser(sendIntent, null)
-                                shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                ContextCompat.startActivity(ct, shareIntent, null)
-                            }else{
-                                val sendIntent: Intent = Intent().apply {
-                                    action = Intent.ACTION_SEND
-                                    putExtra(Intent.EXTRA_TEXT, saved.pubDocumentUrl)
-                                    type = "text/plain"
-                                }
-                                val shareIntent = Intent.createChooser(sendIntent, null)
-                                shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                ContextCompat.startActivity(ct, shareIntent, null)
-                            }
+                            val shareIntent = Intent.createChooser(sendIntent, null)
+                            shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            ContextCompat.startActivity(ct, shareIntent, null)
                         }
 
                         R.id.menuActionDelete ->{

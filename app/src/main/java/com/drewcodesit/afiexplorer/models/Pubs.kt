@@ -5,6 +5,10 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+data class ApiResponse(
+    val publications: List<Pubs>
+)
+
 data class Pubs(
     @SerializedName("PubID")
     var pubID: Int,

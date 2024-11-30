@@ -1,6 +1,5 @@
 package com.drewcodesit.afiexplorer.ui.browse
 
-import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -14,7 +13,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
@@ -32,9 +30,7 @@ import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.databinding.FragmentBrowseBinding
 import com.drewcodesit.afiexplorer.models.Pubs
 import com.drewcodesit.afiexplorer.utils.LineDividerItemDecoration
-import com.google.android.material.internal.ViewUtils.hideKeyboard
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.logEvent
 import com.maxkeppeler.sheets.input.InputSheet
 import com.maxkeppeler.sheets.input.type.InputRadioButtons
 import com.maxkeppeler.sheets.input.type.spinner.InputSpinner
@@ -65,7 +61,6 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
             @RequiresApi(Build.VERSION_CODES.N)
             override fun handleOnBackPressed() {
                 refreshPubList()
-                //findNavController().navigate(R.id.navigation_featured)
             }
         }
 
@@ -123,7 +118,7 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
                 LineDividerItemDecoration(
                     context,
                     DividerItemDecoration.VERTICAL,
-                    36
+                    0
                 )
             )
         }
@@ -201,8 +196,9 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
                                 label("Select an Organization")
                                 options(
                                     mutableListOf(
-                                        "DoD",
-                                        "HAF",
+                                        "Department of Defense",
+                                        "Headquarters Air Force",
+                                        "Headquarters Space Force",
                                         "LeMay Center"
                                     )
                                 )
@@ -210,7 +206,8 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
                                 val orgs = mapOf(
                                     0 to "DoD",
                                     1 to "HAF",
-                                    2 to "LeMay Center"
+                                    2 to "USSF",
+                                    3 to "LeMay Center"
                                 )
 
                                 changeListener { value ->
@@ -223,16 +220,21 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
                                 label("Select a Command from the dropdown")
                                 options(
                                     mutableListOf(
-                                        "ACC",
-                                        "AMC",
-                                        "AETC",
-                                        "PACAF",
-                                        "USAFE-AFAFRICA",
-                                        "AFGSC",
-                                        "AFMC",
-                                        "AFRC",
-                                        "AFSOC",
-                                        "ANG"
+                                        "Air Combat Command",
+                                        "Air Mobility Command",
+                                        "Air Education & Training Command",
+                                        "Pacific Air Forces",
+                                        "US Air Forces in Europe-AFAFRICA",
+                                        "Air Force Global Strike Command",
+                                        "Air Force Material Command",
+                                        "Air Force Reserve Command",
+                                        "Air Force Special Operations Command",
+                                        "Air National Guard",
+                                        "Space Force/SPoC",
+                                        "Space Force/SSC",
+                                        "Space Force/STARCOM",
+                                        "Space Force/COO",
+                                        "Space Force/CSRO"
                                     )
                                 )
 
@@ -246,7 +248,12 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
                                     6 to "AFMC",
                                     7 to "AFRC",
                                     8 to "AFSOC",
-                                    9 to "ANG"
+                                    9 to "ANG",
+                                    10 to "SPoC",
+                                    11 to "SSC",
+                                    12 to "STARCOM",
+                                    13 to "COO",
+                                    14 to "CSRO"
                                 )
                                 changeListener { value ->
                                     commands[value]?.let {
@@ -271,9 +278,8 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
     }
 
     override fun onMainPubsClickListener(pubs: Pubs) {
-        firebaseAnalytics.logEvent("main_pubs_view"){ param("event_name", pubs.pubTitle!!) }
+       // firebaseAnalytics.logEvent("main_pubs_view"){ param("event_name", pubs.pubTitle!!) }
         try {
-            updateDocumentUrlForSpecificPubs(pubs)
             if (isRestrictedDocument(pubs.pubDocumentUrl)) {
                 showRestrictedToast(getString(R.string.pub_restricted))
             } else {
@@ -284,18 +290,10 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
         }
     }
 
-    // Force code document URL due to api.afiexplorer.com not being updated
-    private fun updateDocumentUrlForSpecificPubs(pubs: Pubs) {
-        pubs.pubDocumentUrl = when (pubs.pubID) {
-            10 -> requireContext().getString(R.string.updated_jtr_link)
-            18 -> requireContext().getString(R.string.updated_ate_link)
-            else -> pubs.pubDocumentUrl
-        }
-    }
-
     // Restricted pubs are still listed on e-pubs, but open a generic page
     // describing actual location. This displays a Toast indicating the
-    // file is not publicly accessible
+    // file is not publicly accessible (This only works for pdf's that have
+    // the below in the URL... Example AFH10-2401 is https://static.e-publishing.af.mil/production/1/af_a4/publication/afh10-2401/generic_restricted.pdf
     private fun isRestrictedDocument(url: String?): Boolean {
         return url?.let {
             listOf(

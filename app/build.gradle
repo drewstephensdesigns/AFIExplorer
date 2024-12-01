@@ -20,12 +20,12 @@ android {
 
         minSdkVersion 21
         targetSdkVersion 34
-        // version code changed to 38
+        // version code changed to 39
         // 30 OCT 24
-        versionCode 38
-        // version name changed to 2.1.2
+        versionCode 39
+        // version name changed to 2.1.3
         // 30 OCT 24
-        versionName "2.1.2"
+        versionName "2.1.3"
 
         ksp {
             arg("room.schemaLocation", "$projectDir/schemas")
@@ -134,5 +134,5 @@ dependencies {
     implementation ("com.maxkeppeler.sheets:lottie:2.3.1")
 
     // Lottie Files
-    implementation ("com.airbnb.android:lottie:6.5.2")
+    implementation ('com.airbnb.android:lottie:6.6.0')
 }

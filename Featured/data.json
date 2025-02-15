@@ -1,19 +1,5 @@
 [
   {
-    "PubID": 1,
-    "Number": "The Brown Book",
-    "Title": "THE ENLISTED FORCE STRUCTURE",
-    "RescindLevel": "AF/A1",
-    "DocumentUrl": "https://www.doctrine.af.mil/Portals/61/documents/Airman_Development/BrownBook.pdf"
-  },
-  {
-    "PubID": 2,
-    "Number": "The Blue Book",
-    "Title": "A PROFESSION OF ARMS: OUR CORE VALUES",
-    "RescindLevel": "AF/A1",
-    "DocumentUrl": "https://www.doctrine.af.mil/Portals/61/documents/Airman_Development/BlueBook.pdf"
-  },
-  {
     "PubID": 3,
     "Number": "Air Force Doctrine Publication 1-1",
     "Title": "MISSION COMMAND",
@@ -26,13 +12,6 @@
     "Title": "MILITARY LEAVE PROGRAM",
     "RescindLevel": "AF/A1",
     "DocumentUrl": "https://static.e-publishing.af.mil/production/1/af_a1/publication/dafi36-3003/dafi36-3003.pdf"
-  },
-   {
-    "PubID": 5,
-    "Number": "DAFI36-2903",
-    "Title": "DRESS AND PERSONAL APPEARANCE",
-    "RescindLevel": "AF/A1",
-    "DocumentUrl":"https://static.e-publishing.af.mil/production/1/af_a1/publication/dafi36-2903/dafi36-2903.pdf"
   },
    {
     "PubID": 6,

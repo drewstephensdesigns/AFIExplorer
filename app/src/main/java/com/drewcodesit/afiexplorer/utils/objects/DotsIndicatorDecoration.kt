@@ -1,4 +1,4 @@
-package com.drewcodesit.afiexplorer.utils
+package com.drewcodesit.afiexplorer.utils.objects
 
 import android.content.res.Resources
 import android.graphics.Canvas

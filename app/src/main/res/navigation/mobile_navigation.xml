@@ -3,26 +3,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_featured">
+    app:startDestination="@+id/navigation_browse">
 
+    <!-- Featured Screen -->
+    <!-- Check in MainActivity to only show once -->
     <fragment
         android:id="@+id/navigation_featured"
         android:name="com.drewcodesit.afiexplorer.ui.featured.FeaturedFragment"
         android:label="@string/app_featured"
         tools:layout="@layout/fragment_featured" />
 
+    <!-- Full Publications Screen -->
     <fragment
         android:id="@+id/navigation_browse"
         android:name="com.drewcodesit.afiexplorer.ui.browse.BrowseFragment"
         android:label="@string/app_home"
         tools:layout="@layout/fragment_browse" />
 
+    <!-- Saved Publications Screen -->
     <fragment
         android:id="@+id/navigation_library"
         android:name="com.drewcodesit.afiexplorer.ui.library.LibraryFragment"
         android:label="@string/app_faves"
         tools:layout="@layout/fragment_library" />
 
+    <!-- Options &amp; App Settings Screen -->
     <fragment
         android:id="@+id/navigation_options_menu"
         android:name="com.drewcodesit.afiexplorer.ui.options.OptionsFragment"

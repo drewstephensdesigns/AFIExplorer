@@ -3,13 +3,16 @@ package com.drewcodesit.afiexplorer.ui.browse
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.drewcodesit.afiexplorer.database.FavoriteDatabase
+import com.drewcodesit.afiexplorer.database.FavoriteEntity
 import com.drewcodesit.afiexplorer.interfaces.ApiService
 import com.drewcodesit.afiexplorer.models.Pubs
 import com.drewcodesit.afiexplorer.utils.Config
+import com.drewcodesit.afiexplorer.utils.toast.ToastType
 import com.google.gson.GsonBuilder
-import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -28,9 +31,19 @@ class BrowseViewModel(
     val browsePublications : MutableLiveData<List<Pubs>>
         get() = _browsePublications
 
+    private val _saveResult = MutableLiveData<String?>()
+    val saveResult: LiveData<String?> = _saveResult
+
+    private lateinit var database: FavoriteDatabase
+
+
     init {
+        initializeDatabase()
         fetchPublications()
     }
+
+    // Initialize the database here
+    private fun initializeDatabase() { database = FavoriteDatabase.getDatabase(app) }
 
     private fun fetchPublications() {
         viewModelScope.launch {
@@ -69,9 +82,7 @@ class BrowseViewModel(
                 )
 
                 // Fetch publications concurrently
-                val results = withContext(Dispatchers.IO) {
-                    endpoints.map { async { service.getPubs(it) } }.awaitAll()
-                }
+                val results = withContext(Dispatchers.IO) { endpoints.map { async { service.getPubs(it) } }.awaitAll() }
 
                 // Combine and process the results
                 val combinedPublications = results.flatMap { it.publications }
@@ -85,13 +96,26 @@ class BrowseViewModel(
                 _browsePublications.postValue(_browseItemsList)
 
             } catch (e: Exception) {
-                showErrorToast(e)
+                Config.showToast(app.applicationContext, "Error encountered:: $e", ToastType.ERROR, null)
                 Log.e("BROWSE VIEW MODEL", "Error is : $e")
             }
         }
     }
 
-    private fun showErrorToast(error: Exception){
-        Toasty.error(app.applicationContext, "Error: $error", Toasty.LENGTH_SHORT, false).show()
+    fun saveFavorite(favorite: FavoriteEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val exists = database.favoriteDAO()?.titleExists(favorite.pubNumber)
+            if (exists == 0) {
+                database.favoriteDAO()?.addData(favorite)
+                _saveResult.postValue("${favorite.pubNumber} saved!")
+            } else {
+                database.favoriteDAO()?.update(favorite)
+                _saveResult.postValue("${favorite.pubNumber} updated!")
+            }
+        }
+    }
+
+    fun resetSaveResult() {
+        _saveResult.value = null
     }
 }

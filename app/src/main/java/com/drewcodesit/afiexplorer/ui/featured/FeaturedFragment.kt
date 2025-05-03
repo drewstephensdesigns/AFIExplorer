@@ -21,10 +21,12 @@ import com.drewcodesit.afiexplorer.MainActivity
 import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.databinding.FragmentFeaturedBinding
 import com.drewcodesit.afiexplorer.models.Pubs
-import com.drewcodesit.afiexplorer.utils.DotsIndicatorDecoration
+import com.drewcodesit.afiexplorer.utils.objects.DotsIndicatorDecoration
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.rajat.pdfviewer.PdfViewerActivity
-import es.dmoral.toasty.Toasty
+import androidx.core.net.toUri
+import com.drewcodesit.afiexplorer.utils.Config
+import com.drewcodesit.afiexplorer.utils.toast.ToastType
 
 class FeaturedFragment : Fragment(),
     FeaturedAdapter.FeaturedCardClickListener,
@@ -87,7 +89,7 @@ class FeaturedFragment : Fragment(),
         onItemsFetched: (List<Pubs>) -> Unit
     ) {
         if (items.isEmpty()) {
-            showToast(errorMessage)
+            Config.showToast(requireContext(), errorMessage, ToastType.WARNING, null)
         } else {
             initUI()
             onItemsFetched(items)
@@ -161,24 +163,18 @@ class FeaturedFragment : Fragment(),
     }
 
     private fun openUrl(url: String) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        val intent = Intent(Intent.ACTION_VIEW, url.toUri())
         startActivity(intent)
     }
 
     private fun sendFeedback() {
         val versionName = context?.packageManager?.getPackageInfo(requireContext().packageName, 0)?.versionName
         val feedbackIntent = Intent(Intent.ACTION_SENDTO).apply {
-            data = Uri.parse(
-                "mailto:" + Uri.encode("drewstephensdesigns@gmail.com") +
-                        "?subject=" + Uri.encode("App Feedback: ") +
-                        resources.getString(R.string.app_name) + " $versionName"
-            )
+            data = ("mailto:" + Uri.encode("drewstephensdesigns@gmail.com") +
+                    "?subject=" + Uri.encode("App Feedback: ") +
+                    resources.getString(R.string.app_name) + " $versionName").toUri()
         }
         startActivity(Intent.createChooser(feedbackIntent, "Send feedback..."))
-    }
-
-    private fun showToast(message: String) {
-        Toasty.error(requireContext(), message, Toasty.LENGTH_SHORT, false).show()
     }
 
     override fun onFeaturedCardClickListener(featured: Pubs) {
@@ -192,7 +188,7 @@ class FeaturedFragment : Fragment(),
     private fun openPdf(url: String, title: String) {
         try {
             val intent = Intent(Intent.ACTION_VIEW).apply {
-                setDataAndType(Uri.parse(url), "application/pdf")
+                setDataAndType(url.toUri(), "application/pdf")
             }
             startActivity(intent)
         } catch (e: ActivityNotFoundException) {

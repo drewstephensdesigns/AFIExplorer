@@ -4,7 +4,6 @@ import android.app.SearchManager
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,26 +15,27 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
+import androidx.core.net.toUri
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.drewcodesit.afiexplorer.MainActivity
 import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.databinding.FragmentBrowseBinding
 import com.drewcodesit.afiexplorer.models.Pubs
-import com.drewcodesit.afiexplorer.utils.LineDividerItemDecoration
+import com.drewcodesit.afiexplorer.utils.Config.showToast
+import com.drewcodesit.afiexplorer.utils.toast.ToastType
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.maxkeppeler.sheets.input.InputSheet
 import com.maxkeppeler.sheets.input.type.InputRadioButtons
 import com.maxkeppeler.sheets.input.type.spinner.InputSpinner
 import com.rajat.pdfviewer.PdfViewerActivity
-import es.dmoral.toasty.Toasty
 
 class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
 
@@ -50,9 +50,7 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
     private var searchView: SearchView? = null
 
     private var browseAdapter : BrowseAdapter? = null
-    private var browseViewModel : BrowseViewModel? = null
-
-    private var isFirstBackPress: Boolean = true
+    private val browseViewModel : BrowseViewModel by viewModels({requireActivity()})
 
     //The OnBackPressedDispatcher is a class that allows you
     // to register a OnBackPressedCallback to a LifecycleOwner
@@ -76,51 +74,50 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
         initUI()
         setupMenu()
         initViewModel()
-
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
-            onBackPressedCallback
-        )
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressedCallback)
+        browseViewModel.saveResult.observe(viewLifecycleOwner) { message ->
+            message?.let {
+                showToast(requireContext(), it, ToastType.SUCCESS, null)
+                browseViewModel.resetSaveResult()
+            }
+        }
         return binding.root
     }
 
     private fun initViewModel(){
-        binding.loading.visibility = View.VISIBLE
-
-        browseViewModel = ViewModelProvider(requireActivity(),
-            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application))[BrowseViewModel::class.java]
-
-        browseViewModel?.browsePublications?.observe(viewLifecycleOwner){browseItems ->
-            browseItems.let {
-                browseAdapter = BrowseAdapter(requireContext(), it, this)
-                binding.loading.visibility = View.GONE
+        showSkeletonLoader(true)
+        browseViewModel.browsePublications.observe(viewLifecycleOwner){ items ->
+            showSkeletonLoader(false)
+            if (items.isNullOrEmpty()){
+                binding.noResultsFound.isVisible = true
+            } else {
+                binding.noResultsFound.isVisible = false
+                browseAdapter = BrowseAdapter(items, this, findNavController(), browseViewModel)
                 binding.recyclerView.adapter = browseAdapter
+                browseAdapter?.getPubs(items)
             }
-            when {
-                browseItems.isEmpty() ->{
-                    binding.noResultsFound.visibility = View.VISIBLE
-                }
+        }
+    }
 
-                browseItems != null -> {
-                    browseAdapter?.getPubs(browseItems)
-                }
+    private fun showSkeletonLoader(show: Boolean) {
+        binding.shimmerViewContainer.isVisible = show
+        binding.recyclerView.isVisible = !show
+        binding.shimmerViewContainer.apply {
+            if (show) {
+                startShimmer()
+                binding.shimmerRecyclerView.layoutManager = LinearLayoutManager(context)
+                binding.shimmerRecyclerView.adapter = ShimmerAdapter()
+            } else {
+                stopShimmer()
             }
         }
     }
 
     private fun initUI(){
-        binding.recyclerView.layoutManager = LinearLayoutManager(context)
-        binding.recyclerView.setHasFixedSize(true)
-
         binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
             itemAnimator = DefaultItemAnimator()
-            addItemDecoration(
-                LineDividerItemDecoration(
-                    context,
-                    DividerItemDecoration.VERTICAL,
-                    0
-                )
-            )
+            setHasFixedSize(true)
         }
     }
 
@@ -148,32 +145,7 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
                         }
 
                         override fun onQueryTextChange(newText: String?): Boolean {
-                            browseAdapter?.filter?.filter(newText) { i ->
-                                if (i == 0) {
-                                    _binding?.recyclerView?.visibility = View.GONE
-
-                                    // Hiding filter to prevent weird bug
-
-
-                                    // Displays the lottie animation
-                                    _binding?.noResultsFound?.visibility = View.VISIBLE
-                                    _binding?.noResultsFoundText?.visibility = View.VISIBLE
-                                    _binding?.noResultsFoundText?.text =
-                                        resources.getString(R.string.no_results_found, newText)
-                                } else {
-                                    val mainActivity = activity as? MainActivity
-                                    mainActivity?.supportActionBar?.title = resources.getString(R.string.app_home)
-
-                                    // Hides the lottie animation
-                                    _binding?.noResultsFound?.visibility = View.GONE
-                                    _binding?.noResultsFoundText?.visibility = View.GONE
-
-                                    // Displays the layout
-                                    _binding?.recyclerView?.visibility = View.VISIBLE
-
-                                }
-                            }
-
+                            updateSearchResults(newText)
                             return false
                         }
                     })
@@ -273,7 +245,7 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
     // Change ToolBar Title: (activity as MainActivity).supportActionBar?.title = ""
     // Source: https://stackoverflow.com/questions/27100007/set-a-title-in-toolbar-from-fragment-in-android
     private fun updateFilter(org: String, title: String) {
-        browseAdapter?.filterByRescindOrg()?.filter(org)
+        browseAdapter?.filter?.filter(org)
         (activity as MainActivity).supportActionBar?.title = title
     }
 
@@ -281,9 +253,9 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
        // firebaseAnalytics.logEvent("main_pubs_view"){ param("event_name", pubs.pubTitle!!) }
         try {
             if (isRestrictedDocument(pubs.pubDocumentUrl)) {
-                showRestrictedToast(getString(R.string.pub_restricted))
+                showToast(requireContext(), getString(R.string.pub_restricted), ToastType.ERROR, null)
             } else {
-                openPdfDocument(pubs.pubDocumentUrl, pubs.pubTitle)
+                openPdfDocument(pubs.pubDocumentUrl)
             }
         } catch (e: ActivityNotFoundException) {
             openPdfWithFallback(pubs.pubDocumentUrl, pubs.pubTitle)
@@ -303,9 +275,9 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
         } == true
     }
 
-    private fun openPdfDocument(url: String?, title: String?) {
+    private fun openPdfDocument(url: String?) {
         val intent = Intent(Intent.ACTION_VIEW).apply {
-            setDataAndType(Uri.parse(url), "application/pdf")
+            setDataAndType(url!!.toUri(), "application/pdf")
         }
         startActivity(intent)
     }
@@ -326,20 +298,20 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
     // or navigates back to featured fragment
     private fun refreshPubList() {
         (activity as MainActivity).supportActionBar?.title = resources.getString(R.string.app_home)
-
-        if (isFirstBackPress) {
-            isFirstBackPress = false
-            browseAdapter?.filterByRescindOrg()?.filter("")
-            Toasty.info(requireContext(), resources.getString(R.string.action_navigate_back), Toasty.LENGTH_SHORT, false).show()
-
-        } else {
-            findNavController().navigateUp()
+        browseAdapter?.filter?.filter("") { count ->
+            // This callback is executed after the filter is applied
+            binding.recyclerView.post { // Execute on the next UI frame
+                binding.recyclerView.scrollToPosition(0)
+            }
         }
     }
 
-    // Cleans up toast notification for restricted access publications
-    private fun showRestrictedToast(message: String) {
-        Toasty.error(requireContext(), message, Toasty.LENGTH_SHORT, false).show()
+    private fun updateSearchResults(newText: String?) {
+        browseAdapter?.filter?.filter(newText) { count ->
+            binding.noResultsFound.isVisible = count == 0 && !newText.isNullOrEmpty() // Show "no results" only when there's a query and no matches
+            binding.noResultsFoundText.isVisible = count == 0 && !newText.isNullOrEmpty()
+            binding.noResultsFoundText.text = getString(R.string.no_results_found, newText)
+        }
     }
 
     override fun onDestroyView() {

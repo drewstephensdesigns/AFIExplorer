@@ -29,6 +29,7 @@
     <string name="action_nuke_database">This action will delete the entire database…</string>
 
     <!-- Hints/Notices -->
+    <string name="delete_hint">You deleted %1$s</string>
     <string name="search_hint">Search pubs…</string>
     <string name="no_results_found">No Results Found for %1$s</string>
     <string name="no_results_found_db">"No saved items \n Add publications from the \n home screen to view later."</string>

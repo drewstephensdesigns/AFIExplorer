@@ -13,55 +13,24 @@
     android:layout_height="wrap_content"
     android:paddingBottom="75dp">
 
-    <ImageView
-        android:id="@+id/icon_app_main"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true"
-        android:src="@mipmap/ic_launcher"
-        android:contentDescription="@string/change_theme" />
+    <!-- Version Numbers -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/build_version"
+        android:layout_marginTop="@dimen/small_margin"
+        style="@style/AboutCard">
 
-    <!-- Settings Header -->
-    <TextView
-        android:id="@+id/text_settings_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/icon_app_main"
-        android:layout_marginStart="@dimen/xlarge_margin"
-        android:text="@string/app_settings"
-        android:fontFamily="@font/ibm_plex_sans"
-        android:textAppearance="@style/TextAppearance.Material3.HeadlineLarge" />
-
-    <!-- Settings Header -->
-    <TextView
-        android:id="@+id/text_build_version"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/text_settings_header"
-        android:layout_marginStart="@dimen/xlarge_margin"
-        android:text="@string/versionName"
-        android:fontFamily="@font/roboto"
-        android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
-        tools:text="Build Version: 1.0.0(Beta)"/>
-
-    <!-- Settings Header -->
-    <TextView
-        android:id="@+id/text_database_version"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/text_build_version"
-        android:layout_marginStart="@dimen/xlarge_margin"
-        android:text="@string/versionName"
-        android:fontFamily="@font/roboto"
-        android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
-        tools:text="Database Version: 8"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/AboutItem"
+            android:id="@+id/settings_number"
+            android:text="@string/versionName"
+            app:drawableStartCompat="@drawable/ic_database" />
+    </com.google.android.material.card.MaterialCardView>
 
     <!-- Theme Change -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/theme"
         android:layout_marginTop="@dimen/small_margin"
-        android:layout_below="@id/text_database_version"
+        android:layout_below="@id/build_version"
         style="@style/AboutCard">
         <androidx.appcompat.widget.AppCompatTextView
             style="@style/AboutItem"

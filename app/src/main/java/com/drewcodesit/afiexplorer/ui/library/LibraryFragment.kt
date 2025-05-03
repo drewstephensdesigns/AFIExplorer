@@ -1,15 +1,17 @@
 package com.drewcodesit.afiexplorer.ui.library
 
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -21,7 +23,6 @@ import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.database.FavoriteDatabase
 import com.drewcodesit.afiexplorer.database.FavoriteEntity
 import com.drewcodesit.afiexplorer.databinding.FragmentLibraryBinding
-import com.drewcodesit.afiexplorer.utils.FavesListenerItem
 import com.maxkeppeler.sheets.core.ButtonStyle
 import com.maxkeppeler.sheets.core.SheetStyle
 import com.maxkeppeler.sheets.info.InfoSheet
@@ -30,14 +31,21 @@ import com.maxkeppeler.sheets.input.type.InputRadioButtons
 import com.maxkeppeler.sheets.lottie.LottieAnimation
 import com.maxkeppeler.sheets.lottie.withCoverLottieAnimation
 import com.rajat.pdfviewer.PdfViewerActivity
-import es.dmoral.toasty.Toasty
+import androidx.core.net.toUri
+import com.drewcodesit.afiexplorer.utils.Config
+import com.drewcodesit.afiexplorer.utils.objects.LineDividerItemDecoration
+import com.drewcodesit.afiexplorer.utils.toast.ToastType
+import androidx.core.content.edit
 
 
-class LibraryFragment : Fragment(), FavesListenerItem {
+class LibraryFragment : Fragment() {
 
     private var _binding: FragmentLibraryBinding? = null
-
     private var favesAdapter: LibraryAdapter? = null
+
+    private var selectedSortOption = 0 // 0 = Title, 1 = Number
+    private val PREFS_NAME = "library_prefs"
+    private val PREF_SORT_OPTION = "sort_option"
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -49,6 +57,7 @@ class LibraryFragment : Fragment(), FavesListenerItem {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLibraryBinding.inflate(inflater, container, false)
+        selectedSortOption = getSavedSortOption() // load saved sort
         initMenu()
         initUI()
         fetchFaves()
@@ -72,30 +81,11 @@ class LibraryFragment : Fragment(), FavesListenerItem {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.action_filter_faves -> {
-                        InputSheet().show(requireContext()) {
-                            style(SheetStyle.BOTTOM_SHEET)
-                            title("Sort By")
-                            with(InputRadioButtons {
-                                options(mutableListOf("Publication Title", "Publication Number"))
-                                changeListener { value ->
-                                    when (value) {
-                                        0 -> {
-                                            favesAdapter?.sortFavorites()
-                                        }
-
-                                        1 -> {
-                                            favesAdapter?.sortFavoritesByNumber()
-                                        }
-                                    }
-                                }
-                            })
-                        }
-                        true
+                        filterOptions(); true
                     }
 
                     R.id.action_clear_database -> {
-                        nukeDatabase()
-                        true
+                        nukeDatabase(); true
                     }
 
                     else -> {
@@ -112,7 +102,7 @@ class LibraryFragment : Fragment(), FavesListenerItem {
         binding.rvFavorites.apply {
             itemAnimator = DefaultItemAnimator()
             addItemDecoration(
-                com.drewcodesit.afiexplorer.utils.LineDividerItemDecoration(
+                LineDividerItemDecoration(
                     context,
                     DividerItemDecoration.VERTICAL,
                     36
@@ -122,21 +112,29 @@ class LibraryFragment : Fragment(), FavesListenerItem {
     }
 
     private fun fetchFaves() {
-        val favorites =
-            FavoriteDatabase.getDatabase(requireContext()).favoriteDAO()?.getFavoriteData()
+        val dao = FavoriteDatabase.getDatabase(requireContext()).favoriteDAO()
+        val favorites = dao?.getFavoriteData()?.toMutableList() ?: mutableListOf()
 
-        favesAdapter = LibraryAdapter(requireContext(), favorites!!, this, this)
+        // Apply sorting before passing to adapter
+        when (selectedSortOption) {
+            0 -> favorites.sortBy { it.pubTitle }
+            1 -> favorites.sortBy { it.pubNumber }
+        }
+
+        favesAdapter = LibraryAdapter(
+            requireContext(),
+            favorites,
+            onSelectItemClick = { entity -> openFavorite(entity) },
+            onDeleteClick = { entity -> deleteFavorite(entity) }
+        )
         binding.rvFavorites.adapter = favesAdapter
 
-        // Show or Hide Empty State
+        // Show/hide empty state
         if (favorites.isEmpty()) {
-            // Kotlin View Binding
             binding.emptyFavesInfoImg.visibility = View.VISIBLE
             binding.emptyFavesInfoText.visibility = View.VISIBLE
             binding.emptyFavesInfoText.text = getString(R.string.no_results_found_db)
-
         } else {
-            // Kotlin View Binding
             binding.emptyFavesInfoImg.visibility = View.GONE
             binding.emptyFavesInfoText.visibility = View.GONE
         }
@@ -161,7 +159,12 @@ class LibraryFragment : Fragment(), FavesListenerItem {
             onPositive("Ok") {
                 FavoriteDatabase.getDatabase(requireContext()).favoriteDAO()?.deleteAll()
                 fetchFaves()
-                showDeleteToast("Database cleared!")
+                Config.showToast(
+                    requireContext(),
+                    "Database cleared!",
+                    ToastType.INFO,
+                    AppCompatResources.getDrawable(requireContext(), R.drawable.ic_error)
+                )
             }
             positiveButtonStyle(ButtonStyle.OUTLINED)
             negativeButtonStyle(ButtonStyle.NORMAL)
@@ -173,44 +176,69 @@ class LibraryFragment : Fragment(), FavesListenerItem {
     // Opens document from the Favorites Screen
     // If PDF Reader installed the doc will open natively
     // Else falls back to the PDFViewer Activity
-    override fun onFavesSelectedListener(onOpened: FavoriteEntity) {
+    private fun openFavorite(favorite: FavoriteEntity) {
         try {
             val intent = Intent(Intent.ACTION_VIEW)
-            intent.setDataAndType(Uri.parse(onOpened.pubDocumentUrl), "application/pdf")
+            intent.setDataAndType(favorite.pubDocumentUrl.toUri(), "application/pdf")
             startActivity(intent)
         } catch (e: ActivityNotFoundException) {
             startActivity(
-                // Use 'launchPdfFromPath' if you want to use assets file (enable "fromAssets" flag) / internal directory
-                PdfViewerActivity.launchPdfFromUrl(      //PdfViewerActivity.Companion.launchPdfFromUrl(..   :: incase of JAVA
+                PdfViewerActivity.launchPdfFromUrl(
                     requireContext(),
-                    onOpened.pubDocumentUrl,       // PDF URL in String format
-                    onOpened.pubNumber,           // PDF Name/Title in String format
-                    "",                     // If nothing specific, Put "" it will save to Downloads
-                    enableDownload = true                // This param is true by default.
+                    favorite.pubDocumentUrl,
+                    favorite.pubNumber,
+                    "",
+                    enableDownload = true
                 )
             )
         }
     }
 
     // Deletes single row from database and refreshes the list
-    override fun onFavesDeletedListener(onDeleted: FavoriteEntity, position: Int) {
-        FavoriteDatabase.getDatabase(requireContext()).favoriteDAO()?.delete(onDeleted)
-        showDeleteToast("You deleted ${onDeleted.pubNumber}")
-        favesAdapter?.notifyItemRemoved(position)
+    private fun deleteFavorite(favorite: FavoriteEntity) {
+        FavoriteDatabase.getDatabase(requireContext()).favoriteDAO()?.delete(favorite)
+        Config.showToast(
+            requireContext(),
+            getString(R.string.delete_hint, favorite.pubNumber),
+            ToastType.INFO,
+            AppCompatResources.getDrawable(requireContext(), R.drawable.ic_error)
+        )
         fetchFaves()
     }
 
-    private fun showDeleteToast(message: String) {
-        Toasty.info(requireContext(), message, R.drawable.ic_error).show()
+    private fun filterOptions() {
+        InputSheet().show(requireContext()) {
+            style(SheetStyle.BOTTOM_SHEET)
+            title("Sort By")
+            with(InputRadioButtons {
+                options(mutableListOf("Publication Title", "Publication Number"))
+                changeListener { value ->
+                    selectedSortOption = value
+                    saveSortOption(value) // persist it
+                    when (value) {
+                        0 -> favesAdapter?.sortFavorites()
+                        1 -> favesAdapter?.sortFavoritesByNumber()
+                    }
+                }
+            })
+        }
+    }
+
+    private fun saveSortOption(option: Int) {
+        val prefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        prefs.edit { putInt(PREF_SORT_OPTION, option) }
+        Log.d("LibraryFragment", "Saved sort option: $option")
+    }
+
+    private fun getSavedSortOption(): Int {
+        val prefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val value = prefs.getInt(PREF_SORT_OPTION, 0)
+        Log.d("LibraryFragment", "Loaded saved sort option: $value")
+        return value // default to 0 (Title)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onResume() {
-        super.onResume()
-
     }
 }

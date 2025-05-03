@@ -29,7 +29,7 @@ abstract class FavoriteDatabase() : RoomDatabase(){
                     FavoriteDatabase::class.java,
                     Config.DATABASE_NAME)
                     .allowMainThreadQueries()
-                    .fallbackToDestructiveMigration()
+                    .fallbackToDestructiveMigration(true)
                     .build()
             }
             return INSTANCE as FavoriteDatabase

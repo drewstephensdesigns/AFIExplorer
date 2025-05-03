@@ -1,11 +1,19 @@
 package com.drewcodesit.afiexplorer.utils
 
+import android.app.DownloadManager
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
+import android.graphics.drawable.Drawable
+import android.os.Environment
+import android.widget.Toast
 import androidx.core.content.getSystemService
+import androidx.core.net.toUri
 import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.database.FavoriteDatabase
+import com.drewcodesit.afiexplorer.utils.toast.ToastType
+import es.dmoral.toasty.Toasty
 
 object Config {
 
@@ -21,12 +29,51 @@ object Config {
 
     // Table
     const val TABLE_NAME = "favoriteslist"
+    const val VECTOR_TABLE = "vector_table"
+    const val AFI_TOPICS_TABLE = "afi_topics"
 
+    // Displays database as version number in OptionsFragment.kt
+    fun Context.getDBVersion() = FavoriteDatabase.getDatabase(this).openHelper.readableDatabase.version.toString()
+
+    // Global function to save text to clipboard
     fun save(context: Context, text: String) {
         val clip = ClipData.newPlainText(context.getString(R.string.copied_to_clipboard), text)
         context.getSystemService<ClipboardManager>()!!.setPrimaryClip(clip)
     }
 
-    fun Context.getDBVersion() = FavoriteDatabase.getDatabase(this).openHelper.readableDatabase.version.toString()
+    // Global function to share publication
+    fun sharePublication(ct: Context, url: String) {
+        val sendIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, url)
+            type = "text/plain"
+        }
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        ct.startActivity(shareIntent)
+    }
 
+    // Global function to download publication
+    fun downloadPublication(ct: Context, url: String, title: String, subTitle: String){
+
+        val manager = ct.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val request = DownloadManager.Request(url.toUri())
+            .setTitle(title)
+            .setDescription(subTitle)
+            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOCUMENTS, "/AFIExplorer/${subTitle}.pdf")
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+        manager.enqueue(request)
+    }
+
+    fun showToast(context: Context, message: String, type: ToastType, drawableResId: Drawable?) {
+        val toast = when (type) {
+            ToastType.INFO -> Toasty.info(context, message, Toast.LENGTH_SHORT)
+            ToastType.SUCCESS -> Toasty.success(context, message, Toast.LENGTH_SHORT)
+            ToastType.WARNING -> Toasty.warning(context, message, Toast.LENGTH_SHORT)
+            ToastType.ERROR -> Toasty.error(context, message, Toast.LENGTH_SHORT)
+            ToastType.NORMAL -> { Toasty.normal(context, message, Toast.LENGTH_SHORT)
+            }
+        }
+        toast.show()
+    }
 }

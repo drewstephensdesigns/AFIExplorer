@@ -9,9 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.edit
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
-import com.drewcodesit.afiexplorer.MainActivity
 import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.databinding.FragmentOptionsBinding
 import com.drewcodesit.afiexplorer.utils.Config
@@ -32,13 +33,15 @@ class OptionsFragment : Fragment() {
 
     private lateinit var sharedPreferences: SharedPreferences
 
-    private val deviceInfoText = "Manufacturer: ${Build.MANUFACTURER}\n" +
+    private val deviceInfoText =
+            "Manufacturer: ${Build.MANUFACTURER}\n" +
             "Model: ${Build.MODEL}\n" +
             "SDK: ${Build.VERSION.SDK_INT}\n" +
             "Board: ${Build.BOARD}\n" +
             "OS: Android ${Build.VERSION.RELEASE}\n" +
             "Arch: ${Build.SUPPORTED_ABIS[0]}\n" +
-            "Product: ${Build.PRODUCT}"
+            "Product: ${Build.PRODUCT}\n"
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,16 +58,15 @@ class OptionsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // Gets version info from Gradle/Manifest
         val versionHeader = resources.getString(R.string.version_header)
+        val databaseVersion = resources.getString(R.string.database_version, requireContext().getDBVersion())
+
         val versionName = requireActivity().packageManager.getPackageInfo(requireActivity().packageName, 0).versionName
         val formattedVersionText = resources.getString(R.string.version_text, versionHeader, versionName)
 
-        binding.iconAppMain.setOnClickListener { showDeviceInfo() }
+        //binding.iconAppMain.setOnClickListener { showDeviceInfo() }
 
-        binding.textBuildVersion.text = formattedVersionText
-        binding.textDatabaseVersion.text = resources.getString(R.string.database_version, requireContext().getDBVersion())
-
-        // displays back arrow
-        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.buildVersion.setOnClickListener { showDeviceInfo() }
+        binding.settingsNumber.text = formattedVersionText + "\n" + databaseVersion
 
         /**
          * Change App Theme
@@ -119,7 +121,7 @@ class OptionsFragment : Fragment() {
 
     private fun getLink(link: String){
         val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = (Uri.parse(link))
+        intent.data = (link.toUri())
         startActivity(intent)
     }
 
@@ -131,9 +133,11 @@ class OptionsFragment : Fragment() {
         val send = Intent(Intent.ACTION_SENDTO)
 
         // Email subject (App Name and Version Code for troubleshooting)
-        val uriText = "mailto:" + Uri.encode("drewstephensdesigns@gmail.com") +
-                "?subject=" + Uri.encode("App Feedback: ") + resources.getString(R.string.app_name) + " " + formattedVersionText
-        val uri = Uri.parse(uriText)
+        val uriText = "mailto:" +
+                Uri.encode("drewstephensdesigns@gmail.com") +
+                "?subject=" + Uri.encode("App Feedback: ") +
+                resources.getString(R.string.app_name) + " " + formattedVersionText
+        val uri = uriText.toUri()
         send.data = uri
 
         // Displays apps that are able to handle email
@@ -143,7 +147,7 @@ class OptionsFragment : Fragment() {
     private fun setupCard(card: MaterialCardView, link: String) {
         card.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = (Uri.parse(link))
+            intent.data = (link.toUri())
             startActivity(intent)
         }
         card.setOnLongClickListener {
@@ -164,7 +168,7 @@ class OptionsFragment : Fragment() {
         )
             .setAction(R.string.open_copied) {
                 val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = (Uri.parse(href))
+                intent.data = (href.toUri())
                 startActivity(intent)
             }
             .setAnimationMode(Snackbar.ANIMATION_MODE_FADE)
@@ -186,26 +190,32 @@ class OptionsFragment : Fragment() {
                 when(index){
                     0 -> {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                        sharedPreferences.edit().putInt(
-                            getString(R.string.pref_key_mode_night),
-                            AppCompatDelegate.MODE_NIGHT_NO
-                        ).apply()
+                        sharedPreferences.edit() {
+                            putInt(
+                                getString(R.string.pref_key_mode_night),
+                                AppCompatDelegate.MODE_NIGHT_NO
+                            )
+                        }
 
                     }
                     1 -> {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                        sharedPreferences.edit().putInt(
-                            getString(R.string.pref_key_mode_night),
-                            AppCompatDelegate.MODE_NIGHT_YES
-                        ).apply()
+                        sharedPreferences.edit() {
+                            putInt(
+                                getString(R.string.pref_key_mode_night),
+                                AppCompatDelegate.MODE_NIGHT_YES
+                            )
+                        }
 
                     }
                     2 -> {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-                        sharedPreferences.edit().putInt(
-                            getString(R.string.pref_key_mode_night),
-                            AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-                        ).apply()
+                        sharedPreferences.edit() {
+                            putInt(
+                                getString(R.string.pref_key_mode_night),
+                                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                            )
+                        }
                     }
                 }
             }
@@ -215,10 +225,12 @@ class OptionsFragment : Fragment() {
     // Displays users device info
     private fun showDeviceInfo(){
         InfoSheet().show(requireContext()){
-            style(SheetStyle.DIALOG)
-            title("Device Info")
+            style(SheetStyle.BOTTOM_SHEET)
+            title("Device Details for Troubleshooting")
             content(deviceInfoText)
-            onPositive("Ok")
+            onPositive("Copy to clipboard"){
+                Config.save(requireContext(), deviceInfoText)
+            }
         }
     }
 

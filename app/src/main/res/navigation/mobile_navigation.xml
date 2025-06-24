@@ -11,7 +11,13 @@
         android:id="@+id/navigation_featured"
         android:name="com.drewcodesit.afiexplorer.ui.featured.FeaturedFragment"
         android:label="@string/app_featured"
-        tools:layout="@layout/fragment_featured" />
+        tools:layout="@layout/fragment_featured" >
+        <action
+            android:id="@+id/action_featuredFragment_to_navigation_browse"
+            app:destination="@id/navigation_browse"
+            app:popUpTo="@id/navigation_browse"
+            app:popUpToInclusive="true"/>
+    </fragment>
 
     <!-- Full Publications Screen -->
     <fragment
@@ -26,6 +32,27 @@
         android:name="com.drewcodesit.afiexplorer.ui.library.LibraryFragment"
         android:label="@string/app_faves"
         tools:layout="@layout/fragment_library" />
+
+    <!-- Chat Options Screen -->
+    <fragment
+        android:id="@+id/navigation_chat_options"
+        android:name="com.drewcodesit.afiexplorer.ui.chat.ChatOptionsFragment"
+        android:label="@string/app_chat_afi"
+        tools:layout="@layout/fragment_chat_options" >
+
+        <action
+            android:id="@+id/action_chatOptions_navigateto_chat"
+            app:destination="@id/navigation_chat"
+            app:popUpTo="@id/navigation_chat"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/navigation_chat"
+        android:name="com.drewcodesit.afiexplorer.ui.chat.ChatFragment"
+        android:label="@string/app_chat_afi"
+        tools:layout="@layout/fragment_chat"/>
 
     <!-- Options &amp; App Settings Screen -->
     <fragment

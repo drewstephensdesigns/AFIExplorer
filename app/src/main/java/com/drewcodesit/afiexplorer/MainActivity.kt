@@ -14,6 +14,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
 import com.drewcodesit.afiexplorer.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
 import es.dmoral.toasty.Toasty
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        PDFBoxResourceLoader.init(applicationContext)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -37,8 +39,11 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
+                R.id.navigation_featured,
                 R.id.navigation_browse,
                 R.id.navigation_library,
+                R.id.navigation_chat_options,
+                R.id.navigation_chat,
                 R.id.navigation_options_menu
             )
         )
@@ -49,7 +54,6 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null && shouldShowFeatured()) {
             navController.navigate(R.id.navigation_featured)
         }
-
         toastyConfig()
     }
 

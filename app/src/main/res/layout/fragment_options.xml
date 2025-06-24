@@ -4,14 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="20dp"
-    android:fillViewport="true">
+    android:layout_height="match_parent">
 
 <RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingBottom="75dp">
+    android:layout_height="wrap_content">
 
     <!-- Version Numbers -->
     <com.google.android.material.card.MaterialCardView

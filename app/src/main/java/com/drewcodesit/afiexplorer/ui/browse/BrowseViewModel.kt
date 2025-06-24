@@ -6,8 +6,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.drewcodesit.afiexplorer.database.FavoriteDatabase
-import com.drewcodesit.afiexplorer.database.FavoriteEntity
+import com.drewcodesit.afiexplorer.database.favorites.FavoriteDatabase
+import com.drewcodesit.afiexplorer.database.favorites.FavoriteEntity
 import com.drewcodesit.afiexplorer.interfaces.ApiService
 import com.drewcodesit.afiexplorer.models.Pubs
 import com.drewcodesit.afiexplorer.utils.Config

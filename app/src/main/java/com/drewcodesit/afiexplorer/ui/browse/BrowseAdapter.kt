@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.drewcodesit.afiexplorer.R
-import com.drewcodesit.afiexplorer.database.FavoriteEntity
+import com.drewcodesit.afiexplorer.database.favorites.FavoriteEntity
 import com.drewcodesit.afiexplorer.databinding.BrowseItemsViewBinding
 import com.drewcodesit.afiexplorer.models.Pubs
 import com.drewcodesit.afiexplorer.utils.Config.downloadPublication
@@ -28,6 +28,8 @@ class BrowseAdapter(
     private val navController: NavController,
     private val browseViewModel: BrowseViewModel
 ) : ListAdapter<Pubs, BrowseAdapter.BrowseVH>(PubsDiffCallback()), Filterable {
+
+    private var filterMode = FilterMode.SEARCH
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BrowseVH {
         val binding = BrowseItemsViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -70,20 +72,39 @@ class BrowseAdapter(
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
-                val charString = constraint?.toString() ?: ""
-                val filteredList = if (charString.isEmpty()) pubsList else pubsList.filter {
-                    it.pubTitle!!.contains(charString, ignoreCase = true) ||
-                            it.pubNumber!!.contains(charString, ignoreCase = true) ||
-                            it.pubRescindOrg!!.contains(charString, ignoreCase = true)
+                val query = constraint?.toString()?.trim().orEmpty()
+                val filteredList = when (filterMode) {
+                    FilterMode.SEARCH -> {
+                        if (query.isEmpty()) pubsList else pubsList.filter {
+                            it.pubTitle?.contains(query, ignoreCase = true) == true ||
+                                    it.pubNumber?.contains(query, ignoreCase = true) == true ||
+                                    it.pubRescindOrg?.contains(query, ignoreCase = true) == true
+                        }
+                    }
+                    FilterMode.ORG -> {
+                        pubsList.filter {
+                            it.pubRescindOrg?.contains(query, ignoreCase = true) == true
+                        }
+                    }
                 }
-                return FilterResults().apply { values = filteredList }
+
+                return FilterResults().apply {
+                    values = filteredList
+                    count = filteredList.size
+                }
             }
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                val searchResults = (results?.values as? List<*>)?.filterIsInstance<Pubs>() ?: emptyList()
-                results?.count = searchResults.size
-                submitList(searchResults)
+                val filtered = (results?.values as? List<*>)?.filterIsInstance<Pubs>() ?: emptyList()
+                submitList(filtered)
             }
+        }
+    }
+
+    fun applyFilter(query: String, mode: FilterMode, onFiltered: ((Int) -> Unit)? = null) {
+        filterMode = mode
+        filter.filter(query) {
+            onFiltered?.invoke(itemCount)
         }
     }
 
@@ -130,4 +151,9 @@ class BrowseAdapter(
     // This allows the parent class to respond to the click event and perform some action,
     // such as opening a detail view for the selected item.
     interface MainClickListener {fun onMainPubsClickListener(pubs: Pubs)}
+
+    enum class FilterMode {
+        SEARCH,
+        ORG
+    }
 }

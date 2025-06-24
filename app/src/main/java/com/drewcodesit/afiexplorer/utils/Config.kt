@@ -11,9 +11,10 @@ import android.widget.Toast
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import com.drewcodesit.afiexplorer.R
-import com.drewcodesit.afiexplorer.database.FavoriteDatabase
+import com.drewcodesit.afiexplorer.database.favorites.FavoriteDatabase
 import com.drewcodesit.afiexplorer.utils.toast.ToastType
 import es.dmoral.toasty.Toasty
+import java.lang.Math.sqrt
 
 object Config {
 
@@ -65,6 +66,7 @@ object Config {
         manager.enqueue(request)
     }
 
+
     fun showToast(context: Context, message: String, type: ToastType, drawableResId: Drawable?) {
         val toast = when (type) {
             ToastType.INFO -> Toasty.info(context, message, Toast.LENGTH_SHORT)
@@ -76,4 +78,16 @@ object Config {
         }
         toast.show()
     }
+
+    fun generateFakeEmbedding(text: String): List<Float> {
+        return List(256) { (0..100).random() / 100f }  // 256-dim random embedding
+    }
+
+    fun cosineSimilarity(vec1: List<Float>, vec2: List<Float>): Float {
+        val dotProduct = vec1.zip(vec2).sumOf { (a, b) -> (a * b).toDouble() }
+        val mag1 = kotlin.math.sqrt(vec1.sumOf { (it * it).toDouble() })
+        val mag2 = kotlin.math.sqrt(vec2.sumOf { (it * it).toDouble() })
+        return if (mag1 == 0.0 || mag2 == 0.0) 0f else (dotProduct / (mag1 * mag2)).toFloat()
+    }
+
 }

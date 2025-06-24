@@ -7,10 +7,6 @@ apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 apply plugin: 'com.google.devtools.ksp'
 
 android {
-    //Properties properties = new Properties()
-    //properties.load(project.rootProject.file('local.properties').newDataInputStream())
-    //def apikey = properties.getProperty('key')
-
     defaultConfig {
         multiDexEnabled = true
         applicationId "io.github.drewstephenscoding.afiexplorer"
@@ -35,7 +31,9 @@ android {
             useSupportLibrary = true
         }
 
-       // buildConfigField "String" , "API_KEY" ,  apikey
+       Properties properties = new Properties()
+       properties.load(project.rootProject.file('local.properties').newDataInputStream())
+       buildConfigField "String", "GEMINI_API_KEY", "\"${properties.getProperty('GEMINI_API_KEY')}\""
     }
     applicationVariants.configureEach { variant ->
         variant.resValue "string", "versionName", variant.versionName
@@ -86,36 +84,34 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //noinspection GradleDependency
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     implementation 'androidx.recyclerview:recyclerview:1.4.0'
     implementation 'androidx.preference:preference-ktx:1.2.1'
 
     // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.11.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
-
+    implementation 'com.squareup.retrofit2:retrofit:3.0.0'
+    implementation 'com.squareup.retrofit2:converter-gson:3.0.0'
 
     // Room components
-    implementation 'androidx.room:room-runtime:2.7.1'
-    implementation "androidx.room:room-ktx:2.7.1"
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.7'
-    implementation 'androidx.preference:preference-ktx:1.2.1'
-    ksp 'androidx.room:room-compiler:2.7.1'
+    implementation 'androidx.room:room-runtime:2.7.2'
+    implementation "androidx.room:room-ktx:2.7.2"
+    ksp 'androidx.room:room-compiler:2.7.2'
 
     // Firebase
-    implementation 'com.google.firebase:firebase-crashlytics:19.4.3'
+    implementation 'com.google.firebase:firebase-crashlytics:19.4.4'
     implementation 'com.google.firebase:firebase-analytics:22.4.0'
 
     // Navigation
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.8.9'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.8.9'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.9.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.9.0'
 
     // Lifecycle
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.8.7'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.9.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.1'
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.9.1'
 
     // Toasty - Usual Toast, but with Steroids
     implementation 'com.github.GrenderG:Toasty:1.5.2'
@@ -126,8 +122,6 @@ dependencies {
     // Licenses
     implementation 'com.google.android.gms:play-services-oss-licenses:17.1.0'
 
-    implementation 'com.facebook.shimmer:shimmer:0.5.0'
-
     // Sheets - https://github.com/maxkeppeler/sheets
     implementation ("com.maxkeppeler.sheets:core:2.3.1")
     implementation ("com.maxkeppeler.sheets:info:2.3.1")
@@ -137,4 +131,14 @@ dependencies {
 
     // Lottie Files
     implementation ('com.airbnb.android:lottie:6.6.3')
+
+    // Gemini AI
+    implementation 'com.google.ai.client.generativeai:generativeai:0.9.0'
+    implementation 'com.google.ai.client.generativeai:common:0.10.0'
+
+    // Loading Dots
+    implementation 'com.github.kapilmhr:Chat-Loading-Dots:1.0'
+
+    // PDF extraction library
+    implementation 'com.tom-roush:pdfbox-android:2.0.27.0'
 }

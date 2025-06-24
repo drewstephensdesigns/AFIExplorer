@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.drewcodesit.afiexplorer.R
-import com.drewcodesit.afiexplorer.database.FavoriteEntity
+import com.drewcodesit.afiexplorer.database.favorites.FavoriteEntity
 import com.drewcodesit.afiexplorer.databinding.LibraryItemsViewBinding
 import com.drewcodesit.afiexplorer.utils.Config
 
@@ -29,16 +29,6 @@ class LibraryAdapter(
     }
 
     override fun getItemCount(): Int = savedFavorites.size
-
-    fun sortFavorites() {
-        savedFavorites.sortBy { it.pubTitle }
-        notifyDataSetChanged()
-    }
-
-    fun sortFavoritesByNumber() {
-        savedFavorites.sortBy { it.pubNumber }
-        notifyDataSetChanged()
-    }
 
     inner class LibraryVH(private val binding: LibraryItemsViewBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(entity: FavoriteEntity) {

@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/xsmall_margin"
-    android:foreground="?attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp"
+    app:cardBackgroundColor="?colorSurfaceContainerHigh"
     app:strokeColor="?attr/colorOutline"
-    app:strokeWidth="1dp">
+    app:strokeWidth=".5dp">
 
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
-    android:padding="@dimen/xsmall_margin"
+    android:padding="6dp"
     android:focusable="true">
 
     <ImageView

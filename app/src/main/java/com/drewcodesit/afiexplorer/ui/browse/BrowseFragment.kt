@@ -85,30 +85,19 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
     }
 
     private fun initViewModel(){
-        showSkeletonLoader(true)
+
         browseViewModel.browsePublications.observe(viewLifecycleOwner){ items ->
-            showSkeletonLoader(false)
             if (items.isNullOrEmpty()){
                 binding.noResultsFound.isVisible = true
             } else {
                 binding.noResultsFound.isVisible = false
+
+
                 browseAdapter = BrowseAdapter(items, this, findNavController(), browseViewModel)
                 binding.recyclerView.adapter = browseAdapter
                 browseAdapter?.getPubs(items)
-            }
-        }
-    }
-
-    private fun showSkeletonLoader(show: Boolean) {
-        binding.shimmerViewContainer.isVisible = show
-        binding.recyclerView.isVisible = !show
-        binding.shimmerViewContainer.apply {
-            if (show) {
-                startShimmer()
-                binding.shimmerRecyclerView.layoutManager = LinearLayoutManager(context)
-                binding.shimmerRecyclerView.adapter = ShimmerAdapter()
-            } else {
-                stopShimmer()
+                binding.loading.isVisible = false
+                binding.loadingText.isVisible = false
             }
         }
     }
@@ -245,7 +234,7 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
     // Change ToolBar Title: (activity as MainActivity).supportActionBar?.title = ""
     // Source: https://stackoverflow.com/questions/27100007/set-a-title-in-toolbar-from-fragment-in-android
     private fun updateFilter(org: String, title: String) {
-        browseAdapter?.filter?.filter(org)
+        browseAdapter?.applyFilter(org, BrowseAdapter.FilterMode.ORG)
         (activity as MainActivity).supportActionBar?.title = title
     }
 
@@ -298,16 +287,13 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
     // or navigates back to featured fragment
     private fun refreshPubList() {
         (activity as MainActivity).supportActionBar?.title = resources.getString(R.string.app_home)
-        browseAdapter?.filter?.filter("") { count ->
-            // This callback is executed after the filter is applied
-            binding.recyclerView.post { // Execute on the next UI frame
-                binding.recyclerView.scrollToPosition(0)
-            }
-        }
+        browseAdapter?.applyFilter("", BrowseAdapter.FilterMode.SEARCH)
+        searchView?.setQuery("", false)
+        binding.recyclerView.scrollToPosition(0)
     }
 
     private fun updateSearchResults(newText: String?) {
-        browseAdapter?.filter?.filter(newText) { count ->
+        browseAdapter?.applyFilter(newText ?: "", BrowseAdapter.FilterMode.SEARCH) { count ->
             binding.noResultsFound.isVisible = count == 0 && !newText.isNullOrEmpty() // Show "no results" only when there's a query and no matches
             binding.noResultsFoundText.isVisible = count == 0 && !newText.isNullOrEmpty()
             binding.noResultsFoundText.text = getString(R.string.no_results_found, newText)

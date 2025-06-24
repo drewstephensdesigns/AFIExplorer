@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -25,6 +26,7 @@ import com.drewcodesit.afiexplorer.utils.objects.DotsIndicatorDecoration
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.rajat.pdfviewer.PdfViewerActivity
 import androidx.core.net.toUri
+import androidx.preference.PreferenceManager
 import com.drewcodesit.afiexplorer.utils.Config
 import com.drewcodesit.afiexplorer.utils.toast.ToastType
 
@@ -157,9 +159,9 @@ class FeaturedFragment : Fragment(),
     }
 
     private fun navigateToBrowse() {
-        val navView = (requireActivity() as MainActivity).findViewById<BottomNavigationView>(R.id.nav_view)
-        val item = navView.menu.findItem(R.id.navigation_browse)
-        NavigationUI.onNavDestinationSelected(item, findNavController())
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        sharedPreferences.edit() { putBoolean("show_featured", false) }
+        findNavController().navigate(R.id.action_featuredFragment_to_navigation_browse)
     }
 
     private fun openUrl(url: String) {

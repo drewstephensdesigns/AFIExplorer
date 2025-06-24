@@ -11,6 +11,11 @@
         android:title="@string/app_faves" />
 
     <item
+        android:id="@+id/navigation_chat_options"
+        android:icon="@drawable/ic_chat_afi"
+        android:title="@string/app_chat_afi" />
+
+    <item
         android:id="@+id/navigation_options_menu"
         android:icon="@drawable/ic_overflow_menu"
         android:title="@string/app_options" />

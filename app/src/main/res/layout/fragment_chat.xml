@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Empty State View (Shown when RecyclerView is empty) -->
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/query_empty_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="@dimen/medium_margin"
+        android:fontFamily="@font/ibm_plex_sans"
+        android:gravity="center"
+        android:text="@string/chat_empty_message"
+        android:textColor="?colorControlNormal"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:visibility="visible" />
+
+    <!-- Main Content Area -->
+    <LinearLayout
+        android:id="@+id/chat_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <!-- ✅ Disclaimer moved here to be part of scrollable content -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/ai_disclaimer_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            app:cardBackgroundColor="?colorTertiaryContainer"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="12dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_error"
+                    android:contentDescription="@string/cd_disclaimer_warning_icon"
+                    app:tint="?colorControlNormal" />
+
+                <TextView
+                    android:id="@+id/ai_disclaimer_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:text="@string/ai_disclaimer"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="?colorOnSurface"
+                    android:textSize="12sp" />
+
+                <ImageButton
+                    android:id="@+id/ai_disclaimer_dismiss"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:src="@drawable/sheets_ic_close"
+                    android:contentDescription="@string/cd_disclaimer_button"
+                    app:tint="?colorOnSurface" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Chat RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chat_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:scrollbars="vertical"
+            tools:itemCount="2"
+            tools:listitem="@layout/item_chat_gemini" />
+
+        <!-- Loading Dots -->
+        <app.frantic.loadingdots.LoadingDots
+            android:id="@+id/loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"
+            app:LoadingDots_auto_play="true"
+            app:LoadingDots_dots_color="?colorError"
+            app:LoadingDots_dots_count="3"
+            app:LoadingDots_dots_size="12dp"
+            app:LoadingDots_dots_space="5dp"
+            app:LoadingDots_jump_duration="200"
+            app:LoadingDots_jump_height="4dp"
+            app:LoadingDots_loop_duration="800"
+            app:LoadingDots_loop_start_delay="100" />
+
+        <!-- Input Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="75dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopStart="16dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/query_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/ask_question_hint"
+                    android:textColor="?colorControlNormal"
+                    android:textColorHint="?colorControlNormal" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/send_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="10dp"
+                android:src="@android:drawable/ic_menu_send"
+                android:contentDescription="@string/cd_send_chat_button"
+                android:tintMode="?colorSurfaceVariant" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

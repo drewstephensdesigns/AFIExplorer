@@ -20,8 +20,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.drewcodesit.afiexplorer.R
-import com.drewcodesit.afiexplorer.database.FavoriteDatabase
-import com.drewcodesit.afiexplorer.database.FavoriteEntity
+import com.drewcodesit.afiexplorer.database.favorites.FavoriteDatabase
+import com.drewcodesit.afiexplorer.database.favorites.FavoriteEntity
 import com.drewcodesit.afiexplorer.databinding.FragmentLibraryBinding
 import com.maxkeppeler.sheets.core.ButtonStyle
 import com.maxkeppeler.sheets.core.SheetStyle
@@ -36,6 +36,13 @@ import com.drewcodesit.afiexplorer.utils.Config
 import com.drewcodesit.afiexplorer.utils.objects.LineDividerItemDecoration
 import com.drewcodesit.afiexplorer.utils.toast.ToastType
 import androidx.core.content.edit
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.drewcodesit.afiexplorer.database.favorites.FavoriteDAO
+import kotlinx.coroutines.launch
 
 
 class LibraryFragment : Fragment() {
@@ -50,6 +57,9 @@ class LibraryFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private val favoriteViewModel: LibraryViewModel by viewModels {
+        LibraryViewModelFactory(FavoriteDatabase.getDatabase(requireContext()).favoriteDAO()!!)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,7 +67,8 @@ class LibraryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLibraryBinding.inflate(inflater, container, false)
-        selectedSortOption = getSavedSortOption() // load saved sort
+        selectedSortOption = getSavedSortOption()
+        favoriteViewModel.updateSortOption(selectedSortOption) // Send to ViewModel
         initMenu()
         initUI()
         fetchFaves()
@@ -80,16 +91,9 @@ class LibraryFragment : Fragment() {
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
-                    R.id.action_filter_faves -> {
-                        filterOptions(); true
-                    }
-
-                    R.id.action_clear_database -> {
-                        nukeDatabase(); true
-                    }
-
-                    else -> {
-                        false
+                    R.id.action_filter_faves -> { filterOptions(); true }
+                    R.id.action_clear_database -> { nukeDatabase(); true }
+                    else -> { false
                     }
                 }
             }
@@ -112,40 +116,45 @@ class LibraryFragment : Fragment() {
     }
 
     private fun fetchFaves() {
-        val dao = FavoriteDatabase.getDatabase(requireContext()).favoriteDAO()
-        val favorites = dao?.getFavoriteData()?.toMutableList() ?: mutableListOf()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                favoriteViewModel.favorites.collect { sortedFavorites ->
+                    favesAdapter = LibraryAdapter(
+                        requireContext(),
+                        sortedFavorites.toMutableList(),
+                        onSelectItemClick = { entity -> openFavorite(entity) },
+                        onDeleteClick = { entity -> deleteFavorite(entity) }
+                    )
+                    binding.rvFavorites.adapter = favesAdapter
 
-        // Apply sorting before passing to adapter
-        when (selectedSortOption) {
-            0 -> favorites.sortBy { it.pubTitle }
-            1 -> favorites.sortBy { it.pubNumber }
-        }
-
-        favesAdapter = LibraryAdapter(
-            requireContext(),
-            favorites,
-            onSelectItemClick = { entity -> openFavorite(entity) },
-            onDeleteClick = { entity -> deleteFavorite(entity) }
-        )
-        binding.rvFavorites.adapter = favesAdapter
-
-        // Show/hide empty state
-        if (favorites.isEmpty()) {
-            binding.emptyFavesInfoImg.visibility = View.VISIBLE
-            binding.emptyFavesInfoText.visibility = View.VISIBLE
-            binding.emptyFavesInfoText.text = getString(R.string.no_results_found_db)
-        } else {
-            binding.emptyFavesInfoImg.visibility = View.GONE
-            binding.emptyFavesInfoText.visibility = View.GONE
+                    if (sortedFavorites.isEmpty()) {
+                        binding.emptyFavesInfoImg.visibility = View.VISIBLE
+                        binding.emptyFavesInfoText.visibility = View.VISIBLE
+                        binding.emptyFavesInfoText.text = getString(R.string.no_results_found_db)
+                    } else {
+                        binding.emptyFavesInfoImg.visibility = View.GONE
+                        binding.emptyFavesInfoText.visibility = View.GONE
+                    }
+                }
+            }
         }
     }
 
     //  Prompts user for confirmation before deleting the app's database using an InfoSheet dialog
     // with informative content and a caution animation.
+    private fun deleteFavorite(favorite: FavoriteEntity) {
+        favoriteViewModel.deleteFavorite(favorite)
+        Config.showToast(
+            requireContext(),
+            getString(R.string.delete_hint, favorite.pubNumber),
+            ToastType.INFO,
+            AppCompatResources.getDrawable(requireContext(), R.drawable.ic_error)
+        )
+    }
+
     private fun nukeDatabase() {
         InfoSheet().show(requireContext()) {
             style(SheetStyle.DIALOG)
-            // withIconButton(IconButton( R.drawable.ic_error)){}
             title("Delete Database?")
             content(R.string.action_nuke_database)
             withCoverLottieAnimation(LottieAnimation {
@@ -153,12 +162,9 @@ class LibraryFragment : Fragment() {
                     setAnimation(R.raw.caution_anim)
                 }
             })
-            onNegative(
-                "Not Yet",
-            ) { /* Set listener when negative button is clicked. */ }
+            onNegative("Not Yet") { }
             onPositive("Ok") {
-                FavoriteDatabase.getDatabase(requireContext()).favoriteDAO()?.deleteAll()
-                fetchFaves()
+                favoriteViewModel.deleteAllFavorites()
                 Config.showToast(
                     requireContext(),
                     "Database cleared!",
@@ -194,17 +200,6 @@ class LibraryFragment : Fragment() {
         }
     }
 
-    // Deletes single row from database and refreshes the list
-    private fun deleteFavorite(favorite: FavoriteEntity) {
-        FavoriteDatabase.getDatabase(requireContext()).favoriteDAO()?.delete(favorite)
-        Config.showToast(
-            requireContext(),
-            getString(R.string.delete_hint, favorite.pubNumber),
-            ToastType.INFO,
-            AppCompatResources.getDrawable(requireContext(), R.drawable.ic_error)
-        )
-        fetchFaves()
-    }
 
     private fun filterOptions() {
         InputSheet().show(requireContext()) {
@@ -214,11 +209,8 @@ class LibraryFragment : Fragment() {
                 options(mutableListOf("Publication Title", "Publication Number"))
                 changeListener { value ->
                     selectedSortOption = value
-                    saveSortOption(value) // persist it
-                    when (value) {
-                        0 -> favesAdapter?.sortFavorites()
-                        1 -> favesAdapter?.sortFavoritesByNumber()
-                    }
+                    saveSortOption(value)
+                    favoriteViewModel.updateSortOption(value)
                 }
             })
         }

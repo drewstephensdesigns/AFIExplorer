@@ -10,6 +10,7 @@
     <string name="app_home">Browse</string>
     <string name="app_faves">Library</string>
     <string name="app_featured">Featured</string>
+    <string name="app_chat_afi">ChatAFI</string>
     <string name="app_settings">Settings</string>
     <string name="app_options">Options</string>
 
@@ -24,15 +25,16 @@
     <string name="action_download">Download File</string>
     <string name="action_navigate_back">Press back again to navigate</string>
     <string name="action_filter">Filter</string>
-
-
     <string name="action_nuke_database">This action will delete the entire database…</string>
 
     <!-- Hints/Notices -->
+    <string name="ai_disclaimer">AI answers may be inaccurate. Verify with official sources.</string>
+    <string name="ask_question_hint">Ask a question…</string>
     <string name="delete_hint">You deleted %1$s</string>
     <string name="search_hint">Search pubs…</string>
     <string name="no_results_found">No Results Found for %1$s</string>
     <string name="no_results_found_db">"No saved items \n Add publications from the \n home screen to view later."</string>
+    <string name="chat_empty_message">What would you like to know?</string>
 
     <string name="pub_restricted">Restricted, see E-Pubs for official source</string>
 
@@ -95,6 +97,10 @@
     <!-- Content Descriptions -->
     <string name="cd_vertical_menu">Vertical menu</string>
     <string name="cd_favorites">favorites</string>
+    <string name="cd_send_chat_button">Sends user question to LLM</string>
+    <string name="cd_disclaimer_button">Hides AI disclaimer</string>
+    <string name="cd_disclaimer_warning_icon">AI disclaimer icon</string>
+    <string name="cd_chat_afi_icon">ChatAFI Logo</string>
 
     <!-- Placeholders -->
     <string name="certified_date_placeholder">Certified Current: %s</string>
@@ -109,5 +115,8 @@
 
     <string name="updated_jtr_link">https://media.defense.gov/2022/Jan/04/2002917147/-1/-1/1/JTR.PDF</string>
     <string name="updated_ate_link">https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/451513p.pdf</string>
+
+    <string name="llm_prompt">You are an AI chatbot named "ChatAFI," an expert in Air Force publications. Your primary function is to provide accurate, concise, and relevant answers to user questions based *solely* on provided text from official United States Air Force (USAF) publications. Always prioritize strict adherence to the provided source material and avoid introducing external information or assumptions.</string>
+    <string name="llm_rate_limit_message">Error: Too many requests. Please try again later.</string>
 
 </resources>

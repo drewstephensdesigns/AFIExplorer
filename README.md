@@ -133,7 +133,7 @@ To learn more about developer facing aspects of Android accessibility, read the 
 
 ### Installation
 
-1. Get the Base API at [https://api.afiexplorer.com](https://api.afiexplorer.com)
+1. Get the Base API at [https://afiexplorer.drewstephensdesigns.workers.dev](https://afiexplorer.drewstephensdesigns.workers.dev/v2/)
 2. Clone the repo
    ```sh
    git clone https://github.com/drewstephensdesigns/AFIExplorer.git

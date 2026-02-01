@@ -1,10 +1,8 @@
 package com.drewcodesit.afiexplorer.ui.library
 
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -12,40 +10,35 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.net.toUri
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.database.FavoriteDatabase
 import com.drewcodesit.afiexplorer.database.FavoriteEntity
 import com.drewcodesit.afiexplorer.databinding.FragmentLibraryBinding
-import com.maxkeppeler.sheets.core.ButtonStyle
-import com.maxkeppeler.sheets.core.SheetStyle
-import com.maxkeppeler.sheets.info.InfoSheet
-import com.maxkeppeler.sheets.input.InputSheet
-import com.maxkeppeler.sheets.input.type.InputRadioButtons
-import com.maxkeppeler.sheets.lottie.LottieAnimation
-import com.maxkeppeler.sheets.lottie.withCoverLottieAnimation
-import com.rajat.pdfviewer.PdfViewerActivity
-import androidx.core.net.toUri
+import com.drewcodesit.afiexplorer.ui.browse.BrowseViewModel
 import com.drewcodesit.afiexplorer.utils.Config
-import com.drewcodesit.afiexplorer.utils.objects.LineDividerItemDecoration
+import com.drewcodesit.afiexplorer.utils.Config.deleteFavorite
+import com.drewcodesit.afiexplorer.utils.Config.toPubs
+import com.drewcodesit.afiexplorer.utils.objects.ActionsBottomSheet
+import com.drewcodesit.afiexplorer.utils.objects.LibraryPrefs
+import com.drewcodesit.afiexplorer.utils.objects.LibrarySortMode
+import com.drewcodesit.afiexplorer.utils.objects.SortActionsBottomSheet
 import com.drewcodesit.afiexplorer.utils.toast.ToastType
-import androidx.core.content.edit
-
+import kotlinx.coroutines.launch
 
 class LibraryFragment : Fragment() {
 
     private var _binding: FragmentLibraryBinding? = null
     private var favesAdapter: LibraryAdapter? = null
-
-    private var selectedSortOption = 0 // 0 = Title, 1 = Number
-    private val PREFS_NAME = "library_prefs"
-    private val PREF_SORT_OPTION = "sort_option"
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -57,12 +50,34 @@ class LibraryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLibraryBinding.inflate(inflater, container, false)
-        selectedSortOption = getSavedSortOption() // load saved sort
         initMenu()
         initUI()
         fetchFaves()
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                LibraryPrefs.sortModeFlow(requireContext()).collect { mode ->
+                    applySort(mode)
+                }
+            }
+        }
+    }
+
+    // Controls sorting method
+    private fun applySort(mode: LibrarySortMode){
+        when (mode){
+            LibrarySortMode.TITLE ->
+                favesAdapter?.sortFavorites()
+
+            LibrarySortMode.NUMBER ->
+                favesAdapter?.sortFavoritesByNumber()
+        }
+        binding.rvFavorites.scrollToPosition(0)
     }
 
     // Initializes the menu for the by inflating a menu resource and setting up a MenuProvider
@@ -80,14 +95,7 @@ class LibraryFragment : Fragment() {
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
-                    R.id.action_filter_faves -> {
-                        filterOptions(); true
-                    }
-
-                    R.id.action_clear_database -> {
-                        nukeDatabase(); true
-                    }
-
+                    R.id.action_filter_faves -> { showSortActionsBottomSheet(); true }
                     else -> {
                         false
                     }
@@ -97,35 +105,25 @@ class LibraryFragment : Fragment() {
     }
 
     private fun initUI() {
-        binding.rvFavorites.layoutManager = LinearLayoutManager(context)
-        binding.rvFavorites.setHasFixedSize(true)
         binding.rvFavorites.apply {
+            layoutManager = LinearLayoutManager(context)
             itemAnimator = DefaultItemAnimator()
-            addItemDecoration(
-                LineDividerItemDecoration(
-                    context,
-                    DividerItemDecoration.VERTICAL,
-                    36
-                )
-            )
+            setHasFixedSize(true)
         }
     }
 
+    // Loads favorites from local database
+    // Initializes the adapter with item clock and action handlers
+    // and toggles empty-state ui to the user
     private fun fetchFaves() {
         val dao = FavoriteDatabase.getDatabase(requireContext()).favoriteDAO()
         val favorites = dao?.getFavoriteData()?.toMutableList() ?: mutableListOf()
-
-        // Apply sorting before passing to adapter
-        when (selectedSortOption) {
-            0 -> favorites.sortBy { it.pubTitle }
-            1 -> favorites.sortBy { it.pubNumber }
-        }
 
         favesAdapter = LibraryAdapter(
             requireContext(),
             favorites,
             onSelectItemClick = { entity -> openFavorite(entity) },
-            onDeleteClick = { entity -> deleteFavorite(entity) }
+            onLibraryActionsClick = { entity -> showActionsBottomSheetForFavorite(entity)}
         )
         binding.rvFavorites.adapter = favesAdapter
 
@@ -140,39 +138,6 @@ class LibraryFragment : Fragment() {
         }
     }
 
-    //  Prompts user for confirmation before deleting the app's database using an InfoSheet dialog
-    // with informative content and a caution animation.
-    private fun nukeDatabase() {
-        InfoSheet().show(requireContext()) {
-            style(SheetStyle.DIALOG)
-            // withIconButton(IconButton( R.drawable.ic_error)){}
-            title("Delete Database?")
-            content(R.string.action_nuke_database)
-            withCoverLottieAnimation(LottieAnimation {
-                setupAnimation {
-                    setAnimation(R.raw.caution_anim)
-                }
-            })
-            onNegative(
-                "Not Yet",
-            ) { /* Set listener when negative button is clicked. */ }
-            onPositive("Ok") {
-                FavoriteDatabase.getDatabase(requireContext()).favoriteDAO()?.deleteAll()
-                fetchFaves()
-                Config.showToast(
-                    requireContext(),
-                    "Database cleared!",
-                    ToastType.INFO,
-                    AppCompatResources.getDrawable(requireContext(), R.drawable.ic_error)
-                )
-            }
-            positiveButtonStyle(ButtonStyle.OUTLINED)
-            negativeButtonStyle(ButtonStyle.NORMAL)
-            displayNegativeButton(true)
-            displayPositiveButton(true)
-        }
-    }
-
     // Opens document from the Favorites Screen
     // If PDF Reader installed the doc will open natively
     // Else falls back to the PDFViewer Activity
@@ -182,59 +147,109 @@ class LibraryFragment : Fragment() {
             intent.setDataAndType(favorite.pubDocumentUrl.toUri(), "application/pdf")
             startActivity(intent)
         } catch (e: ActivityNotFoundException) {
-            startActivity(
-                PdfViewerActivity.launchPdfFromUrl(
-                    requireContext(),
-                    favorite.pubDocumentUrl,
-                    favorite.pubNumber,
-                    "",
-                    enableDownload = true
-                )
-            )
+            val builder = CustomTabsIntent.Builder()
+            val customTabsIntent = builder.build()
+            customTabsIntent.launchUrl(requireContext(), favorite.pubDocumentUrl.toUri())
         }
     }
 
-    // Deletes single row from database and refreshes the list
-    private fun deleteFavorite(favorite: FavoriteEntity) {
-        FavoriteDatabase.getDatabase(requireContext()).favoriteDAO()?.delete(favorite)
-        Config.showToast(
-            requireContext(),
-            getString(R.string.delete_hint, favorite.pubNumber),
-            ToastType.INFO,
-            AppCompatResources.getDrawable(requireContext(), R.drawable.ic_error)
-        )
-        fetchFaves()
+    // Displays an actions bottom sheet for a selected favorite publication.
+    // This bottom sheet provides context-specific actions for a favorite item.
+    // Since the item is already marked as a favorite, the "Save" action is hidden
+    // and the "Delete" action is always shown.
+    private fun showActionsBottomSheetForFavorite(entity: FavoriteEntity) {
+
+        // Favorites ALWAYS show delete
+        val sheet = ActionsBottomSheet(
+            publications = entity.toPubs(),   // Need a conversion (see below)
+            config = ActionsBottomSheet.ActionConfig(
+                showSave = false,
+                showDelete = true,
+                showDownload = true
+            )
+        ) { action ->
+            when (action) {
+                is ActionsBottomSheet.Action.Save -> {
+                    BrowseViewModel(requireActivity().application).saveFavorite(entity)
+                }
+
+                is ActionsBottomSheet.Action.CopyURL -> {
+                    Config.save(requireContext(), entity.pubDocumentUrl)
+                }
+
+                is ActionsBottomSheet.Action.Share -> {
+                    Config.sharePublication(requireContext(), entity.pubDocumentUrl)
+                }
+
+                is ActionsBottomSheet.Action.Delete -> {
+                    deleteFavorite(requireContext(), entity)
+                    fetchFaves()
+                }
+
+                is ActionsBottomSheet.Action.Download -> {
+                    Config.downloadPublication(
+                        requireContext(),
+                        entity.pubDocumentUrl,
+                        entity.pubNumber,
+                        entity.pubTitle
+                    )
+                }
+            }
+        }
+
+        sheet.show(childFragmentManager, "ActionsSheet")
     }
 
-    private fun filterOptions() {
-        InputSheet().show(requireContext()) {
-            style(SheetStyle.BOTTOM_SHEET)
-            title("Sort By")
-            with(InputRadioButtons {
-                options(mutableListOf("Publication Title", "Publication Number"))
-                changeListener { value ->
-                    selectedSortOption = value
-                    saveSortOption(value) // persist it
-                    when (value) {
-                        0 -> favesAdapter?.sortFavorites()
-                        1 -> favesAdapter?.sortFavoritesByNumber()
+    // Displays a sorting and bulk-action bottom sheet for the favorites list.
+    // This bottom sheet allows the user to:
+    // - Sort favorites alphabetically by title.
+    // - Sort favorites numerically by publication number.
+    // - Delete all favorites at once.
+    private fun showSortActionsBottomSheet() {
+        val hasItems = favesAdapter?.itemCount?.let { it > 0 } == true
+
+        SortActionsBottomSheet(
+            hasItems = hasItems,
+            listener = object : SortActionsBottomSheet.SortActionListener {
+
+                // Allows user to sort saved publications by the title of the pub
+                // Example: Airlift and Special Missions Aircraft Maintenance will sort higher
+                // than Sustaining Airfield Pavement at Enduring Contingency Locations
+                override fun onSortByTitle() {
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        LibraryPrefs.setSortMode(
+                            requireContext(),
+                            LibrarySortMode.TITLE
+                        )
                     }
                 }
-            })
-        }
-    }
 
-    private fun saveSortOption(option: Int) {
-        val prefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        prefs.edit { putInt(PREF_SORT_OPTION, option) }
-        Log.d("LibraryFragment", "Saved sort option: $option")
-    }
+                override fun onSortByNumber() {
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        LibraryPrefs.setSortMode(
+                            requireContext(),
+                            LibrarySortMode.NUMBER
+                        )
+                    }
+                }
 
-    private fun getSavedSortOption(): Int {
-        val prefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val value = prefs.getInt(PREF_SORT_OPTION, 0)
-        Log.d("LibraryFragment", "Loaded saved sort option: $value")
-        return value // default to 0 (Title)
+                override fun onDeleteAll() {
+                    FavoriteDatabase
+                        .getDatabase(requireContext())
+                        .favoriteDAO()
+                        ?.deleteAll()
+
+                    fetchFaves()
+
+                    Config.showToast(
+                        requireContext(),
+                        "All favorites deleted",
+                        ToastType.INFO,
+                        AppCompatResources.getDrawable(requireContext(), R.drawable.ic_error)
+                    )
+                }
+            }
+        ).show(childFragmentManager, "SortActionBottomSheet")
     }
 
     override fun onDestroyView() {

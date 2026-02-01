@@ -14,8 +14,6 @@ import com.drewcodesit.afiexplorer.utils.Config
 import com.drewcodesit.afiexplorer.utils.toast.ToastType
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
@@ -25,11 +23,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 class BrowseViewModel(
     private val app: Application) : AndroidViewModel(app) {
 
-    private var _browseItemsList = ArrayList<Pubs>()
+    private val allPublications = mutableListOf<Pubs>()
     private val _browsePublications = MutableLiveData<List<Pubs>>()
-
-    val browsePublications : MutableLiveData<List<Pubs>>
-        get() = _browsePublications
+    val browsePublications: LiveData<List<Pubs>> = _browsePublications
 
     private val _saveResult = MutableLiveData<String?>()
     val saveResult: LiveData<String?> = _saveResult
@@ -48,56 +44,36 @@ class BrowseViewModel(
     private fun fetchPublications() {
         viewModelScope.launch {
             try {
-                val gson = GsonBuilder()
-                    .setLenient()
-                    .create()
+                val gson = GsonBuilder().setLenient().create()
 
                 val retrofit = Retrofit.Builder()
-                    .baseUrl(Config.BASE_URL)
+                    .baseUrl(Config.BASE_URL) // ends with /v2/
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build()
 
                 val service = retrofit.create(ApiService::class.java)
 
-                // Define all endpoint paths
-                val endpoints = listOf(
-                    "air-force/departmental",
-                    "air-national-guard/air-national-guard",
-                    "major-commands/air-combat-command",
-                    "major-commands/air-education-and-training-command",
-                    "major-commands/air-force-global-strike-command",
-                    "major-commands/air-force-materiel-command",
-                    "major-commands/air-force-reserve-command",
-                    "major-commands/air-force-special-operations-command",
-                    "major-commands/air-mobility-command",
-                    "major-commands/pacific-air-force",
-                    "major-commands/united-states-air-force-in-europe-af-africa",
-                    "united-states-space-force/headquarters",
-                    "united-states-space-force/space-operations-command",
-                    "united-states-space-force/space-systems-command",
-                    "united-states-space-force/space-training-readiness-command",
-                    "united-states-space-force/ussf-coo",
-                    "united-states-space-force/ussf-csro",
-                    "supplemental"
-                )
+                // ONE call. ONE endpoint.
+                val response = withContext(Dispatchers.IO) {
+                    service.getPubs()
+                }
 
-                // Fetch publications concurrently
-                val results = withContext(Dispatchers.IO) { endpoints.map { async { service.getPubs(it) } }.awaitAll() }
+                val sortedList = response.publications
+                    .sortedByDescending { it.getCertDate() }
 
-                // Combine and process the results
-                val combinedPublications = results.flatMap { it.publications }
+                allPublications.clear()
+                allPublications.addAll(sortedList)
 
-                // Sort the publications by cert date
-                val sortedList = combinedPublications.sortedByDescending { it.getCertDate() }
-
-                // Update the LiveData
-                _browseItemsList.clear()
-                _browseItemsList.addAll(sortedList)
-                _browsePublications.postValue(_browseItemsList)
+                _browsePublications.value = allPublications
 
             } catch (e: Exception) {
-                Config.showToast(app.applicationContext, "Error encountered:: $e", ToastType.ERROR, null)
-                Log.e("BROWSE VIEW MODEL", "Error is : $e")
+                Config.showToast(
+                    app.applicationContext,
+                    "Error encountered: $e",
+                    ToastType.ERROR,
+                    null
+                )
+                Log.e("BROWSE_VIEW_MODEL", "Error", e)
             }
         }
     }
@@ -113,6 +89,11 @@ class BrowseViewModel(
                 _saveResult.postValue("${favorite.pubNumber} updated!")
             }
         }
+    }
+
+    // Check if publication is in favorites
+    fun isFavorite(pubId: Int): Boolean {
+        return database.favoriteDAO()?.exists(pubId) == 1
     }
 
     fun resetSaveResult() {

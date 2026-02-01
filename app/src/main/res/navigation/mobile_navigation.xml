@@ -5,14 +5,6 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_browse">
 
-    <!-- Featured Screen -->
-    <!-- Check in MainActivity to only show once -->
-    <fragment
-        android:id="@+id/navigation_featured"
-        android:name="com.drewcodesit.afiexplorer.ui.featured.FeaturedFragment"
-        android:label="@string/app_featured"
-        tools:layout="@layout/fragment_featured" />
-
     <!-- Full Publications Screen -->
     <fragment
         android:id="@+id/navigation_browse"

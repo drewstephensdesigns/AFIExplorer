@@ -1,10 +1,8 @@
 ## Change Log
 Here you can find all the changes, improvements and bugs that have been added to AFI Explorer since the beginning.  The most current version will always be shown at the top for visibility.
 
-### Current: Version 28 (2.0.2)
-- Updated link serving the Air National Guard Publications
-- Updated/improved filtering of MAJCOMS
-- Bug Fixes
+### Current: Version 39 (2.1.3)
+This release focused on including Space Force publications, bug fixes, and improvements.
 
 ## Previous Versions
 #### Version 1 (1.0)
@@ -137,4 +135,39 @@ Here you can find all the changes, improvements and bugs that have been added to
 - Updated link serving the Air National Guard Publications
 - Bug Fixes
 
+#### Version 28 (2.0.2)
+- Updated link serving the Air National Guard Publications
+- Updated/improved filtering of MAJCOMS
+- Bug Fixes
 
+#### Version 29
+- bugs and improvements
+
+#### Version 30 (2.0.4)
+- bugs and improvements
+
+#### Version 31 (2.0.5)
+- This version resolved crashing issues during launch and added the following improvements:
+  - link to the AF Resilience website
+  - UI updates showing featured and updated publications
+
+#### Version 32 (2.0.6)
+- bugs and improvements
+
+#### Version 33 (2.0.7)
+- bugs and improvements
+
+#### Version 34 (2.0.8)
+- bugs and improvements
+
+#### Version 35 (2.0.9)
+- This was a hotfix release due to an issue with the database versioning causing crashing
+
+#### Version 36 (2.1.0)
+- bugs and improvements
+
+#### Version 37 (2.1.1)
+- bugs and improvements
+
+#### Version 38 (2.1.2)
+- bugs and improvements

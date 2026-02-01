@@ -5,12 +5,6 @@
         android:id="@+id/action_filter_faves"
         android:icon="@drawable/ic_filter_list"
         android:orderInCategory="100"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:title="@string/action_filter" />
-
-    <item
-        android:id="@+id/action_clear_database"
-        android:orderInCategory="101"
-        android:title="@string/action_clear_database"
-        app:showAsAction="never"/>
 </menu>

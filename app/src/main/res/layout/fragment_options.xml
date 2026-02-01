@@ -1,129 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.recyclerview.widget.RecyclerView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/optionsRecycler"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="20dp"
-    android:fillViewport="true">
-
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingBottom="75dp">
-
-    <!-- Version Numbers -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/build_version"
-        android:layout_marginTop="@dimen/small_margin"
-        style="@style/AboutCard">
-
-        <androidx.appcompat.widget.AppCompatTextView
-            style="@style/AboutItem"
-            android:id="@+id/settings_number"
-            android:text="@string/versionName"
-            app:drawableStartCompat="@drawable/ic_database" />
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- Theme Change -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/theme"
-        android:layout_marginTop="@dimen/small_margin"
-        android:layout_below="@id/build_version"
-        style="@style/AboutCard">
-        <androidx.appcompat.widget.AppCompatTextView
-            style="@style/AboutItem"
-            android:text="@string/change_theme"
-            app:drawableStartCompat="@drawable/follow_system" />
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- Buy a Coffee -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/donate"
-        style="@style/AboutCard"
-        android:layout_marginTop="@dimen/small_margin"
-        android:layout_below="@id/theme">
-
-        <androidx.appcompat.widget.AppCompatTextView
-            style="@style/AboutItem"
-            android:text="@string/app_sponsorship"
-            app:drawableStartCompat="@drawable/ic_coffee" />
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- App Rating -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/rate"
-        style="@style/AboutCard"
-        android:layout_marginTop="@dimen/small_margin"
-        android:layout_below="@id/donate">
-
-        <androidx.appcompat.widget.AppCompatTextView
-            style="@style/AboutItem"
-            android:text="@string/rating_header"
-            app:drawableStartCompat="@drawable/ic_thumbs_up" />
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- Privacy Policy -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/privacy"
-        android:layout_marginTop="@dimen/small_margin"
-        android:layout_below="@id/rate"
-        style="@style/AboutCard">
-        <androidx.appcompat.widget.AppCompatTextView
-            style="@style/AboutItem"
-            android:text="@string/privacy_policy"
-            app:drawableStartCompat="@drawable/ic_error" />
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- Libraries -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/open_source"
-        android:layout_marginTop="@dimen/small_margin"
-        android:layout_below="@id/privacy"
-        style="@style/AboutCard">
-        <androidx.appcompat.widget.AppCompatTextView
-            style="@style/AboutItem"
-            android:text="@string/licenses"
-            app:drawableStartCompat="@drawable/ic_publications" />
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- Feedback -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/feedback"
-        android:layout_marginTop="@dimen/small_margin"
-        android:layout_below="@id/open_source"
-        style="@style/AboutCard">
-        <androidx.appcompat.widget.AppCompatTextView
-            style="@style/AboutItem"
-            android:text="@string/feedback_subheading"
-            app:drawableStartCompat="@drawable/ic_feedback" />
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- Connect -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/connect"
-        android:layout_marginTop="@dimen/small_margin"
-        android:layout_below="@id/feedback"
-        style="@style/AboutCard">
-        <androidx.appcompat.widget.AppCompatTextView
-            style="@style/AboutItem"
-            android:text="@string/social_header"
-            app:drawableStartCompat="@drawable/ic_linkedin" />
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- Connect -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/epubs_changes"
-        android:layout_marginTop="@dimen/small_margin"
-        android:layout_below="@id/connect"
-        style="@style/AboutCard">
-        <androidx.appcompat.widget.AppCompatTextView
-            style="@style/AboutItem"
-            android:text="@string/epubs_notice"
-            app:drawableStartCompat="@drawable/ic_change_log" />
-    </com.google.android.material.card.MaterialCardView>
-</RelativeLayout>
-</ScrollView>
+    android:clipToPadding="false"
+    android:paddingBottom="78dp"
+    tools:listitem="@layout/option_items_view"
+    tools:itemCount="10"
+    android:scrollbars="vertical"
+    app:fastScrollEnabled="true"
+    android:scrollbarThumbVertical="@drawable/thumb_drawable"
+    app:fastScrollHorizontalThumbDrawable="@drawable/thumb_drawable"
+    app:fastScrollHorizontalTrackDrawable="@drawable/line_drawable"
+    app:fastScrollVerticalThumbDrawable="@drawable/thumb_drawable"
+    app:fastScrollVerticalTrackDrawable="@drawable/line_drawable"
+    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />

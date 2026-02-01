@@ -4,11 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverter
-import androidx.room.TypeConverters
 import com.drewcodesit.afiexplorer.utils.Config
-import java.util.Date
-import javax.annotation.Nonnull
 
 @Entity(tableName = Config.TABLE_NAME, indices = [Index(value = ["number", "title"], unique = true)])
 data class FavoriteEntity(

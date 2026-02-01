@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.edit
 import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -44,12 +43,6 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
-        // 🔥 Prevent double navigation
-        if (savedInstanceState == null && shouldShowFeatured()) {
-            navController.navigate(R.id.navigation_featured)
-        }
-
         toastyConfig()
     }
 
@@ -66,14 +59,5 @@ class MainActivity : AppCompatActivity() {
             .setToastTypeface(typeface!!)
             .supportDarkTheme(true)
             .apply()
-    }
-
-    private fun shouldShowFeatured(): Boolean {
-        val isFirstRun = sharedPreferences.getBoolean("is_first_run", true)
-        if (isFirstRun) {
-            sharedPreferences.edit { putBoolean("is_first_run", false) }
-            return true
-        }
-        return false
     }
 }

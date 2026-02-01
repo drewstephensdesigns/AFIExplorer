@@ -1,48 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="85dp"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="?attr/selectableItemBackground"
-    android:clickable="true"
-    android:paddingBottom="@dimen/small_margin"
-    android:paddingLeft="14dp"
-    android:paddingRight="14dp"
-    android:paddingTop="@dimen/xsmall_margin"
-    android:focusable="true">
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginTop="5dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="2dp"
+    app:cardUseCompatPadding="false"
+    app:strokeWidth="0dp"
+    app:cardBackgroundColor="?attr/colorSurface">
 
-    <ImageView
-        android:id="@+id/textViewOptions"
-        android:layout_width="@dimen/large_margin"
-        android:layout_height="@dimen/large_margin"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="@dimen/small_margin"
-        android:src="@drawable/ic_menu_vert"
-        android:contentDescription="@string/cd_vertical_menu" />
-
-    <TextView
-        android:id="@+id/pubNumber"
-        android:layout_toEndOf="@id/textViewOptions"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto"
-        android:textStyle="bold"
-        tools:text="Number"
-        android:textColor="?attr/colorControlNormal"
-        android:textSize="15sp" />
+        android:padding="10dp">
 
-    <TextView
-        android:id="@+id/pubTitle"
-        android:layout_toEndOf="@id/textViewOptions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/pubNumber"
-        android:maxLines="2"
-        android:ellipsize="end"
-        tools:text="Title"
-        android:textAllCaps="false"
-        android:fontFamily="@font/noto_sans"
-        android:textColor="?attr/colorControlNormal"
-        android:textSize="@dimen/textview_small_text" />
+        <!-- OPTIONS TOUCH TARGET (48dp square, centered vertically at end) -->
+        <ImageView
+            android:id="@+id/libraryOptionsContainer"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="@string/cd_vertical_menu"
+            android:padding="12dp"
+            android:scaleType="center"
+            android:src="@drawable/ic_menu_vert"
+            app:tint="?attr/colorOnSurface"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-</RelativeLayout>
+        <!-- PUBLICATION NUMBER -->
+        <TextView
+            android:id="@+id/pubNumber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/noto_sans"
+            android:textStyle="bold"
+            android:textColor="?colorControlNormal"
+            android:textSize="14sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/libraryOptionsContainer"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="CFETP3E4X1WG" />
+
+        <!-- PUBLICATION TITLE -->
+        <TextView
+            android:id="@+id/pubTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ibm_plex_sans"
+            android:textColor="?colorControlNormal"
+            android:textSize="@dimen/textview_small_text"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:alpha="0.87"
+            android:paddingTop="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/libraryOptionsContainer"
+            app:layout_constraintTop_toBottomOf="@id/pubNumber"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="WATER AND FUEL SYSTEMS MAINTENANCE WAGE GRADE SERIES 4201/4204..." />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

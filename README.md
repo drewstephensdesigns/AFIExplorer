@@ -80,7 +80,7 @@
 [![Product Name Screen Shot][product-screenshot]](https://afiexplorer.com)
 -->
 
-This app was born out of necessity and started as a proof of concept by two U.S Air Force personnel.  Built with Modern Android development tools, this app allows you to quickly search, save and download Air Force and select Department of Defense guidance and publications.  We're always looking to improve the app and graciously take feedback.  Please use the email at the bottom of the page, or in app feedback link to reach out.  You can also open an issue for review!
+AFI Explorer is an open-sourced Android application designed to make Air Force publications easier to access, search and reference on mobile devices.  What began as a proof-of-concept tool built by two U.S Air Force personnel has grown into a fully functional mobile app that helps personnel quickly lookup Air Force Instructions (AFIs) and related Department of Defense documents in the field or on the go.   We're always looking to improve the app and graciously take feedback.  Please use the email at the bottom of the page, or in app feedback link to reach out.  You can also open an issue for review!
 
 <h3 align="center">Screenshots</h3>
 <div align="center"; style="width:100%; display:flex; justify-content:space-between;">

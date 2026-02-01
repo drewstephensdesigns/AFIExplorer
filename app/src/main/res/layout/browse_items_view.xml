@@ -1,107 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="85dp"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/xsmall_margin"
-    android:foreground="?attr/selectableItemBackground"
-    android:clickable="true"
-    android:focusable="true"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="4dp"
-    app:strokeColor="?attr/colorOutline"
-    app:strokeWidth="1dp">
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginTop="5dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="2dp"
+    app:cardUseCompatPadding="false"
+    app:strokeWidth="0dp"
+    app:cardBackgroundColor="?attr/colorSurface">
 
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
-    android:padding="@dimen/xsmall_margin"
-    android:focusable="true">
-
-    <ImageView
-        android:id="@+id/textViewOptions"
-        android:layout_width="@dimen/large_margin"
-        android:layout_height="@dimen/large_margin"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="3dp"
-        android:src="@drawable/ic_menu_vert"
-        android:contentDescription="@string/cd_vertical_menu" />
-
-    <TextView
-        android:id="@+id/pubNumber"
-        android:layout_toEndOf="@id/textViewOptions"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxLines="2"
-        android:fontFamily="@font/ibm_plex_sans"
-        tools:text="CFETP3E4X1WG"
-        android:textStyle="bold"
-        android:textColor="?colorOnSurfaceVariant"
-        android:textSize="15sp" />
+        android:padding="10dp">
 
-    <TextView
-        android:id="@+id/pubTitle"
-        tools:text="WATER AND FUEL SYSTEMS MAINTENANCE WAGE GRADE SERIES 4201/4204/4206/4255/4742/4749/5406/5408/5409"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/pubNumber"
-        android:layout_toEndOf="@id/textViewOptions"
-        android:paddingTop="2dp"
-        android:layout_marginEnd="11dp"
-        android:ellipsize="end"
-        android:fontFamily="@font/roboto"
-        android:maxLines="3"
-        android:textColor="?colorOnSurface"
-        android:textSize="@dimen/textview_small_text" />
+        <!-- OPTIONS TOUCH TARGET (48dp square, centered vertically at end) -->
+        <ImageView
+            android:id="@+id/optionsContainer"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="@string/cd_vertical_menu"
+            android:padding="12dp"
+            android:scaleType="center"
+            android:src="@drawable/ic_menu_vert"
+            app:tint="?attr/colorOnSurface"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-    <TextView
-        android:id="@+id/pubLastAction"
-        tools:text="LastAction"
-        android:layout_below="@id/pubTitle"
-        android:paddingTop="2dp"
-        android:layout_toEndOf="@id/textViewOptions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/noto_sans"
-        android:textColor="?colorOnSurface"
-        android:textSize="@dimen/textview_xsmall_text" />
+        <!-- PUBLICATION NUMBER -->
+        <TextView
+            android:id="@+id/pubNumber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
+            android:textStyle="bold"
+            android:textColor="?colorControlNormal"
+            android:textSize="14sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/optionsContainer"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="CFETP3E4X1WG" />
 
-    <TextView
-        android:id="@+id/pubCertDate"
-        tools:text="Certified"
-        android:paddingTop="2dp"
-        android:layout_below="@id/pubLastAction"
-        android:layout_toEndOf="@id/textViewOptions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/noto_sans"
-        android:textColor="?colorOnSurface"
-        android:textSize="@dimen/textview_xsmall_text" />
+        <!-- PUBLICATION TITLE -->
+        <TextView
+            android:id="@+id/pubTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ibm_plex_sans"
+            android:textColor="?colorControlNormal"
+            android:textSize="@dimen/textview_xsmall_text"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:alpha="0.87"
+            android:paddingTop="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/optionsContainer"
+            app:layout_constraintTop_toBottomOf="@id/pubNumber"
+            tools:text="WATER AND FUEL SYSTEMS MAINTENANCE WAGE GRADE SERIES 4201/4204..." />
 
-    <TextView
-        android:id="@+id/pubGMDate"
-        tools:text="GMDate"
-        android:paddingTop="2dp"
-        android:layout_below="@id/pubCertDate"
-        android:layout_toEndOf="@id/textViewOptions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/noto_sans"
-        android:textColor="?colorOnSurface"
-        android:textSize="@dimen/textview_xsmall_text" />
+        <!-- CERT DATE -->
+        <TextView
+            android:id="@+id/pubCertDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/noto_sans"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="@dimen/textview_small_text"
+            android:alpha="0.6"
+            android:paddingTop="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/optionsContainer"
+            app:layout_constraintTop_toBottomOf="@id/pubTitle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="Certified" />
 
-    <TextView
-        android:id="@+id/pubRescindOrg"
-        tools:text="RescindOrg"
-        android:paddingTop="2dp"
-        android:layout_below="@id/pubGMDate"
-        android:layout_toEndOf="@id/textViewOptions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto"
-        android:textColor="?colorOnSurface"
-        android:textSize="@dimen/textview_xsmall_text" />
-</RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

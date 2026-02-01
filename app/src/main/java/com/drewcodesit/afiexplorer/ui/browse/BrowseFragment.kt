@@ -4,7 +4,6 @@ import android.app.SearchManager
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -13,8 +12,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -27,19 +26,26 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.drewcodesit.afiexplorer.MainActivity
 import com.drewcodesit.afiexplorer.R
+import com.drewcodesit.afiexplorer.database.FavoriteEntity
 import com.drewcodesit.afiexplorer.databinding.FragmentBrowseBinding
+import com.drewcodesit.afiexplorer.models.Filters
 import com.drewcodesit.afiexplorer.models.Pubs
+import com.drewcodesit.afiexplorer.utils.Config.deleteFavorite
+import com.drewcodesit.afiexplorer.utils.Config.downloadPublication
+import com.drewcodesit.afiexplorer.utils.Config.save
+import com.drewcodesit.afiexplorer.utils.Config.sharePublication
 import com.drewcodesit.afiexplorer.utils.Config.showToast
+import com.drewcodesit.afiexplorer.utils.objects.ActionsBottomSheet
 import com.drewcodesit.afiexplorer.utils.toast.ToastType
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.maxkeppeler.sheets.input.InputSheet
 import com.maxkeppeler.sheets.input.type.InputRadioButtons
 import com.maxkeppeler.sheets.input.type.spinner.InputSpinner
-import com.rajat.pdfviewer.PdfViewerActivity
 
-class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
+class BrowseFragment : Fragment(),
+    BrowseAdapter.MainClickListener,
+    BrowseAdapter.MoreActionsListener {
 
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
+    //private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     private var _binding: FragmentBrowseBinding? = null
 
@@ -54,14 +60,22 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
 
     //The OnBackPressedDispatcher is a class that allows you
     // to register a OnBackPressedCallback to a LifecycleOwner
-    private val onBackPressedCallback: OnBackPressedCallback =
-        object : OnBackPressedCallback(true) {
-            @RequiresApi(Build.VERSION_CODES.N)
-            override fun handleOnBackPressed() {
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            // 1. Check if searchView is active or list is filtered
+            val isFiltered = !searchView?.query.isNullOrEmpty() ||
+                    (browseAdapter?.currentList?.size != browseAdapter?.pubsList?.size)
+
+            if (isFiltered) {
+                // Restore the full list
                 refreshPubList()
+            } else {
+                // Default back behavior
+                isEnabled = false
+                requireActivity().onBackPressedDispatcher.onBackPressed()
             }
         }
-
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -85,30 +99,16 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
     }
 
     private fun initViewModel(){
-        showSkeletonLoader(true)
+        binding.loading.isVisible = true
         browseViewModel.browsePublications.observe(viewLifecycleOwner){ items ->
-            showSkeletonLoader(false)
+            binding.loading.isVisible = false
             if (items.isNullOrEmpty()){
                 binding.noResultsFound.isVisible = true
             } else {
                 binding.noResultsFound.isVisible = false
-                browseAdapter = BrowseAdapter(items, this, findNavController(), browseViewModel)
+                browseAdapter = BrowseAdapter(items, this, findNavController(), this)
                 binding.recyclerView.adapter = browseAdapter
                 browseAdapter?.getPubs(items)
-            }
-        }
-    }
-
-    private fun showSkeletonLoader(show: Boolean) {
-        binding.shimmerViewContainer.isVisible = show
-        binding.recyclerView.isVisible = !show
-        binding.shimmerViewContainer.apply {
-            if (show) {
-                startShimmer()
-                binding.shimmerRecyclerView.layoutManager = LinearLayoutManager(context)
-                binding.shimmerRecyclerView.adapter = ShimmerAdapter()
-            } else {
-                stopShimmer()
             }
         }
     }
@@ -166,71 +166,26 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
                             // LeMay Center: Air Force Doctrine (TTPs are restricted)
                             with(InputRadioButtons {
                                 label("Select an Organization")
-                                options(
-                                    mutableListOf(
-                                        "Department of Defense",
-                                        "Headquarters Air Force",
-                                        "Headquarters Space Force",
-                                        "LeMay Center"
-                                    )
-                                )
-
-                                val orgs = mapOf(
-                                    0 to "DoD",
-                                    1 to "HAF",
-                                    2 to "USSF",
-                                    3 to "LeMay Center"
-                                )
-
+                                options(Filters.organizations.map { it.displayName } as MutableList<String>)
                                 changeListener { value ->
-                                    orgs[value]?.let { updateFilter(it, it) }
+                                    Filters.organizations[value].let { updateFilter(it.filterValue, it.displayName) }
                                 }
                             })
 
                             // Input Spinner of Major Commands for cleaner look
                             with(InputSpinner {
-                                label("Select a Command from the dropdown")
-                                options(
-                                    mutableListOf(
-                                        "Air Combat Command",
-                                        "Air Mobility Command",
-                                        "Air Education & Training Command",
-                                        "Pacific Air Forces",
-                                        "US Air Forces in Europe-AFAFRICA",
-                                        "Air Force Global Strike Command",
-                                        "Air Force Material Command",
-                                        "Air Force Reserve Command",
-                                        "Air Force Special Operations Command",
-                                        "Air National Guard",
-                                        "Space Force/SPoC",
-                                        "Space Force/SSC",
-                                        "Space Force/STARCOM",
-                                        "Space Force/COO",
-                                        "Space Force/CSRO"
-                                    )
-                                )
-
-                                val commands = mapOf(
-                                    0 to "ACC",
-                                    1 to "AMC",
-                                    2 to "AETC",
-                                    3 to "PACAF",
-                                    4 to "USAFE-AFAFRICA",
-                                    5 to "AFGSC",
-                                    6 to "AFMC",
-                                    7 to "AFRC",
-                                    8 to "AFSOC",
-                                    9 to "ANG",
-                                    10 to "SPoC",
-                                    11 to "SSC",
-                                    12 to "STARCOM",
-                                    13 to "COO",
-                                    14 to "CSRO"
-                                )
+                                label("Select a Command")
+                                options(Filters.commands.map { it.displayName } as MutableList<String>)
                                 changeListener { value ->
-                                    commands[value]?.let {
-                                        updateFilter(it, it)
-                                    }
+                                    Filters.commands[value].let { updateFilter(it.filterValue, it.displayName) }
+                                }
+                            })
+
+                            with(InputSpinner{
+                                label("Select a base")
+                                options(Filters.bases.map { it.displayName } as MutableList<String>)
+                                changeListener { value ->
+                                    Filters.bases[value].let { updateFilter(it.filterValue, it.displayName) }
                                 }
                             })
                         }
@@ -245,7 +200,7 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
     // Change ToolBar Title: (activity as MainActivity).supportActionBar?.title = ""
     // Source: https://stackoverflow.com/questions/27100007/set-a-title-in-toolbar-from-fragment-in-android
     private fun updateFilter(org: String, title: String) {
-        browseAdapter?.filter?.filter(org)
+        browseAdapter?.filterByRescindOrg()?.filter(org)
         (activity as MainActivity).supportActionBar?.title = title
     }
 
@@ -258,7 +213,7 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
                 openPdfDocument(pubs.pubDocumentUrl)
             }
         } catch (e: ActivityNotFoundException) {
-            openPdfWithFallback(pubs.pubDocumentUrl, pubs.pubTitle)
+            openPdfWithFallback(pubs.pubDocumentUrl)
         }
     }
 
@@ -267,12 +222,7 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
     // file is not publicly accessible (This only works for pdf's that have
     // the below in the URL... Example AFH10-2401 is https://static.e-publishing.af.mil/production/1/af_a4/publication/afh10-2401/generic_restricted.pdf
     private fun isRestrictedDocument(url: String?): Boolean {
-        return url?.let {
-            listOf(
-                "generic_restricted.pdf", "restricted_access.pdf", "for_official_use_only.pdf",
-                "generic_fouo.pdf", "stocked_and_issued", "generic_opr1.pdf", "generic_opr.pdf"
-            ).any { it in url }
-        } == true
+        return url?.let { RESTRICTED_DOCS.any{restricted -> restricted in url}} == true
     }
 
     private fun openPdfDocument(url: String?) {
@@ -282,26 +232,30 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
         startActivity(intent)
     }
 
-    private fun openPdfWithFallback(url: String?, title: String?) {
-        startActivity(
-            PdfViewerActivity.launchPdfFromUrl(
-                requireContext(),
-                url.orEmpty(),
-                title.orEmpty(),
-                "",  // If nothing specific, leave empty
-                enableDownload = true
-            )
-        )
+    // Migrated to Chrome Custom Tabs as fallback since the pdfViewer
+    // doesn't work with targetsdk 36
+    // https://developer.android.com/reference/androidx/browser/customtabs/CustomTabsIntent
+    private fun openPdfWithFallback(url: String?) {
+        val builder = CustomTabsIntent.Builder()
+        val customTabsIntent = builder.build()
+        customTabsIntent.launchUrl(requireContext(), url!!.toUri())
     }
 
     // Callback to refresh (show all) publications list when user selects back button
     // or navigates back to featured fragment
     private fun refreshPubList() {
-        (activity as MainActivity).supportActionBar?.title = resources.getString(R.string.app_home)
-        browseAdapter?.filter?.filter("") { count ->
-            // This callback is executed after the filter is applied
-            binding.recyclerView.post { // Execute on the next UI frame
-                binding.recyclerView.scrollToPosition(0)
+        (activity as MainActivity).supportActionBar?.title = getString(R.string.app_home)
+
+        // Clear the search view UI without triggering the listener again
+        // (or letting the listener handle the filter(null) call)
+        searchView?.setQuery("", false)
+        searchView?.clearFocus()
+
+        browseAdapter?.filterByRescindOrg()?.filter("/"){
+            binding.recyclerView.post {
+                binding.recyclerView.postDelayed({
+                    binding.recyclerView.layoutManager?.scrollToPosition(0)
+                }, 100)
             }
         }
     }
@@ -317,5 +271,57 @@ class BrowseFragment : Fragment(), BrowseAdapter.MainClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onMoreActionsClickListener(pubs: Pubs, fEntity: FavoriteEntity) {
+        val isInFavorites = browseViewModel.isFavorite(pubs.pubID)
+        val sheet = ActionsBottomSheet(
+            pubs,
+            config = ActionsBottomSheet.ActionConfig(
+                showSave = !isInFavorites,
+                showDelete = isInFavorites,
+                showDownload = true
+            )
+        ) { action ->
+            when (action) {
+                is ActionsBottomSheet.Action.Save -> {
+                    browseViewModel.saveFavorite(fEntity)
+                }
+
+                is ActionsBottomSheet.Action.CopyURL -> {
+                    save(requireContext(), pubs.pubDocumentUrl!!)
+                }
+
+                is ActionsBottomSheet.Action.Share -> {
+                    sharePublication(requireContext(), pubs.pubDocumentUrl!!)
+                }
+
+                is ActionsBottomSheet.Action.Download -> {
+                    downloadPublication(
+                        requireContext(),
+                        pubs.pubDocumentUrl!!,
+                        pubs.pubNumber!!,
+                        pubs.pubTitle!!
+                    )
+                }
+
+                is ActionsBottomSheet.Action.Delete -> {
+                    deleteFavorite(requireContext(), fEntity)
+                }
+            }
+        }
+        sheet.show(childFragmentManager, "ActionsSheet")
+    }
+
+    companion object{
+        private val RESTRICTED_DOCS = listOf(
+            "generic_restricted.pdf",
+            "restricted_access.pdf",
+            "for_official_use_only.pdf",
+            "generic_fouo.pdf",
+            "stocked_and_issued",
+            "generic_opr1.pdf",
+            "generic_opr.pdf"
+        )
     }
 }

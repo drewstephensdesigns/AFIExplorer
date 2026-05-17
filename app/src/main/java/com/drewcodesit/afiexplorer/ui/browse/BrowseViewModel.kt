@@ -11,92 +11,116 @@ import com.drewcodesit.afiexplorer.database.FavoriteEntity
 import com.drewcodesit.afiexplorer.interfaces.ApiService
 import com.drewcodesit.afiexplorer.models.Pubs
 import com.drewcodesit.afiexplorer.utils.Config
-import com.drewcodesit.afiexplorer.utils.toast.ToastType
+import com.drewcodesit.afiexplorer.utils.objects.PublicationEndpoints
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+/**
+ * ViewModel for the Browse screen, responsible for fetching publications
+ * from multiple endpoints and managing favorites.
+ */
+class BrowseViewModel(private val app: Application) : AndroidViewModel(app) {
 
-class BrowseViewModel(
-    private val app: Application) : AndroidViewModel(app) {
-
-    private val allPublications = mutableListOf<Pubs>()
+    // Main list of publications exposed to the UI
     private val _browsePublications = MutableLiveData<List<Pubs>>()
     val browsePublications: LiveData<List<Pubs>> = _browsePublications
 
+    // Result message for favorite operations (save/update)
     private val _saveResult = MutableLiveData<String?>()
     val saveResult: LiveData<String?> = _saveResult
 
-    private lateinit var database: FavoriteDatabase
+    // Error messages exposed to the UI to avoid showing Toasts directly from the ViewModel
+    private val _errorEvent = MutableLiveData<String?>()
+    val errorEvent: LiveData<String?> = _errorEvent
 
+    private val database: FavoriteDatabase by lazy { FavoriteDatabase.getDatabase(app) }
+
+    // Lazy initialization of the ApiService to avoid recreating it multiple times
+    private val apiService: ApiService by lazy {
+        val gson = GsonBuilder().create()
+        Retrofit.Builder()
+            .baseUrl(Config.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+            .create(ApiService::class.java)
+    }
 
     init {
-        initializeDatabase()
         fetchPublications()
     }
 
-    // Initialize the database here
-    private fun initializeDatabase() { database = FavoriteDatabase.getDatabase(app) }
-
-    private fun fetchPublications() {
+    /**
+     * Fetches publications from all defined endpoints concurrently.
+     * Uses coroutines to handle network calls off the main thread.
+     */
+    fun fetchPublications() {
         viewModelScope.launch {
             try {
-                val gson = GsonBuilder().setLenient().create()
-
-                val retrofit = Retrofit.Builder()
-                    .baseUrl(Config.BASE_URL) // ends with /v2/
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .build()
-
-                val service = retrofit.create(ApiService::class.java)
-
-                // ONE call. ONE endpoint.
-                val response = withContext(Dispatchers.IO) {
-                    service.getPubs()
+                // Perform network requests concurrently using async/awaitAll
+                val results = withContext(Dispatchers.IO) {
+                    PublicationEndpoints.ALL_PATHS.map { path ->
+                        async {
+                            try {
+                                apiService.getPubs(path).publications
+                            } catch (e: Exception) {
+                                Log.e("BrowseViewModel", "Failed to fetch path: $path", e)
+                                emptyList() // Gracefully skip failed endpoints
+                            }
+                        }
+                    }.awaitAll()
                 }
 
-                val sortedList = response.publications
-                    .sortedByDescending { it.getCertDate() }
+                // Flatten results and sort by certification date descending
+                val sortedList = results.flatten()
+                    .sortedByDescending { it.certDateMillis() }
 
-                allPublications.clear()
-                allPublications.addAll(sortedList)
-
-                _browsePublications.value = allPublications
+                _browsePublications.postValue(sortedList)
 
             } catch (e: Exception) {
-                Config.showToast(
-                    app.applicationContext,
-                    "Error encountered: $e",
-                    ToastType.ERROR,
-                    null
-                )
-                Log.e("BROWSE_VIEW_MODEL", "Error", e)
+                Log.e("BrowseViewModel", "Global fetch error", e)
+                _errorEvent.postValue("Failed to load publications. Please check your connection.")
             }
         }
     }
 
+    // Saves or updates a publication in the favorites database.
     fun saveFavorite(favorite: FavoriteEntity) {
         viewModelScope.launch(Dispatchers.IO) {
-            val exists = database.favoriteDAO()?.titleExists(favorite.pubNumber)
+            val dao = database.favoriteDAO() ?: return@launch
+            val exists = dao.titleExists(favorite.pubNumber)
+            
             if (exists == 0) {
-                database.favoriteDAO()?.addData(favorite)
+                dao.addData(favorite)
                 _saveResult.postValue("${favorite.pubNumber} saved!")
             } else {
-                database.favoriteDAO()?.update(favorite)
+                dao.update(favorite)
                 _saveResult.postValue("${favorite.pubNumber} updated!")
             }
         }
     }
 
-    // Check if publication is in favorites
+    /**
+     * Checks if a publication is already marked as a favorite.
+     * Note: This performs a synchronous DB check. In a larger app, 
+     * consider using a Flow or Room's LiveData support for real-time updates.
+     */
     fun isFavorite(pubId: Int): Boolean {
         return database.favoriteDAO()?.exists(pubId) == 1
     }
 
+    // Resets the save result after it has been handled by the UI.
     fun resetSaveResult() {
         _saveResult.value = null
+    }
+
+    // Resets the error event after it has been handled by the UI.
+    fun resetErrorEvent() {
+        _errorEvent.value = null
     }
 }

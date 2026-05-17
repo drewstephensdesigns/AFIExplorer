@@ -18,7 +18,7 @@ import com.drewcodesit.afiexplorer.databinding.FragmentOptionsBinding
 import com.drewcodesit.afiexplorer.models.OptionItems
 import com.drewcodesit.afiexplorer.utils.Config
 import com.drewcodesit.afiexplorer.utils.Config.getDBVersion
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import com.google.android.gms.oss.licenses.v2.OssLicensesMenuActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.maxkeppeler.sheets.core.SheetStyle

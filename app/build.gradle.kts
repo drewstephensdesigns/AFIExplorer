@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
+    id("com.google.android.gms.oss-licenses-plugin")
 }
 
 android {
@@ -11,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "io.github.drewstephenscoding.afiexplorer"
-        minSdk = 23
+        minSdk = 24
         targetSdk = 36
 
         // changed 18 JAN 26

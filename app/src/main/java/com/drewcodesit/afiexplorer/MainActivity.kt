@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)

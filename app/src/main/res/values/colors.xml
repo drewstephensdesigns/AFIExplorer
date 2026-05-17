@@ -1,19 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- New Theme Colors
-    8 APR 2024 -->
-    <color name="columbia_blue">#BFD7EA</color>
-    <color name="cadet_blue">#91AEC1</color>
-    <color name="air_force_blue">#508CA4</color>
-    <color name="air_force_dark_blue">#183E4D</color>
-    <color name="sea_green">#05623C</color>
-    <color name="cal_poly_green">#004F2D</color>
-    <color name="teal_200_transparent">#0003DAC5</color>
-    <color name="charcoal">#192937</color>
-    <color name="white">#BEBCB4</color>
-    <color name="burnt_sienna">#B5512A</color>
-    <color name="attribution_text_background_color">#80192937</color>
-    <color name="attribution_text_color">#80F3FFBD</color>
-    <color name="lion">#9E753A</color>
-    <color name="black">#252525</color>
+    <!-- Brand blues — used in both themes -->
+    <color name="brand_deep">#0F2932</color>
+    <color name="brand_light">#BFD7EA</color>
+    <color name="brand_mid">#91AEC1</color>
+    <color name="brand_accent">#51D6FF</color>
+
+    <!-- Green scale — day theme secondary -->
+    <color name="green_primary">#05623C</color>
+    <color name="green_deep">#004F2D</color>
+
+    <!-- Surfaces / text -->
+    <color name="surface_dark">#192937</color>
+    <color name="surface_warm">#BEBCB4</color>
+
+    <!-- Semantic -->
+    <color name="color_error">#B5512A</color>
+
+    <!-- Publication category colors -->
+    <color name="cat_afmd">#FFC933</color>
+    <color name="cat_dafman">#4A90C4</color>
+    <color name="cat_dafi">#5BA08A</color>
+    <color name="cat_starcom">#9B6BB5</color>
+    <color name="cat_dod">#C07A3A</color>
+    <color name="cat_spfi">#4DAABC</color>
+    <color name="cat_cfetp">#7A9E4E</color>
+    <color name="cat_afjqs">#C45F7A</color>
+    <color name="cat_other">#7A7F8A</color>
+
+    <!-- MAJCOMS -->
+    <color name="cat_amc">#6B7FA3</color>
+    <color name="cat_pacaf">#3A6B9E</color>
+    <color name="cat_acc">#B5404A</color>
+    <color name="cat_afsoc">#4A7A52</color>
+    <color name="cat_usafe">#5B8FA8</color>
+    <color name="cat_aetc">#B8963E</color>
+    <color name="cat_afgsc">#6B5B8A</color>
+    <color name="cat_afrc">#9E4F6E</color>
+    <color name="cat_ang">#7B7FBA</color>
+
 </resources>

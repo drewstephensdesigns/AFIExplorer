@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Accent Block -->
+    <View
+        android:layout_width="48dp"
+        android:layout_height="6dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="12dp"
+        android:alpha="0.4"
+        android:background="?attr/colorOutline" />
+
+    <!-- Publication Number -->
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/pubNumber"
+        style="@style/TextAppearance.Material3.TitleMedium.Emphasized"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="12dp"
+        android:fontFamily="@font/noto_sans"
+        android:gravity="center_horizontal"
+        android:paddingVertical="6dp"
+        tools:text="DAFI36-2903" />
+
+    <!-- Publication Title -->
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/pubTitle"
+        style="@style/TextAppearance.Material3.TitleSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="12dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/noto_sans"
+        android:gravity="center_horizontal"
+        android:maxLines="2"
+        android:paddingVertical="8dp"
+        tools:text="Dress &amp; Personnel Appearance of USAF Personnel" />
+
+    <!-- Publication Last Action
+    (Correction, Re-write, Guidance Memo, etc) -->
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/pubLastAction"
+        style="@style/TextAppearance.Material3.BodySmall.Emphasized"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="10dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/roboto"
+        android:gravity="center_horizontal"
+        android:maxLines="2"
+        android:paddingVertical="6dp"
+        tools:text="Last Action: Correction 2025 Nov 25" />
+
+    <!-- Separation Line -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="12dp"
+        android:alpha="0.4"
+        android:background="?attr/colorOutline" />
+
+    <!-- Dialog Info -->
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/dialogHeader"
+        style="@style/TextAppearance.Material3.BodySmall.Emphasized"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:drawablePadding="12dp"
+        android:fontFamily="@font/noto_sans"
+        android:paddingVertical="12dp"
+        android:text="@string/bottom_sheet_dialog_hint" />
+
+    <!-- Save to Favorites Button -->
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/btnSave"
+        style="@style/TextAppearance.Material3.BodyLarge.Emphasized"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:drawableStart="@drawable/ic_bookmark_heart"
+        android:drawablePadding="12dp"
+        android:fontFamily="@font/roboto"
+        android:paddingVertical="12dp"
+        android:text="@string/action_save" />
+
+    <!-- Copy URL Button -->
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/btnCopy"
+        style="@style/TextAppearance.Material3.BodyLarge.Emphasized"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:drawableStart="@drawable/ic_copy_pub"
+        android:drawablePadding="12dp"
+        android:fontFamily="@font/roboto"
+        android:paddingVertical="12dp"
+        android:text="@string/action_copy_url" />
+
+    <!-- Share Button -->
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/btnShare"
+        style="@style/TextAppearance.Material3.BodyLarge.Emphasized"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:drawableStart="@drawable/ic_share_pub"
+        android:drawablePadding="12dp"
+        android:fontFamily="@font/roboto"
+        android:paddingVertical="12dp"
+        android:text="@string/action_share" />
+
+    <!-- Download Publication Button -->
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/btnDownload"
+        style="@style/TextAppearance.Material3.BodyLarge.Emphasized"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:drawableStart="@drawable/ic_download_pub"
+        android:drawablePadding="12dp"
+        android:fontFamily="@font/roboto"
+        android:paddingVertical="12dp"
+        android:text="@string/action_download" />
+
+    <!-- Delete Publication Button
+    Displays only when item is in database -->
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/btnDelete"
+        style="@style/TextAppearance.Material3.BodyLarge.Emphasized"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:drawableStart="@drawable/ic_delete_pub"
+        android:drawableTint="@color/color_error"
+        android:drawablePadding="12dp"
+        android:fontFamily="@font/roboto"
+        android:paddingVertical="12dp"
+        android:text="@string/action_delete" />
+</LinearLayout>

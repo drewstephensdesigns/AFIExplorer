@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:material="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/sort_and_actions"
+        android:textAppearance="@style/TextAppearance.Material3.LabelLarge.Emphasized"
+        android:paddingBottom="12dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="12dp"
+        android:alpha="0.4"
+        android:background="?android:attr/listDivider" />
+
+    <!-- Sort by Title -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSortTitle"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/sort_title" />
+
+    <!-- Sort by Pub Number -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSortNumber"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/sort_number" />
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="16dp"
+        android:background="?android:attr/listDivider" />
+
+    <!-- Delete all -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnDeleteAll"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_everything"
+        android:textColor="@color/color_error"
+        material:strokeColor="@color/color_error" />
+
+</LinearLayout>

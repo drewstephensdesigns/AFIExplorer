@@ -1,0 +1,93 @@
+[versions]
+# Build tooling
+agp = "8.13.2"
+kotlin = "2.3.21"
+ksp = "2.3.4"
+
+# AndroidX / UI
+appcompat = "1.7.1"
+browser = "1.10.0"
+constraintlayout = "2.2.1"
+material = "1.14.0"
+preference = "1.2.1"
+recyclerview = "1.4.0"
+swiperefreshlayout = "1.2.0"
+lifecycle = "2.10.0"
+navigation = "2.9.8"
+
+# Networking
+retrofit = "3.0.0"
+
+# Persistence
+room = "2.8.4"
+
+# Firebase (libraries)
+firebase-analytics = "23.2.0"
+firebase-crashlytics = "20.0.6"
+
+# Firebase (Gradle plugins)
+google-services = "4.4.4"
+firebase-crashlytics-gradle = "3.0.7"
+
+# Misc
+toasty = "1.5.2"
+play-services-oss-licenses = "17.5.1"
+sheets = "2.3.1"
+lottie = "6.7.1"
+datastore-preferences = "1.3.0-alpha09"
+
+[libraries]
+# Kotlin / Core
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib" }
+appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
+constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
+recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
+preference-ktx = { module = "androidx.preference:preference-ktx", version.ref = "preference" }
+browser = { module = "androidx.browser:browser", version.ref = "browser" }
+swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
+
+# Retrofit
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+
+# Room
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+
+# Lifecycle
+lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
+lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
+lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+
+# Navigation
+navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }
+navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
+
+# Firebase libraries
+firebase-analytics = { module = "com.google.firebase:firebase-analytics", version.ref = "firebase-analytics" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
+
+# UI / Misc
+toasty = { module = "com.github.GrenderG:Toasty", version.ref = "toasty" }
+oss-licenses = { module = "com.google.android.gms:play-services-oss-licenses", version.ref = "play-services-oss-licenses" }
+
+# Sheets
+sheets-core = { module = "com.maxkeppeler.sheets:core", version.ref = "sheets" }
+sheets-info = { module = "com.maxkeppeler.sheets:info", version.ref = "sheets" }
+sheets-option = { module = "com.maxkeppeler.sheets:option", version.ref = "sheets" }
+sheets-input = { module = "com.maxkeppeler.sheets:input", version.ref = "sheets" }
+sheets-lottie = { module = "com.maxkeppeler.sheets:lottie", version.ref = "sheets" }
+
+# Lottie
+android-lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
+datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore-preferences" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase-crashlytics-gradle" }
+

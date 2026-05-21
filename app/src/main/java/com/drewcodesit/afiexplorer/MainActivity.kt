@@ -40,6 +40,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_options_menu
             )
         )
+
+        // ActionBar is managed by the activity
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         toastyConfig()

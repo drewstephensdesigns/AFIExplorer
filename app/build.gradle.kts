@@ -15,11 +15,11 @@ android {
         minSdk = 24
         targetSdk = 36
 
-        // changed 18 JAN 26
-        // version code = 40
-        // version name = 2.1.4
-        versionCode = 40
-        versionName = "2.1.4"
+        // changed 20 MAY 26
+        // version code = 41
+        // version name = 2.1.5
+        versionCode = 41
+        versionName = "2.1.5"
 
         vectorDrawables.useSupportLibrary = true
     }
@@ -28,6 +28,19 @@ android {
 
     applicationVariants.all {
         resValue("string", "versionName", versionName)
+
+        val appVersion = versionName
+        val appCode = versionCode
+
+        outputs.all {
+            val output =
+                this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+
+            val buildTypeName = buildType.name
+
+            output.outputFileName =
+                "AFIExplorer-v$appVersion($appCode)-$buildTypeName.apk"
+        }
     }
 
     buildTypes {
@@ -75,6 +88,31 @@ android {
     kotlin {
         compilerOptions {
             jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+        }
+    }
+
+    tasks.whenTaskAdded {
+
+        if (name == "bundleRelease") {
+
+            doLast {
+
+                val versionName = android.defaultConfig.versionName
+                val versionCode = android.defaultConfig.versionCode
+
+                val originalAab =
+                    file("${layout.buildDirectory}/outputs/bundle/release/app-release.aab")
+
+                val renamedAab =
+                    file(
+                        "${layout.buildDirectory}/outputs/bundle/release/" +
+                                "AFIExplorer-v$versionName($versionCode)-release.aab"
+                    )
+
+                if (originalAab.exists()) {
+                    originalAab.renameTo(renamedAab)
+                }
+            }
         }
     }
 }

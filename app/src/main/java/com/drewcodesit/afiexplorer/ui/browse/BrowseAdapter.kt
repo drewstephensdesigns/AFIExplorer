@@ -1,6 +1,7 @@
 package com.drewcodesit.afiexplorer.ui.browse
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
@@ -46,8 +47,17 @@ class BrowseAdapter(
     }
 
     fun getPubs(newList: List<Pubs>) {
-        pubsList = newList
-        submitList(newList.toList())
+       // Log.d("BrowseDebug", "getPubs — isAttachedToWindow: ${recyclerView?.isAttachedToWindow}, isComputingLayout: ${recyclerView?.isComputingLayout}")
+       // Log.d("BrowseDebug", "getPubs called — newList size: ${newList.size}, current internal size: ${currentList.size}")
+        pubsList = newList.toList()
+        submitList(pubsList)
+    }
+
+    // bypass the diff entirely by resetting to the full list immediately.
+    fun resetList() {
+        submitList(pubsList.toList()) {
+            recyclerView?.scrollToPosition(0)
+        }
     }
 
     private fun getCategoryColor(context: Context, pubNumber: String): Int {
@@ -91,23 +101,73 @@ class BrowseAdapter(
     // This method is called automatically by the system whenever the user enters text
     // updates the contents of the list or grid to display the filtered items
     override fun getFilter(): Filter {
+
         return object : Filter() {
+
+            // background thread
             override fun performFiltering(constraint: CharSequence?): FilterResults {
-                val charString = constraint?.toString() ?: ""
-                val filteredList = if (charString.isEmpty()) pubsList else pubsList.filter {
-                    it.pubTitle!!.contains(charString, ignoreCase = true) ||
-                            it.pubNumber!!.contains(charString, ignoreCase = true) ||
-                            it.pubRescindOrg!!.contains(charString, ignoreCase = true)
+
+                val query = constraint?.toString()?.trim().orEmpty()
+
+                val filteredList = if (query.isEmpty()) {
+
+                    pubsList
+
+                } else {
+
+                    pubsList.filter { pub ->
+
+                        pub.pubTitle?.contains(query, ignoreCase = true) == true ||
+                                pub.pubNumber?.contains(query, ignoreCase = true) == true ||
+                                pub.pubRescindOrg?.contains(query, ignoreCase = true) == true
+                    }
+                        .sortedWith(
+                            compareBy<Pubs> {
+
+                                val pubNumber = it.pubNumber.orEmpty()
+
+                                when {
+
+                                    // Parent publication
+                                    !pubNumber.contains("_") &&
+                                            pubNumber.startsWith("DAFI", true) -> 0
+
+                                    // Base supplements (CANNONAFBI21-101)
+                                    !pubNumber.contains("_") -> 1
+
+                                    // Regular supplements
+                                    else -> 2
+                                }
+
+                            }.thenBy {
+                                it.pubNumber
+                            }
+                        )
                 }
-                return FilterResults().apply { values = filteredList }
+
+                return FilterResults().apply {
+                    values = filteredList
+                    count = filteredList.size
+                }
             }
 
-            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                val searchResults = (results?.values as? List<*>)?.filterIsInstance<Pubs>() ?: emptyList()
-                results?.count = searchResults.size
+            // Runs om main/UI thread
+            // Updates Recyclerview after filtering has completed
+            override fun publishResults(
+                constraint: CharSequence?,
+                results: FilterResults?
+            ) {
+
+                val searchResults =
+                    (results?.values as? List<*>)?.filterIsInstance<Pubs>()
+                        ?: emptyList()
+
                 submitList(searchResults) {
-                    // Scroll to top AFTER the diff is committed and layout is complete
+
                     recyclerView?.scrollToPosition(0)
+
+                    // Optional:
+                    // notify empty state here AFTER submitList finishes
                 }
             }
         }

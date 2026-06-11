@@ -60,7 +60,7 @@ class SortActionsBottomSheet(
         private fun showDeleteConfirmation() {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Delete Everything")
-                .setMessage(R.string.action_nuke_database)
+                .setMessage(R.string.delete_everything)
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Delete") { _, _ ->
                     listener.onDeleteAll()

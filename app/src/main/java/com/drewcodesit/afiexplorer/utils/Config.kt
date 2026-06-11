@@ -103,6 +103,16 @@ object Config {
         )
     }
 
+    fun deleteDatabase(context: Context){
+        FavoriteDatabase.getDatabase(context).favoriteDAO()?.deleteAll()
+        showToast(
+            context,
+            "You've deleted the database.",
+            ToastType.WARNING,
+            AppCompatResources.getDrawable(context, R.drawable.ic_error)
+        )
+    }
+
     /**
      * Maps a [FavoriteEntity] database object to a [Pubs] domain model.
      * * Used to transform persistent data entities into a format suitable for the

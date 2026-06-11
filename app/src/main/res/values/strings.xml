@@ -15,19 +15,23 @@
     <string name="change_theme">Change Theme</string>
     <string name="action_search">Search</string>
     <string name="action_delete">Delete publication from favorites</string>
-    <string name="action_clear_database">Delete all favorites</string>
+    <string name="action_clear_database">Delete database (cannot be undone)</string>
     <string name="action_save">Save publication to favorites</string>
     <string name="action_share">Share publication to others</string>
     <string name="action_copy_url">Copy publication link</string>
     <string name="action_download">Download file to device</string>
     <string name="action_filter">Filter</string>
-    <string name="action_nuke_database">This action will delete the entire database and cannot be restored…</string>
 
     <!-- Hints/Notices -->
     <string name="delete_hint">You deleted %1$s</string>
     <string name="search_hint">Search pubs…</string>
     <string name="no_results_found">No Results Found for %1$s</string>
-    <string name="no_results_found_db">"No saved items \n Add publications from the \n home screen to view later."</string>
+    <string name="no_results_found_db">No favorites yet! \n Add publications from the \n home screen to view later.</string>
+    <string name="no_results_found_airman">No favorites yet, Airman! \n Add publications from the \n home screen to view later."</string>
+    <string name="no_results_found_guardian">No favorites yet, Guardian! \n Add publications from the \n home screen to view later."</string>
+
+
+
     <string name="bottom_sheet_dialog_hint">Use the options below to manage your frequent publications.</string>
 
     <string name="pub_restricted">Restricted, see E-Pubs for official source</string>
@@ -92,7 +96,7 @@
     <string name="af_doctrine_url" translatable="false">https://www.doctrine.af.mil</string>
 
     <!-- Not used if Featured Screen gets deleted -->
-    <string name="see_all">See All</string>
+
     <string name="feedback_header">Send Feedback</string>
     <string name="epubs_summary">E-Publishing Website</string>
     <string name="epubs_url" translatable="false">https://www.e-publishing.af.mil/product-index/</string>
@@ -104,9 +108,9 @@
     <!-- Placeholders -->
     <string name="certified_date_placeholder">Certified Current: %s</string>
 
-    <string name="recently_updated_header">Recently Updated</string>
-    <string name="recently_updated_subheader">New publications and revisions</string>
-    <string name="quick_links_header">App Quick Links</string>
+    <string name="floating_action_button_search">Transitions into search bar and filter</string>
+    <string name="trending_search_text">Trending Search Terms</string>
+    <string name="cd_cancel_button">Cancel</string>
 
     <!-- Large Language Model -->
 </resources>

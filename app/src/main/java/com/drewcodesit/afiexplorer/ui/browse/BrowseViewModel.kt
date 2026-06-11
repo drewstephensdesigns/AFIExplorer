@@ -21,10 +21,8 @@ import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-/**
- * ViewModel for the Browse screen, responsible for fetching publications
- * from multiple endpoints and managing favorites.
- */
+// ViewModel for the Browse screen, responsible for fetching publications
+// from multiple endpoints and managing favorites.
 class BrowseViewModel(private val app: Application) : AndroidViewModel(app) {
 
     // Main list of publications exposed to the UI
@@ -39,6 +37,7 @@ class BrowseViewModel(private val app: Application) : AndroidViewModel(app) {
     private val _errorEvent = MutableLiveData<String?>()
     val errorEvent: LiveData<String?> = _errorEvent
 
+    // Lazy initialization of the database to avoid recreating it multiple times
     private val database: FavoriteDatabase by lazy { FavoriteDatabase.getDatabase(app) }
 
     // Lazy initialization of the ApiService to avoid recreating it multiple times
@@ -55,10 +54,8 @@ class BrowseViewModel(private val app: Application) : AndroidViewModel(app) {
         fetchPublications()
     }
 
-    /**
-     * Fetches publications from all defined endpoints concurrently.
-     * Uses coroutines to handle network calls off the main thread.
-     */
+    // Fetches publications from all defined endpoints concurrently.
+    // Uses coroutines to handle network calls off the main thread.
     fun fetchPublications() {
         viewModelScope.launch {
             try {
@@ -105,11 +102,8 @@ class BrowseViewModel(private val app: Application) : AndroidViewModel(app) {
         }
     }
 
-    /**
-     * Checks if a publication is already marked as a favorite.
-     * Note: This performs a synchronous DB check. In a larger app, 
-     * consider using a Flow or Room's LiveData support for real-time updates.
-     */
+    // Checks if a publication is already marked as a favorite.
+    // Note: This performs a synchronous DB check.
     fun isFavorite(pubId: Int): Boolean {
         return database.favoriteDAO()?.exists(pubId) == 1
     }

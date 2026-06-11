@@ -42,15 +42,6 @@
             android:name="com.google.android.gms.oss.licenses.v2.OssLicensesMenuActivity"
             tools:replace="android:theme"
             android:theme="@style/Theme.AFIExplorer" />
-        <!--
-        <activity
-            android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
-            android:theme="@style/Theme.AFIExplorer" />
-        <activity
-            android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
-            android:theme="@style/Theme.AFIExplorer" />
-            -->
-
     </application>
 
 </manifest>

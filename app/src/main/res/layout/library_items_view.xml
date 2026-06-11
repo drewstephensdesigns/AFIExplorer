@@ -17,6 +17,15 @@
         android:layout_height="wrap_content"
         android:padding="10dp">
 
+        <View
+            android:id="@+id/categoryIndicator"
+            android:layout_width="4dp"
+            android:layout_height="0dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <!-- OPTIONS TOUCH TARGET (48dp square, centered vertically at end) -->
         <ImageView
             android:id="@+id/libraryOptionsContainer"
@@ -36,13 +45,14 @@
             android:id="@+id/pubNumber"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/noto_sans"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/roboto"
             android:textStyle="bold"
             android:textColor="?colorControlNormal"
-            android:textSize="14sp"
+            android:textSize="@dimen/textview_medium_text"
             android:maxLines="2"
             android:ellipsize="end"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/categoryIndicator"
             app:layout_constraintEnd_toStartOf="@id/libraryOptionsContainer"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="CFETP3E4X1WG" />
@@ -54,17 +64,17 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/ibm_plex_sans"
             android:textColor="?colorControlNormal"
-            android:textSize="@dimen/textview_small_text"
+            android:textSize="@dimen/textview_xsmall_text"
             android:maxLines="3"
             android:ellipsize="end"
             android:alpha="0.87"
             android:paddingTop="2dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toEndOf="@id/categoryIndicator"
             app:layout_constraintEnd_toStartOf="@id/libraryOptionsContainer"
             app:layout_constraintTop_toBottomOf="@id/pubNumber"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:text="WATER AND FUEL SYSTEMS MAINTENANCE WAGE GRADE SERIES 4201/4204..." />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </com.google.android.material.card.MaterialCardView>

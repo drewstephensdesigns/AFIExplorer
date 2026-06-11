@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.AFIExplorer" parent="Theme.Material3.DayNight">
+    <style name="Theme.AFIExplorer" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/brand_deep</item>
         <item name="colorPrimaryVariant">@color/brand_light</item>
         <item name="colorOnPrimary">@color/surface_warm</item>
@@ -40,10 +40,5 @@
         <item name="android:textAlignment">viewStart</item>
     </style>
 
-    <style name="PlaceholderCard" parent="Theme.AFIExplorer">
-        <item name="cardBackgroundColor">#0003DAC5</item>
-        <item name="strokeWidth">0dp</item>
-        <item name="cardElevation">0dp</item>
-        <item name="strokeColor">@color/surface_warm</item>
-    </style>
+
 </resources>

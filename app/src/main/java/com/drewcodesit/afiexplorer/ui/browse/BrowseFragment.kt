@@ -1,29 +1,21 @@
 package com.drewcodesit.afiexplorer.ui.browse
 
-import android.app.SearchManager
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.widget.SearchView
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.drewcodesit.afiexplorer.MainActivity
 import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.database.FavoriteEntity
 import com.drewcodesit.afiexplorer.databinding.FragmentBrowseBinding
@@ -35,36 +27,52 @@ import com.drewcodesit.afiexplorer.utils.Config.save
 import com.drewcodesit.afiexplorer.utils.Config.sharePublication
 import com.drewcodesit.afiexplorer.utils.Config.showToast
 import com.drewcodesit.afiexplorer.utils.objects.ActionsBottomSheet
+import com.drewcodesit.afiexplorer.utils.objects.SearchBarManager
 import com.drewcodesit.afiexplorer.utils.toast.ToastType
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.logEvent
 import com.maxkeppeler.sheets.input.InputSheet
 import com.maxkeppeler.sheets.input.type.InputRadioButtons
 import com.maxkeppeler.sheets.input.type.spinner.InputSpinner
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class BrowseFragment : Fragment(),
     BrowseAdapter.MainClickListener,
     BrowseAdapter.MoreActionsListener {
 
+    // ViewBinding
     private var _binding: FragmentBrowseBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
-    private var searchView: SearchView? = null
+    // Core Components
+    private lateinit var browseAdapter: BrowseAdapter
+    private val browseViewModel: BrowseViewModel by viewModels()
 
-    private var browseAdapter : BrowseAdapter? = null
-    private val browseViewModel : BrowseViewModel by viewModels()
+    // State
+    private var isDataLoaded = false
 
-    //The OnBackPressedDispatcher is a class that allows you
-    // to register a OnBackPressedCallback to a LifecycleOwner
+    private lateinit var searchBarManager: SearchBarManager
+    private var searchJob: Job? = null
+
+    // Back Press Handling
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
-
         override fun handleOnBackPressed() {
-            searchView?.onActionViewCollapsed()
-            refreshPubList()
+            if (searchBarManager.isExpanded()) {
+                //binding.searchEditText.setText("")
+                binding.searchEditText.text.clear()
+                searchBarManager.collapse()          // then collapse
+                // refreshPubList() no longer needed; the setText above already resets the filter
+            } else {
+                isEnabled = false
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
         }
     }
 
+    // Lifecycle
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -74,34 +82,51 @@ class BrowseFragment : Fragment(),
         _binding = FragmentBrowseBinding.inflate(inflater, container, false)
 
         initUI()
-        setupMenu()
         initViewModel()
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressedCallback)
+
+        // Register back press handler
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            onBackPressedCallback
+        )
+
+        // Observe save result messages
         browseViewModel.saveResult.observe(viewLifecycleOwner) { message ->
-            message?.let {
-                showToast(requireContext(), it, ToastType.SUCCESS, null)
-                browseViewModel.resetSaveResult()
-            }
+            message ?: return@observe
+            showToast(requireContext(), message, ToastType.SUCCESS, null)
+            browseViewModel.resetSaveResult()
         }
+
         return binding.root
     }
 
-    private fun initViewModel() {
-        binding.loading.visibility = View.VISIBLE
-        browseViewModel.browsePublications.observe(viewLifecycleOwner) { items ->
-            if (items.isNullOrEmpty()) {
-                binding.noResultsFound.isVisible = true
-            } else {
-                binding.loading.visibility = View.GONE
-                binding.noResultsFound.isVisible = false
-                browseAdapter?.getPubs(items)
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.nav_view)
+        // Initialize search UI manager
+        searchBarManager = SearchBarManager(
+            fab = binding.fabSearch,
+            searchRow = binding.searchBarContainer,
+            searchEditText = binding.searchEditText,
+            cancel = binding.btnCollapseSearch,
+            bottomNav = bottomNav
+        )
+
+        // Handle search input (debounced externally if needed)
+        binding.searchEditText.doAfterTextChanged { text ->
+            applySearch(text?.toString())
+            onBackPressedCallback.isEnabled = !text.isNullOrEmpty()
         }
+
+        // Open filter bottom sheet
+        binding.btnFilter.setOnClickListener { openFilterSheet() }
     }
 
-
+    // UI Setup
     private fun initUI() {
         browseAdapter = BrowseAdapter(emptyList(), this, this)
+
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             itemAnimator = DefaultItemAnimator()
@@ -110,100 +135,116 @@ class BrowseFragment : Fragment(),
         }
     }
 
-    private fun setupMenu() {
-        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
-            // Handle for example visibility of menu items
-            override fun onPrepareMenu(menu: Menu) {}
+    // ViewModel Setup
+    private fun initViewModel() {
+        binding.loading.isVisible = true
 
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.menu_search, menu)
-                val searchManager =
-                    requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
-                searchView = menu.findItem(R.id.action_search)?.actionView as SearchView
+        browseViewModel.browsePublications.observe(viewLifecycleOwner) { items ->
+            renderList(items)
+        }
 
-                searchView?.apply {
-                    setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
-                    setIconifiedByDefault(true)
-                    maxWidth = Int.MAX_VALUE
-
-                    setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                        override fun onQueryTextSubmit(query: String?): Boolean {
-                            searchView?.clearFocus()
-                            return false
-                        }
-
-                        override fun onQueryTextChange(newText: String?): Boolean {
-                            updateSearchResults(newText)
-                            return false
-                        }
-                    })
-                }
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when (menuItem.itemId) {
-                    R.id.action_search -> { true }
-
-                    R.id.action_filter_orgs ->{
-                        InputSheet().show(requireContext()) {
-                            title("Filter Publications")
-
-                            // Input buttons for non-epubs/MAJCOM publications
-                            // DoD: JTR, GTC, DTS regs
-                            // AF/: All HAF level publications (SAF, AF, JAG, etc)
-                            // LeMay Center: Air Force Doctrine (TTPs are restricted)
-
-                            with(InputRadioButtons {
-                                label("Other Publications")
-                                options(Filters.externalOrg.map { it.displayName } as MutableList<String>)
-                                changeListener { value ->
-                                    Filters.externalOrg[value].let { updateFilter(it.filterValue, it.displayName) }
-                                }
-                            })
-
-                            with(InputSpinner {
-                                label("DAF Publications")
-                                options(Filters.organizations.map { it.displayName } as MutableList<String>)
-                                changeListener { value ->
-                                    Filters.organizations[value].let { updateFilter(it.filterValue, it.displayName) }
-                                }
-                            })
-
-                            // Input Spinner of Major Commands for cleaner look
-                            with(InputSpinner {
-                                label("MAJCOM Publications")
-                                options(Filters.commands.map { it.displayName } as MutableList<String>)
-                                changeListener { value ->
-                                    Filters.commands[value].let { updateFilter(it.filterValue, it.displayName) }
-                                }
-                            })
-
-                            with(InputSpinner{
-                                label("Base Level Publications")
-                                options(Filters.bases.map { it.displayName } as MutableList<String>)
-                                changeListener { value ->
-                                    Filters.bases[value].let { updateFilter(it.filterValue, it.displayName) }
-                                }
-                            })
-                        }
-                        true
-                    }
-                    else -> { false }
-                }
-            }
-        }, viewLifecycleOwner, Lifecycle.State.CREATED)
+        // Restore cached data when returning to fragment
+        browseViewModel.browsePublications.value?.let {
+            renderList(it)
+        }
     }
 
-    // Change ToolBar Title: (activity as MainActivity).supportActionBar?.title = ""
-    // Source: https://stackoverflow.com/questions/27100007/set-a-title-in-toolbar-from-fragment-in-android
-    private fun updateFilter(org: String, title: String) {
-        browseAdapter?.filter?.filter(org)
-        (activity as MainActivity).supportActionBar?.title = title
+    // Rendering Logic
+    private fun renderList(items: List<Pubs>?) {
+        val isEmpty = items.isNullOrEmpty()
+
+        isDataLoaded = true
+        binding.loading.isVisible = false
+        binding.noResultsFound.isVisible = isEmpty
+
+        if (!isEmpty) {
+            browseAdapter.getPubs(items)
+        }
     }
 
+    // Search + Filter
+    private fun applySearch(query: String?) {
+        if (!isDataLoaded) return
+
+        searchJob?.cancel()
+
+        if (query.isNullOrEmpty()) {
+            browseAdapter.resetList()
+            binding.noResultsFound.isVisible = false
+            binding.noResultsFoundText.isVisible = false
+        } else {
+            searchJob = viewLifecycleOwner.lifecycleScope.launch {
+                delay(300)
+                updateSearchResults(query)
+            }
+        }
+    }
+
+    private fun updateSearchResults(newText: String?) {
+        browseAdapter.filter.filter(newText) { count ->
+            val showEmpty = count == 0 && !newText.isNullOrEmpty()
+
+            binding.noResultsFound.isVisible = showEmpty
+            binding.noResultsFoundText.isVisible = showEmpty
+            binding.noResultsFoundText.text =
+                getString(R.string.no_results_found, newText)
+        }
+    }
+
+    private fun updateFilter(org: String) {
+        browseAdapter.filter.filter(org)
+    }
+
+    private fun refreshPubList() {
+        browseAdapter.filter.filter("")
+    }
+
+    // Filter Bottom Sheet
+    private fun openFilterSheet() {
+        searchBarManager.collapse()
+
+        InputSheet().show(requireContext()) {
+            title("Filter Publications")
+
+            with(InputRadioButtons {
+                label("Other Publications")
+                options(Filters.externalOrg.map { it.displayName }.toMutableList())
+                changeListener { index ->
+                    updateFilter(Filters.externalOrg[index].filterValue)
+                }
+            })
+
+            with(InputSpinner {
+                label("DAF Publications")
+                options(Filters.organizations.map { it.displayName }.toMutableList())
+                changeListener { index ->
+                    updateFilter(Filters.organizations[index].filterValue)
+                }
+            })
+
+            with(InputSpinner {
+                label("MAJCOM Publications")
+                options(Filters.commands.map { it.displayName }.toMutableList())
+                changeListener { index ->
+                    updateFilter(Filters.commands[index].filterValue)
+                }
+            })
+
+            with(InputSpinner {
+                label("Base Level Publications")
+                options(Filters.bases.map { it.displayName }.toMutableList())
+                changeListener { index ->
+                    updateFilter(Filters.bases[index].filterValue)
+                }
+            })
+        }
+    }
+
+    // Adapter Callbacks
     override fun onMoreActionsClickListener(pubs: Pubs, fEntity: FavoriteEntity) {
         val isInFavorites = browseViewModel.isFavorite(pubs.pubID)
-        val sheet = ActionsBottomSheet(
+
+        ActionsBottomSheet(
             pubs,
             config = ActionsBottomSheet.ActionConfig(
                 showSave = !isInFavorites,
@@ -212,92 +253,79 @@ class BrowseFragment : Fragment(),
             )
         ) { action ->
             when (action) {
-                is ActionsBottomSheet.Action.Save -> {
+                is ActionsBottomSheet.Action.Save ->
                     browseViewModel.saveFavorite(fEntity)
-                }
 
-                is ActionsBottomSheet.Action.CopyURL -> {
+                is ActionsBottomSheet.Action.CopyURL ->
                     save(requireContext(), pubs.pubDocumentUrl!!)
-                }
 
-                is ActionsBottomSheet.Action.Share -> {
+                is ActionsBottomSheet.Action.Share ->
                     sharePublication(requireContext(), pubs.pubDocumentUrl!!)
-                }
 
-                is ActionsBottomSheet.Action.Download -> {
+                is ActionsBottomSheet.Action.Download ->
                     downloadPublication(
                         requireContext(),
                         pubs.pubDocumentUrl!!,
                         pubs.pubNumber!!,
                         pubs.pubTitle!!
                     )
-                }
 
-                is ActionsBottomSheet.Action.Delete -> {
+                is ActionsBottomSheet.Action.Delete ->
                     deleteFavorite(requireContext(), fEntity)
-                }
             }
-        }
-        sheet.show(childFragmentManager, "ActionsSheet")
+        }.show(childFragmentManager, "ActionsSheet")
     }
 
     override fun onMainPubsClickListener(pubs: Pubs) {
-        // firebaseAnalytics.logEvent("main_pubs_view"){ param("event_name", pubs.pubTitle!!) }
-        try {
-            if (isRestrictedDocument(pubs.pubDocumentUrl)) {
-                showToast(requireContext(), getString(R.string.pub_restricted), ToastType.ERROR, null)
-            } else {
+        if (isRestrictedDocument(pubs.pubDocumentUrl)) {
+            showToast(
+                requireContext(),
+                getString(R.string.pub_restricted),
+                ToastType.ERROR,
+                null
+            )
+        } else {
+            try {
                 openPdfDocument(pubs.pubDocumentUrl)
+                getAnalytics().logEvent("pub_clicked") {
+                    param("pub_number", pubs.pubNumber!!)
+                    param("pub_title", pubs.pubTitle!!)
+                }
+            } catch (_: ActivityNotFoundException) {
+                openPdfWithFallback(pubs.pubDocumentUrl)
             }
-        } catch (_: ActivityNotFoundException) {
-            openPdfWithFallback(pubs.pubDocumentUrl)
-            //Log.e("BrowseFragment", "onMainPubsClickListener: $e")
-            //Log.e("PDF Status", "ERROR LOADING: ${e.message}")
         }
     }
 
-    // Restricted pubs are still listed on e-pubs, but open a generic page
-    // describing actual location. This displays a Toast indicating the
-    // file is not publicly accessible (This only works for pdf's that have
-    // the below in the URL... Example AFH10-2401 is https://static.e-publishing.af.mil/production/1/af_a4/publication/afh10-2401/generic_restricted.pdf
+    // PDF Handling
     private fun isRestrictedDocument(url: String?): Boolean {
-        return url?.let { RESTRICTED_DOCS.any{ restricted -> restricted in url }} == true
+        return url?.let { u -> RESTRICTED_DOCS.any { it in u } } == true
     }
 
     private fun openPdfDocument(url: String?) {
-        val intent = Intent(Intent.ACTION_VIEW).apply {
+        startActivity(Intent(Intent.ACTION_VIEW).apply {
             setDataAndType(url!!.toUri(), "application/pdf")
-        }
-        startActivity(intent)
+        })
     }
 
     private fun openPdfWithFallback(url: String?) {
-        val builder = CustomTabsIntent.Builder()
-        val customTabsIntent = builder.build()
-        customTabsIntent.launchUrl(requireContext(), url!!.toUri())
+        CustomTabsIntent.Builder()
+            .build()
+            .launchUrl(requireContext(), url!!.toUri())
     }
 
-    // Callback to refresh (show all) publications list when user selects back button
-    // or navigates back to featured fragment
-    private fun refreshPubList() {
-        (activity as MainActivity).supportActionBar?.title = resources.getString(R.string.app_home)
-        browseAdapter?.filter?.filter("")
+    // Analytics
+    private fun getAnalytics(): FirebaseAnalytics {
+        return FirebaseAnalytics.getInstance(requireContext())
     }
 
-    // Update search results based on user input in the search bar
-    private fun updateSearchResults(newText: String?) {
-        browseAdapter?.filter?.filter(newText) { count ->
-            binding.noResultsFound.isVisible = count == 0 && !newText.isNullOrEmpty() // Show "no results" only when there's a query and no matches
-            binding.noResultsFoundText.isVisible = count == 0 && !newText.isNullOrEmpty()
-            binding.noResultsFoundText.text = getString(R.string.no_results_found, newText)
-        }
-    }
-
+    // Cleanup
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
+    // Constants
     companion object {
         private val RESTRICTED_DOCS = listOf(
             "generic_restricted.pdf",

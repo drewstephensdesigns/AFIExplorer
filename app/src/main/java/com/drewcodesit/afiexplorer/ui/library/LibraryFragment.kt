@@ -4,16 +4,11 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -25,14 +20,20 @@ import com.drewcodesit.afiexplorer.database.FavoriteDatabase
 import com.drewcodesit.afiexplorer.database.FavoriteEntity
 import com.drewcodesit.afiexplorer.databinding.FragmentLibraryBinding
 import com.drewcodesit.afiexplorer.ui.browse.BrowseViewModel
+import com.drewcodesit.afiexplorer.ui.easterEgg.Branch
+import com.drewcodesit.afiexplorer.ui.easterEgg.BranchManager
 import com.drewcodesit.afiexplorer.utils.Config
 import com.drewcodesit.afiexplorer.utils.Config.deleteFavorite
+import com.drewcodesit.afiexplorer.utils.Config.downloadPublication
+import com.drewcodesit.afiexplorer.utils.Config.save
+import com.drewcodesit.afiexplorer.utils.Config.sharePublication
 import com.drewcodesit.afiexplorer.utils.Config.toPubs
 import com.drewcodesit.afiexplorer.utils.objects.ActionsBottomSheet
 import com.drewcodesit.afiexplorer.utils.objects.LibraryPrefs
 import com.drewcodesit.afiexplorer.utils.objects.LibrarySortMode
 import com.drewcodesit.afiexplorer.utils.objects.SortActionsBottomSheet
 import com.drewcodesit.afiexplorer.utils.toast.ToastType
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
 class LibraryFragment : Fragment() {
@@ -44,13 +45,14 @@ class LibraryFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    private lateinit var branchManager: BranchManager
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLibraryBinding.inflate(inflater, container, false)
-        initMenu()
         initUI()
         fetchFaves()
 
@@ -59,6 +61,17 @@ class LibraryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        branchManager = BranchManager(requireContext())
+
+        applyBranchUI(branchManager.getBranch())
+
+        binding.emptyFavesInfoImg.setOnLongClickListener {
+            val newBranch = branchManager.toggleBranch()
+            applyBranchUI(newBranch)
+            showBranchToast(newBranch)
+            true
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 LibraryPrefs.sortModeFlow(requireContext()).collect { mode ->
@@ -66,6 +79,9 @@ class LibraryFragment : Fragment() {
                 }
             }
         }
+
+        binding.fabFilter.setOnClickListener { showSortActionsBottomSheet() }
+
     }
 
     // Controls sorting method
@@ -78,30 +94,6 @@ class LibraryFragment : Fragment() {
                 favesAdapter?.sortFavoritesByNumber()
         }
         binding.rvFavorites.scrollToPosition(0)
-    }
-
-    // Initializes the menu for the by inflating a menu resource and setting up a MenuProvider
-    // to handle menu creation, visibility, and item selection.
-    private fun initMenu() {
-        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
-            override fun onPrepareMenu(menu: Menu) {
-                // Handle for example visibility of menu items
-            }
-
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menu.clear()
-                menuInflater.inflate(R.menu.menu_fave_actions, menu)
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when (menuItem.itemId) {
-                    R.id.action_filter_faves -> { showSortActionsBottomSheet(); true }
-                    else -> {
-                        false
-                    }
-                }
-            }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun initUI() {
@@ -174,11 +166,11 @@ class LibraryFragment : Fragment() {
                 }
 
                 is ActionsBottomSheet.Action.CopyURL -> {
-                    Config.save(requireContext(), entity.pubDocumentUrl)
+                    save(requireContext(), entity.pubDocumentUrl)
                 }
 
                 is ActionsBottomSheet.Action.Share -> {
-                    Config.sharePublication(requireContext(), entity.pubDocumentUrl)
+                    sharePublication(requireContext(), entity.pubDocumentUrl)
                 }
 
                 is ActionsBottomSheet.Action.Delete -> {
@@ -187,7 +179,7 @@ class LibraryFragment : Fragment() {
                 }
 
                 is ActionsBottomSheet.Action.Download -> {
-                    Config.downloadPublication(
+                    downloadPublication(
                         requireContext(),
                         entity.pubDocumentUrl,
                         entity.pubNumber,
@@ -250,6 +242,38 @@ class LibraryFragment : Fragment() {
                 }
             }
         ).show(childFragmentManager, "SortActionBottomSheet")
+    }
+
+    // Easter Egg
+    private fun applyBranchUI(branch: Branch) {
+        when (branch) {
+            Branch.DEFAULT ->{
+                binding.emptyFavesInfoImg.setImageResource(R.drawable.baseline_bookmark)
+                binding.emptyFavesInfoText.text = getString(R.string.no_results_found_db)
+            }
+
+            Branch.AIR_FORCE -> {
+                binding.emptyFavesInfoImg.setImageResource(R.drawable.air_force_logo)
+                binding.emptyFavesInfoText.text = getString(R.string.no_results_found_airman)
+            }
+
+            Branch.SPACE_FORCE -> {
+                binding.emptyFavesInfoImg.setImageResource(R.drawable.space_force_logo)
+                binding.emptyFavesInfoText.text = getString(R.string.no_results_found_guardian)
+            }
+        }
+    }
+
+    private fun showBranchToast(branch: Branch) {
+        if (branch == Branch.DEFAULT) return
+
+        val message = when (branch) {
+            Branch.AIR_FORCE -> "Switched to Air Force mode 🇺🇸"
+            Branch.SPACE_FORCE -> "Switched to Space Force mode 🚀"
+            else -> return
+        }
+
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {

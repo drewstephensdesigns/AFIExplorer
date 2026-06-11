@@ -1,0 +1,25 @@
+# --- Android Studio / IntelliJ Clutter ---
+.idea/
+*.iml
+.gradle/
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+cmake-build-*/
+
+# --- App Build Garbage (The dust on the floor) ---
+build/
+app/build/
+
+# --- Device / System Trash ---
+*.apk
+*.ap_
+*.aab
+.DS_Store
+Thumbs.db
+
+# --- Security Secrets (The key to the castle) ---
+/app/google-services.json
+*.keystore
+*.jks

@@ -15,11 +15,12 @@ android {
         minSdk = 24
         targetSdk = 36
 
-        // changed 20 MAY 26
-        // version code = 41
-        // version name = 2.1.5
-        versionCode = 41
-        versionName = "2.1.5"
+        // The robot will use the GitHub run number to automatically boost this!
+        val baseCode = 42
+        val runNumber = System.getenv("GITHUB_RUN_NUMBER")?.toIntOrNull() ?: 0
+
+        versionCode = baseCode + runNumber
+        versionName = System.getenv("VERSION_NAME") ?: "2.1.6"
 
         vectorDrawables.useSupportLibrary = true
     }
@@ -31,12 +32,11 @@ android {
 
         val appVersion = versionName
         val appCode = versionCode
+        val buildTypeName = buildType.name
 
         outputs.all {
             val output =
                 this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
-
-            val buildTypeName = buildType.name
 
             output.outputFileName =
                 "AFIExplorer-v$appVersion($appCode)-$buildTypeName.apk"
@@ -92,25 +92,22 @@ android {
     }
 
     tasks.whenTaskAdded {
-
         if (name == "bundleRelease") {
-
             doLast {
-
                 val versionName = android.defaultConfig.versionName
                 val versionCode = android.defaultConfig.versionCode
 
-                val originalAab =
-                    file("${layout.buildDirectory}/outputs/bundle/release/app-release.aab")
+                val outputDir = file("${layout.buildDirectory}/outputs/bundle/release")
 
-                val renamedAab =
-                    file(
-                        "${layout.buildDirectory}/outputs/bundle/release/" +
-                                "AFIExplorer-v$versionName($versionCode)-release.aab"
+                val original = outputDir.listFiles()?.firstOrNull { it.name.endsWith(".aab") }
+
+                if (original != null) {
+                    val renamed = File(
+                        outputDir,
+                        "AFIExplorer-v$versionName($versionCode)-release.aab"
                     )
 
-                if (originalAab.exists()) {
-                    originalAab.renameTo(renamedAab)
+                    original.renameTo(renamed)
                 }
             }
         }
@@ -138,6 +135,7 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     implementation(libs.datastore.preferences)
+    implementation(libs.google.firebase.firestore.ktx)
     ksp(libs.room.compiler)
 
     // Lifecycle

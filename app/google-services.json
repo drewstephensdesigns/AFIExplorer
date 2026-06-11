@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "284320582210",
     "project_id": "afiexplorer-f8ccc",
-    "storage_bucket": "afiexplorer-f8ccc.appspot.com"
+    "storage_bucket": "afiexplorer-f8ccc.firebasestorage.app"
   },
   "client": [
     {
@@ -12,12 +12,7 @@
           "package_name": "io.github.drewstephenscoding.afiexplorer"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "284320582210-qo21ph5ac3codlbgdjhjbld3abp3f6ls.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
           "current_key": "AIzaSyC8-qzmwrWI49Rj7ZE39gnGrmqGls3N7sc"
@@ -25,12 +20,7 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "284320582210-qo21ph5ac3codlbgdjhjbld3abp3f6ls.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

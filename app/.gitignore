@@ -20,6 +20,6 @@ app/build/
 Thumbs.db
 
 # --- Security Secrets (The key to the castle) ---
-#/app/google-services.json
+/app/google-services.json
 *.keystore
 *.jks

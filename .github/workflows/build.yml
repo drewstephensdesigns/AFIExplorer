@@ -63,14 +63,14 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v7
         with:
-          name: AFIExplorer-APK
+          name: AFIExplorer-APK-Run-${{ github.run_number }}
           path: app/build/outputs/apk/release/*.apk
 
       # 8️⃣ Upload AAB (Artifacts tab)
       - name: Upload AAB
         uses: actions/upload-artifact@v7
         with:
-          name: AFIExplorer-Bundle
+          name: AFIExplorer-Bundle-Run-${{ github.run_number }}
           path: app/build/outputs/bundle/release/*.aab
 
       # 9️⃣ Create GitHub Release (only on tags)

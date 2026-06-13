@@ -15,13 +15,17 @@ android {
         minSdk = 24
         targetSdk = 36
 
+        // 🤖 The robot's automated counting math!
         val baseCode = 42
         val runNumber = System.getenv("GITHUB_RUN_NUMBER")?.toIntOrNull() ?: 0
 
+        // 1. Version Code grows: 43, 44, 45...
         versionCode = baseCode + runNumber
 
-        // If GitHub is building it, it becomes "2.1.6.55". On your local Android Studio, it stays "2.1.6.0"
-        versionName = if (runNumber > 0) "2.1.6.$runNumber" else "2.1.6.0"
+        // 2. We use that same runNumber to automatically tick the patch version up!
+        // If runNumber is 13, this turns "2.1.6" into "2.1.19"
+        val patchVersion = 6 + runNumber
+        versionName = "2.1.$patchVersion($runNumber)"
 
         vectorDrawables.useSupportLibrary = true
     }

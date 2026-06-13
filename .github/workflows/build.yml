@@ -21,7 +21,7 @@ jobs:
     steps:
       # 1️⃣ Checkout repo
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       # 2️⃣ Setup Java
       - name: Set up JDK 17

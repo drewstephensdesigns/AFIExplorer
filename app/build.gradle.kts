@@ -15,12 +15,13 @@ android {
         minSdk = 24
         targetSdk = 36
 
-        // The robot will use the GitHub run number to automatically boost this!
         val baseCode = 42
         val runNumber = System.getenv("GITHUB_RUN_NUMBER")?.toIntOrNull() ?: 0
 
         versionCode = baseCode + runNumber
-        versionName = System.getenv("VERSION_NAME") ?: "2.1.6"
+
+        // If GitHub is building it, it becomes "2.1.6.55". On your local Android Studio, it stays "2.1.6.0"
+        versionName = if (runNumber > 0) "2.1.6.$runNumber" else "2.1.6.0"
 
         vectorDrawables.useSupportLibrary = true
     }

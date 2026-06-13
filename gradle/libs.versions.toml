@@ -1,7 +1,7 @@
 [versions]
 # Build tooling
 agp = "8.13.2"
-kotlin = "2.3.21"
+kotlin = "2.4.0"
 ksp = "2.3.4"
 
 # AndroidX / UI
@@ -35,7 +35,6 @@ play-services-oss-licenses = "17.5.1"
 sheets = "2.3.1"
 lottie = "6.7.1"
 datastore-preferences = "1.3.0-alpha09"
-firebase-firestore-ktx = "26.3.0"
 firebase-firestore-ktx-version = "25.1.4"
 
 [libraries]
@@ -85,7 +84,6 @@ sheets-lottie = { module = "com.maxkeppeler.sheets:lottie", version.ref = "sheet
 # Lottie
 android-lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore-preferences" }
-firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebase-firestore-ktx" }
 google-firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebase-firestore-ktx-version" }
 
 [plugins]

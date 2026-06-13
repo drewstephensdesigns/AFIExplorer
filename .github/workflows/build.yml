@@ -49,7 +49,7 @@ jobs:
       - name: Build Signed App
         run: |
           ./gradlew assembleRelease bundleRelease \
-          -Pandroid.injected.signing.store.file=app/release.keystore \
+          -Pandroid.injected.signing.store.file=release.keystore \
           -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
           -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
           -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}

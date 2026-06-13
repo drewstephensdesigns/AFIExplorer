@@ -47,7 +47,8 @@ jobs:
 
       # 6️⃣ Build signed APK + AAB
       - name: Build Signed App
-        run: ./gradlew assembleRelease bundleRelease \
+        run: |
+          ./gradlew assembleRelease bundleRelease \
           -Pandroid.injected.signing.store.file=app/release.keystore \
           -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
           -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \

@@ -1,3 +1,8 @@
+/*
+ * // Copyright (c) 2021 Andrew Stephens. All rights reserved.
+ * // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+ */
+
 package com.drewcodesit.afiexplorer.database
 
 import android.content.Context
@@ -9,7 +14,7 @@ import androidx.room.RoomDatabase
 import com.drewcodesit.afiexplorer.utils.Config
 
 @Database(
-    entities = [FavoriteEntity::class],
+    entities = [FavoriteEntity::class, PubUpdateEntity::class],
     version = 10,
     autoMigrations = [AutoMigration (from = 9, to = 10)],
     exportSchema = true
@@ -37,4 +42,5 @@ abstract class FavoriteDatabase() : RoomDatabase(){
     }
 
     abstract fun favoriteDAO(): FavoriteDAO?
+    abstract fun pubUpdateDAO(): PubUpdateDao?
 }

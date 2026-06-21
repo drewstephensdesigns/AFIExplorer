@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ // Copyright (c) 2021 Andrew Stephens. All rights reserved.
+  ~ // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+  -->
+
 <vector android:height="24dp"
     android:viewportHeight="24" android:viewportWidth="24"
     android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">

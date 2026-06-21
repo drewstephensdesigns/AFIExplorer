@@ -1,3 +1,8 @@
+/*
+ * // Copyright (c) 2021 Andrew Stephens. All rights reserved.
+ * // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+ */
+
 package com.drewcodesit.afiexplorer.ui.options
 
 import android.content.Intent
@@ -5,6 +10,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.drewcodesit.afiexplorer.R
 import com.drewcodesit.afiexplorer.databinding.FragmentOptionsBinding
-import com.drewcodesit.afiexplorer.models.OptionItems
+import com.drewcodesit.afiexplorer.utils.filter.Filters
 import com.drewcodesit.afiexplorer.utils.Config
 import com.drewcodesit.afiexplorer.utils.Config.getDBVersion
 import com.google.android.gms.oss.licenses.v2.OssLicensesMenuActivity
@@ -30,7 +36,6 @@ import com.maxkeppeler.sheets.option.OptionSheet
 class OptionsFragment : Fragment() {
     private var _binding : FragmentOptionsBinding? = null
     private val binding get() = _binding!!
-    private var optionsAdapter: OptionsAdapter? = null
     private lateinit var sharedPreferences: SharedPreferences
 
     private val deviceInfoText =
@@ -75,17 +80,18 @@ class OptionsFragment : Fragment() {
         val formattedVersionText = resources.getString(R.string.version_text, versionHeader, versionName)
 
         val items = listOf(
-            OptionItems(1, "$formattedVersionText\n$databaseVersion", R.drawable.ic_database) {showDeviceInfo()},
-            OptionItems(2, getString(R.string.change_theme), R.drawable.follow_system) { changeTheme() },
-            OptionItems(3, getString(R.string.app_sponsorship), R.drawable.ic_coffee) { getLink(resources.getString(R.string.app_sponsorship_url)) },
-            OptionItems(4, getString(R.string.rating_header), R.drawable.ic_thumbs_up) { getLink(resources.getString(R.string.playstore_link)) },
-            OptionItems(5, getString(R.string.privacy_policy), R.drawable.ic_error) { getLink(resources.getString(R.string.privacy_url)) },
-            OptionItems(6, getString(R.string.licenses), R.drawable.ic_publications) { showOpenSource() },
-            OptionItems(7, getString(R.string.feedback_header), R.drawable.ic_feedback) { feedBack() },
-            OptionItems(8, getString(R.string.social_header), R.drawable.ic_linkedin) { socialMediaConnections() },
-            OptionItems(9, getString(R.string.epubs_notice), R.drawable.ic_change_log) { getLink(resources.getString(R.string.epubs_notice_url)) },
-            OptionItems(10, getString(R.string.resilience_summary), R.drawable.ic_digital_wellbeing) { getLink(resources.getString(R.string.resilience_url)) },
-            OptionItems(11, getString(R.string.doctrine_summary), R.drawable.ic_network_intelligence) { getLink(resources.getString(R.string.af_doctrine_url)) },
+            //OptionsItems(0, "Set Default Publication Filter", R.drawable.ic_publications) { setDefaultFilter() },
+            OptionsItems(1, "$formattedVersionText\n$databaseVersion", R.drawable.ic_database) {showDeviceInfo()},
+            OptionsItems(2, getString(R.string.change_theme), R.drawable.follow_system) { changeTheme() },
+            OptionsItems(3, getString(R.string.app_sponsorship), R.drawable.ic_coffee) { getLink(resources.getString(R.string.app_sponsorship_url)) },
+            OptionsItems(4, getString(R.string.rating_header), R.drawable.ic_thumbs_up) { getLink(resources.getString(R.string.playstore_link)) },
+            OptionsItems(5, getString(R.string.privacy_policy), R.drawable.ic_error) { getLink(resources.getString(R.string.privacy_url)) },
+            OptionsItems(6, getString(R.string.licenses), R.drawable.ic_publications) { showOpenSource() },
+            OptionsItems(7, getString(R.string.feedback_header), R.drawable.ic_feedback) { feedBack() },
+            OptionsItems(8, getString(R.string.social_header), R.drawable.ic_linkedin) { socialMediaConnections() },
+            OptionsItems(9, getString(R.string.epubs_notice), R.drawable.ic_change_log) { getLink(resources.getString(R.string.epubs_notice_url)) },
+            OptionsItems(10, getString(R.string.resilience_summary), R.drawable.ic_digital_wellbeing) { getLink(resources.getString(R.string.resilience_url)) },
+            OptionsItems(11, getString(R.string.doctrine_summary), R.drawable.ic_network_intelligence) { getLink(resources.getString(R.string.af_doctrine_url)) },
         )
 
         binding.optionsRecycler.adapter = OptionsAdapter(items)
@@ -221,6 +227,37 @@ class OptionsFragment : Fragment() {
             content(deviceInfoText)
             onPositive("Copy to clipboard"){
                 Config.save(requireContext(), deviceInfoText)
+            }
+        }
+    }
+
+    // Allow user to set a default filter
+    private fun setDefaultFilter() {
+        val allFilters = Filters.externalOrg + Filters.organizations + Filters.commands + Filters.bases
+        val displayOptions = mutableListOf("None (Show All)") + allFilters.map { it.displayName }
+
+        OptionSheet().show(requireContext()) {
+            title("Select Default Filter")
+            style(SheetStyle.BOTTOM_SHEET)
+            displayToolbar(true)
+            displayMode(DisplayMode.LIST)
+
+            // FIX: Convert the mapped List explicitly into a MutableList
+            val optionsList = displayOptions.map {
+                Option(R.drawable.ic_publications, it)
+            }.toMutableList()
+
+            with(optionsList)
+
+            onPositive { index: Int, _: Option ->
+                val savedValue = if (index == 0) "" else allFilters[index - 1].filterValue
+
+                sharedPreferences.edit {
+                    //putString(getString(R.string.pref_key_default_filter), savedValue)
+                    Log.e("SHARED PREFS FAKE", "Saved Value is: == $savedValue")
+                }
+
+                Snackbar.make(binding.root, "Default filter updated!", Snackbar.LENGTH_SHORT).show()
             }
         }
     }

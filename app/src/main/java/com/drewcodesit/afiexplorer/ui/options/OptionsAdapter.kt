@@ -1,12 +1,16 @@
+/*
+ * // Copyright (c) 2021 Andrew Stephens. All rights reserved.
+ * // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+ */
+
 package com.drewcodesit.afiexplorer.ui.options
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.drewcodesit.afiexplorer.databinding.OptionItemsViewBinding
-import com.drewcodesit.afiexplorer.models.OptionItems
 
-class OptionsAdapter(private val items: List<OptionItems>)
+class OptionsAdapter(private val items: List<OptionsItems>)
     : RecyclerView.Adapter<OptionsAdapter.OptionVH>() {
 
     override fun onCreateViewHolder(
@@ -25,7 +29,7 @@ class OptionsAdapter(private val items: List<OptionItems>)
     override fun getItemCount(): Int = items.size
     class OptionVH(val binding: OptionItemsViewBinding) : RecyclerView.ViewHolder(binding.root){
 
-        fun bind(item: OptionItems){
+        fun bind(item: OptionsItems){
             with(binding){
                 optionTitle.text = item.title
                 optionTitle.setCompoundDrawablesWithIntrinsicBounds(

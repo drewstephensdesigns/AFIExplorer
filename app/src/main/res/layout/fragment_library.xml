@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ // Copyright (c) 2021 Andrew Stephens. All rights reserved.
+  ~ // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+  -->
+
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -102,7 +107,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/medium_margin"
-        android:layout_marginBottom="90dp"
+        android:layout_marginBottom="25dp"
         android:contentDescription="@string/floating_action_button_search"
         android:src="@drawable/ic_filter_list"
         android:backgroundTint="?colorTertiaryContainer"

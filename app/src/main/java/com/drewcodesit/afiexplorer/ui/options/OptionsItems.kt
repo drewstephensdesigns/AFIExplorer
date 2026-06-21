@@ -3,9 +3,11 @@
  * // Licensed under the MIT License. See LICENSE file in the project root for full license information.
  */
 
-package com.drewcodesit.afiexplorer.utils.toast
+package com.drewcodesit.afiexplorer.ui.options
 
-enum class ToastType {
-    INFO, SUCCESS, WARNING, ERROR, NORMAL
-}
-
+data class OptionsItems(
+    val id: Int,
+    val title: String,
+    val iconRes: Int,
+    val onClick: () -> Unit
+)

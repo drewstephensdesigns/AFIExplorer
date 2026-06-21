@@ -1,3 +1,8 @@
+/*
+ * // Copyright (c) 2021 Andrew Stephens. All rights reserved.
+ * // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+ */
+
 package com.drewcodesit.afiexplorer.ui.library
 
 import android.content.ActivityNotFoundException
@@ -28,10 +33,10 @@ import com.drewcodesit.afiexplorer.utils.Config.downloadPublication
 import com.drewcodesit.afiexplorer.utils.Config.save
 import com.drewcodesit.afiexplorer.utils.Config.sharePublication
 import com.drewcodesit.afiexplorer.utils.Config.toPubs
-import com.drewcodesit.afiexplorer.utils.objects.ActionsBottomSheet
+import com.drewcodesit.afiexplorer.utils.filter.ActionsBottomSheet
 import com.drewcodesit.afiexplorer.utils.objects.LibraryPrefs
 import com.drewcodesit.afiexplorer.utils.objects.LibrarySortMode
-import com.drewcodesit.afiexplorer.utils.objects.SortActionsBottomSheet
+import com.drewcodesit.afiexplorer.utils.filter.SortActionsBottomSheet
 import com.drewcodesit.afiexplorer.utils.toast.ToastType
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
@@ -121,6 +126,7 @@ class LibraryFragment : Fragment() {
 
         // Show/hide empty state
         if (favorites.isEmpty()) {
+            binding.fabFilter.visibility = View.GONE
             binding.emptyFavesInfoImg.visibility = View.VISIBLE
             binding.emptyFavesInfoText.visibility = View.VISIBLE
             binding.emptyFavesInfoText.text = getString(R.string.no_results_found_db)
@@ -270,7 +276,6 @@ class LibraryFragment : Fragment() {
         val message = when (branch) {
             Branch.AIR_FORCE -> "Switched to Air Force mode 🇺🇸"
             Branch.SPACE_FORCE -> "Switched to Space Force mode 🚀"
-            else -> return
         }
 
         Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()

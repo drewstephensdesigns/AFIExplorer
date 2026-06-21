@@ -1,3 +1,8 @@
+<!--
+  - // Copyright (c) 2021 Andrew Stephens. All rights reserved.
+  - // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+  -->
+
 <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M13 41C13 40.4477 13.4477 40 14 40H17C19.2091 40 21 41.7909 21 44V52C21 54.2091 19.2091 56 17 56H14C13.4477 56 13 55.5523 13 55V41Z" fill="white"/>
 <mask id="path-2-inside-1_102_8" fill="white">

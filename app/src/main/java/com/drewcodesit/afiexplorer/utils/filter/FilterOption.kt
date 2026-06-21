@@ -1,9 +1,15 @@
-package com.drewcodesit.afiexplorer.models
+/*
+ * // Copyright (c) 2021 Andrew Stephens. All rights reserved.
+ * // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+ */
+
+package com.drewcodesit.afiexplorer.utils.filter
 
 data class FilterOption(
     val displayName: String, // what the user sees in the UI
     val filterValue: String   // what gets passed to the adapter for filtering
 )
+
 object Filters{
     // Department Level
     val externalOrg = listOf(

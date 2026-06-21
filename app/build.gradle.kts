@@ -1,58 +1,45 @@
+/*
+ * // Copyright (c) 2021 Andrew Stephens. All rights reserved.
+ * // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+ */
+
+import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.variant.ApplicationAndroidComponentsExtension
+
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    //alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
     id("com.google.android.gms.oss-licenses-plugin")
 }
 
-android {
-    compileSdk = 36
+extensions.configure<ApplicationExtension> {
+    namespace = "com.drewcodesit.afiexplorer"
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "io.github.drewstephenscoding.afiexplorer"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 37
 
-        // 🤖 The robot's automated counting math!
+        // 🤖 CI/CD Versioning
         val baseCode = 42
         val runNumber = System.getenv("GITHUB_RUN_NUMBER")?.toIntOrNull() ?: 0
 
-        // 1. Version Code grows: 43, 44, 45...
         versionCode = baseCode + runNumber
 
-        // 2. We use that same runNumber to automatically tick the patch version up!
-        // If runNumber is 13, this turns "2.1.6" into "2.1.19"
         val patchVersion = 6 + runNumber
         versionName = "2.1.$patchVersion($runNumber)"
 
         vectorDrawables.useSupportLibrary = true
     }
 
-    namespace = "com.drewcodesit.afiexplorer"
-
-    applicationVariants.all {
-        resValue("string", "versionName", versionName)
-
-        val appVersion = versionName
-        val appCode = versionCode
-        val buildTypeName = buildType.name
-
-        outputs.all {
-            val output =
-                this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
-
-            output.outputFileName =
-                "AFIExplorer-v$appVersion($appCode)-$buildTypeName.apk"
-        }
-    }
-
     buildTypes {
         getByName("debug") {
             isDebuggable = true
             resValue("bool", "FIREBASE_ANALYTICS_DEACTIVATED", "true")
-            ext["enableCrashlytics"] = false
         }
 
         getByName("release") {
@@ -61,9 +48,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-
             resValue("bool", "FIREBASE_ANALYTICS_DEACTIVATED", "false")
-            ext["enableCrashlytics"] = true
         }
     }
 
@@ -75,10 +60,15 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        resValues = true
     }
 
     sourceSets {
-        getByName("androidTest").assets.srcDirs("$projectDir/schemas")
+        getByName("androidTest"){
+            assets{
+                directories.add(file("$projectDir/schemas").toString())
+            }
+        }
     }
 
     packaging {
@@ -86,34 +76,53 @@ android {
             excludes += setOf("/META-INF/{AL2.0,LGPL2.1}")
         }
     }
-    ksp {
-        arg("room.schemaLocation", "$projectDir/schemas")
-    }
+}
 
-    kotlin {
-        compilerOptions {
-            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
+}
+@Suppress("UnstableApiUsage")
+extensions.configure<ApplicationAndroidComponentsExtension>("androidComponents") {
+    onVariants { variant ->
+
+        val buildType = variant.buildType
+
+        variant.outputs.forEach { output ->
+
+            val versionName = output.versionName.get()
+            val versionCode = output.versionCode.get()
+
+            output.outputFileName.set(
+                "AFIExplorer-v$versionName($versionCode)-$buildType.apk"
+            )
         }
     }
+}
 
-    tasks.whenTaskAdded {
-        if (name == "bundleRelease") {
-            doLast {
-                val versionName = android.defaultConfig.versionName
-                val versionCode = android.defaultConfig.versionCode
+tasks.whenTaskAdded {
+    if (name == "bundleRelease") {
+        doLast {
+            val outputDir = file("${layout.buildDirectory.get()}/outputs/bundle/release")
 
-                val outputDir = file("${layout.buildDirectory}/outputs/bundle/release")
+            val original = outputDir.listFiles()?.firstOrNull { it.name.endsWith(".aab") }
 
-                val original = outputDir.listFiles()?.firstOrNull { it.name.endsWith(".aab") }
+            if (original != null) {
+                val runNumber = System.getenv("GITHUB_RUN_NUMBER")?.toIntOrNull() ?: 0
+                val versionCode = 42 + runNumber
+                val versionName = "2.1.${6 + runNumber}($runNumber)"
 
-                if (original != null) {
-                    val renamed = File(
-                        outputDir,
-                        "AFIExplorer-v$versionName($versionCode)-release.aab"
-                    )
+                val renamed = File(
+                    outputDir,
+                    "AFIExplorer-v$versionName($versionCode)-release.aab"
+                )
 
-                    original.renameTo(renamed)
-                }
+                original.renameTo(renamed)
             }
         }
     }
@@ -141,6 +150,7 @@ dependencies {
     implementation(libs.room.ktx)
     implementation(libs.datastore.preferences)
     implementation(libs.google.firebase.firestore.ktx)
+    implementation(libs.work.runtime.ktx)
     ksp(libs.room.compiler)
 
     // Lifecycle

@@ -1,4 +1,9 @@
-package com.drewcodesit.afiexplorer.utils.objects
+/*
+ * // Copyright (c) 2021 Andrew Stephens. All rights reserved.
+ * // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+ */
+
+package com.drewcodesit.afiexplorer.utils.filter
 
 import android.content.Context
 import android.view.View
@@ -13,7 +18,7 @@ class SearchBarManager(
     private val fab: FloatingActionButton,
     private val searchRow: View,
     private val searchEditText: EditText,
-    private val cancel: ImageButton,
+    cancel: ImageButton,
     private val bottomNav: BottomNavigationView
 ) {
 

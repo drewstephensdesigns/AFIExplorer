@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ // Copyright (c) 2021 Andrew Stephens. All rights reserved.
+  ~ // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+  -->
+
 <resources>
 
     <!-- Default screen margins, per the Android Design guidelines. -->
@@ -14,5 +19,6 @@
     <dimen name="medium_margin">16dp</dimen>
     <dimen name="large_margin">24dp</dimen>
     <dimen name="xlarge_margin">30dp</dimen>
-
+    <dimen name="mtrl_bottom_nav_item_max_width">96dp</dimen>
+    <dimen name="mtrl_bottom_nav_item_min_width">64dp</dimen>
 </resources>
